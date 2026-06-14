@@ -38,6 +38,6 @@ the un-archive rule when something was shipped early.
 ---
 
 These two are the universal core. Anything more specific — a particular error-handling
-pattern, a framework convention, a naming scheme — is **not the method**. It belongs in your
-orientation file (if project-specific) or in a *pattern pack* (if it's a reusable,
-opinionated starting point). See [../packs/README.md](../packs/README.md).
+pattern, a framework convention, a naming scheme — is **not the framework**: it's a
+project-specific choice that belongs in your orientation file, or a universal one that belongs
+in your memory store. Not here.

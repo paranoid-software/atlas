@@ -20,9 +20,9 @@ _<topic>-default/                 (the Atlas — a directory, not a repo)
 ├── STATUS.md            │
 ├── BACKLOG.md           │  the Atlas's own planning files
 ├── DEVIATIONS.md        │  (its "files of record" — see 03-atlas-anatomy.md)
-├── COCO_CANDIDATES.md   │
 ├── SPEC_*.md / DRAFT_*  │
-└── _archived/           ┘
+├── _archived/           ┘
+└── CANDIDATES.md           (optional — memory-store staging)
 ```
 
 Editing a file *through* a symlink writes to the underlying real repo. The Atlas adds no

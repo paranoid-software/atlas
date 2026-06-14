@@ -13,14 +13,17 @@ appear as work arrives.
 | **`STATUS.md`** | A thin, **regenerable digest** of where the project is *now*, derived from the workitem artifacts. Points to them; never duplicates them; holds no rules and no decisions. |
 | **`BACKLOG.md`** | Index-only — one line per open workitem, linking to its `SPEC_*` or `DRAFT_*`. No bodies, no rules, no decisions. |
 | **`DEVIATIONS.md`** | Explicit, documented divergences from a memory-store rule *that applies here* — "the rule says X; here we do Y because …". Not a catalog of rules that simply don't apply. |
-| **`COCO_CANDIDATES.md`** *(candidates file)* | Staging area for universal rules aspiring to the memory store, awaiting a dedicated curation session. |
 | **`_archived/`** | Where shipped SPECs go — the project's shipped history. Holds **only shipped SPECs**, plus a `README.md` explaining the folder. |
 | **`.claude/settings.local.json`** *(tool-local settings)* | Tool-local settings for the primary agent (permissions, additional readable directories). Machine-specific; not portable. No event hooks here — those live tool-global. |
 
-> The candidates file is named `COCO_CANDIDATES.md` after the reference memory store
-> (coco). The **role** is "staging for universal-rule promotion"; rename it to match
-> whatever memory store you use. The naming is kept here for continuity with the reference
-> implementation.
+## Optional files
+
+| File | Role |
+|---|---|
+| **`CANDIDATES.md`** *(candidates file)* | Staging area for universal rules aspiring to the memory store, awaiting a dedicated curation session. **Optional** — add it only if you run a memory-store promotion workflow (you stage universal rules here, then promote them in a dedicated curation session). Teams that don't keep a shared memory store, or promote rules directly, can skip it. |
+
+> The candidates file's **role** is "staging for universal-rule promotion." `CANDIDATES.md`
+> is the neutral default; name it to match your memory store if you prefer.
 
 ## The per-workitem files (appear as work arrives)
 

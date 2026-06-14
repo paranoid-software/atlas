@@ -62,26 +62,29 @@ those before bootstrapping. The current working directory is the Atlas directory
    }
    ```
 
-5. **Create the full fixed scaffold — all start empty** so every Atlas has the same skeleton
+5. **Create the fixed scaffold — all start empty** so every Atlas has the same skeleton
    from day one:
    - `STATUS.md` — the thin digest (one-line product summary; "Active" and "Recently
      shipped" start empty).
    - `BACKLOG.md` — index only; "Open" starts empty.
    - `DEVIATIONS.md` — starts empty.
-   - `COCO_CANDIDATES.md` (candidates file) — staging for universal-rule promotion; starts
-     empty, with the entry format documented inline.
    - `_archived/README.md` — explains that the folder holds only shipped `SPEC_NNNN_<SLUG>.md`
      files.
 
-6. **Do NOT pre-create `SPEC_*.md` / `DRAFT_*.md`.** Those are per-workitem, created when the
+6. **Optionally create `CANDIDATES.md`** (the candidates file) — only if you run a
+   memory-store promotion workflow. It stages universal rules for a later curation session;
+   starts empty, with the entry format documented inline. Skip it otherwise.
+
+7. **Do NOT pre-create `SPEC_*.md` / `DRAFT_*.md`.** Those are per-workitem, created when the
    first workitem appears — not at bootstrap.
 
-7. **Do NOT touch once-per-machine tool setup** (tool-global settings, skills) during Atlas
+8. **Do NOT touch once-per-machine tool setup** (tool-global settings, skills) during Atlas
    bootstrap.
 
-Done. The Atlas is fully scaffolded: standing decisions accumulate in the orientation file;
+Done. The Atlas is scaffolded: standing decisions accumulate in the orientation file;
 buildable work enters as `SPEC_NNNN_<SLUG>.md` (indexed in the backlog, shipped to
-`_archived/`); `STATUS.md` digests it all; universal patterns stage in the candidates file.
+`_archived/`); `STATUS.md` digests it all; and, if you stage universal rules for promotion,
+they collect in the optional candidates file.
 
 ## The orientation-file template
 

@@ -42,21 +42,21 @@ parts:
 
 ## A note on roles vs. reference implementations
 
-Throughout, the method describes each component by the **role** it plays and then names a
-concrete tool that fills it for the reference author. The mapping:
+Throughout, the framework describes each component by the **role** it plays and then names a
+concrete tool that *could* fill it. The roles are what the framework requires; the tools are
+optional and swappable. The mapping:
 
-| Role | Reference implementation | Alternatives exist |
+| Role | Reference implementation (optional) | Alternatives exist |
 |------|--------------------------|---------------------|
-| **Primary agent / tool** — the AI coding tool you drive the project with | Claude Code | Cursor, Codex, Cline, any CLI/IDE agent |
-| **Cross-tool memory store** — universal knowledge every agent queries | [coco](#) (an MCP memory server) | mem0, or any shared rule store an agent can read |
-| **Skill / cheat-sheet mechanism** — reusable, on-demand guides that *point into* the memory store | Claude Code skills | any tool affordance for reusable prompts |
-| **Forced-discipline mechanism** — automation that injects behavior on events (session start, etc.) | Claude Code hooks | any event/automation hook your tool offers |
+| **Primary agent / tool** *(required)* — the AI coding tool you drive the project with | Claude Code | Cursor, Codex, Cline, any CLI/IDE agent |
+| **Cross-tool memory store, over MCP** *(required)* — universal knowledge every agent queries live | coco (an MCP memory server) | mem0, or any cross-tool rule store an agent can query over MCP |
+| **Skill / cheat-sheet mechanism** *(strengthener)* — reusable, on-demand guides that *point into* the memory store | Claude Code skills | any tool affordance for reusable prompts |
+| **Forced-discipline mechanism** *(strengthener)* — automation that injects behavior on events (session start, etc.) | Claude Code hooks | any event/automation hook your tool offers |
 
-Only the first two roles are essential. The last two are *strengtheners*: use them if your
-tool offers them, and degrade gracefully if it doesn't.
+The first two roles are **required**: a primary agent and a **shared memory store every agent
+reaches over MCP**. The named tools are only examples — pick your own. The last two are
+*strengtheners*: use them if your tool offers them, and degrade gracefully if it doesn't.
 
-> **Provenance.** This method is the tool-agnostic render of an operational practice that
-> currently lives in the reference author's memory store under the concept
-> `workspace-architecture`. That store is **canonical for now** and this document is the
-> derived render; the two flip once the pack interchange format can round-trip cleanly, at
-> which point this repo becomes canonical and the memory store imports the method back.
+> **Provenance.** This framework is the tool-agnostic render of an operational practice that
+> originated as the concept `workspace-architecture` in a memory store. This repository is its
+> formal, standalone home.

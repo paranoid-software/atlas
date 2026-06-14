@@ -1,112 +1,77 @@
 # Atlas
 
-**A tool-agnostic method for running large, multi-repo, AI-assisted projects — and the seed
-of a marketplace of importable knowledge packs.**
+**A spec-driven framework for running large, multi-repo, AI-assisted projects** — so any
+agent, in any tool, on any day, can open a project cold and have complete clarity about what
+it is, where it lives, where the work stands, and how work gets shipped.
 
-Atlas is a small set of conventions that let any AI agent, in any tool, on any day, open a
-project cold and have complete clarity about what it is, where it lives, where the work
-stands, and how work gets shipped. It assumes you drive development with AI agents, but it
-requires **no particular agent, IDE, editor, or memory product**. Where a concrete tool
-helps, it's named as a *reference implementation* playing a *role* you can swap.
+Atlas is a small, tool-agnostic set of conventions: **where each kind of knowledge lives**,
+and **how a unit of work travels from idea to shipped**. It assumes you drive development with
+AI agents, but requires **no particular agent, IDE, editor, or memory product**. Where a
+concrete tool helps, it's named as a *reference implementation* playing a *role* you can swap.
 
-This repository is both the **write-up of the method** and the **catalog** for the packs
-built around it.
+> **About this repo.** This is the formal write-up of the framework. The practice originated as
+> an operational concept (`workspace-architecture`) kept in a memory store; this repository is
+> its standalone, tool-agnostic formalization — and the basis for a small documentation site
+> (and an `llms.txt`) later. MIT-licensed, public.
 
 ## Start here
 
 | If you want to… | Go to |
 |---|---|
-| Understand and adopt the method | **[method/README.md](method/README.md)** — overview + reading order |
-| See how this repo is organized (and where future packs land) | **[STRUCTURE.md](STRUCTURE.md)** |
-| Understand the marketplace / packs idea | **[packs/README.md](packs/README.md)** |
+| Understand and adopt the framework | **[method/README.md](method/README.md)** — overview + reading order |
+| See how this repo is organized | **[STRUCTURE.md](STRUCTURE.md)** |
 
-## The method in one screen
+## The framework in one screen
 
 - **The Atlas** — one directory that aggregates all of a project's repos **by symlink** (not
   by copying), so a single-CWD agent sees the whole territory at once while each repo keeps
   its own git, CI, and release cadence. → [method/01-the-atlas.md](method/01-the-atlas.md)
 - **The stores model** — a fixed answer to "where does *this* knowledge go?": project
-  orientation + standing decisions in an orientation file; **universal** rules in a
-  cross-tool memory store; current state in a regenerable status digest; each with exactly
-  one home. → [method/02-stores-model.md](method/02-stores-model.md)
+  orientation + standing decisions in an orientation file; universal rules in a **shared
+  memory store every agent queries over MCP** (required); current state in a regenerable
+  status digest; each with exactly one home.
+  → [method/02-stores-model.md](method/02-stores-model.md)
 - **The SPEC lifecycle** — nothing is coded without a small, deliverable spec; every spec
   travels `READY → IN PROGRESS → IN REVIEW → SHIPPED → archived`.
   → [method/04-spec-lifecycle.md](method/04-spec-lifecycle.md)
 - **The discipline** — small deliverable specs and **independent review before "shipped"**
-  (never trust an agent's self-report).
-  → [method/05-discipline.md](method/05-discipline.md)
+  (never trust an agent's self-report). → [method/05-discipline.md](method/05-discipline.md)
 
-Roles map to reference implementations like so (all swappable; only the first two are
-essential):
+## Roles and reference implementations
 
-| Role | Reference impl | Alternatives |
+Atlas describes each component by the **role** it plays, then names a concrete tool that fills
+it. The tools are swappable and optional; the first two **roles are required**, the last two
+are strengtheners.
+
+| Role | Reference implementation (optional) | Alternatives |
 |---|---|---|
-| Primary agent / tool | Claude Code | Cursor, Codex, Cline, … |
-| Cross-tool memory store | coco (MCP memory server) | mem0, any shared rule store |
+| Primary agent / tool *(required)* | Claude Code | Cursor, Codex, Cline, … |
+| Cross-tool memory store, over MCP *(required)* | coco (an MCP memory server) | mem0, any cross-tool rule store agents query over MCP |
 | Skill / cheat-sheet mechanism | Claude Code skills | any reusable-prompt affordance |
 | Forced-discipline mechanism | Claude Code hooks | any event automation |
 
-## The bigger idea: a marketplace of importable knowledge packs
+## Optional: versioning the Atlas itself
 
-The method currently lives entangled inside a single memory store that is simultaneously
-three things: the **tool** (the memory runtime), the **store of the method**, and the
-**store of one firm's programming patterns**. Sharing "the memory store with our rules
-preloaded" therefore drags firm-specific baggage and forces adoption of one tool. Wrong unit
-to share.
+An Atlas works fine unversioned — it's just a folder of symlinks plus planning files. If you
+*want* a git history of its planning artifacts, there's a clean symlink/git recipe that
+versions the artifacts without touching the member repos. It stays **optional**. →
+[method/07-optional-git-versioning.md](method/07-optional-git-versioning.md)
 
-Atlas separates them. **The shareable unit is the *method*** — universal, clean, and
-tool-agnostic — and, beyond it, a catalog of **packs**: importable, forkable units of
-curated knowledge. Two tiers:
+## What this repo is not
 
-- **The method pack** (`workspace-architecture`) — flagship, universal, the adoption driver.
-- **Pattern packs** — opinionated, firm-flavored *starting points*; forkable, versioned,
-  evolving. **This repo ships none of them** — adopters seed their own.
-
-The crux that makes packs real is a **neutral interchange format** so a pack can be imported
-into one memory runtime or another, rather than being a single tool's internal dump. That
-format is the actual product standard; runtimes are interchangeable speakers of it. Its
-shape is settled below.
-
-## Decisions already made (binding)
-
-These were settled when the method was extracted and are not re-litigated here:
-
-- **The shareable unit is the METHOD, not any one tool.** The memory store is *a reference
-  implementation* of one role the method needs (a cross-tool store every agent queries) — not
-  a requirement.
-- **Stores are described by ROLE; tools are named as implementations.** "You need a memory
-  store playing role X; we use coco; alternatives exist."
-- **Firm patterns never ship.** The method tells adopters to seed their own; zero
-  firm-specific programming content in what's shared.
-- **Source-of-truth direction is memory-store → doc** (derived, tool-abstracted) for now,
-  flipping to this-repo-canonical once the pack interchange format can round-trip.
-- **The method lives here, versioned**, not floating inside an unversioned aggregator
-  directory.
-- **Versioning an Atlas itself is OPTIONAL.** It works fine unversioned; if you opt in, there's
-  a clean symlink/git recipe. → [method/07-optional-git-versioning.md](method/07-optional-git-versioning.md)
-
-## Design decisions (settled)
-
-1. **Interchange format** — a pack is a **directory**: a manifest plus one markdown file per
-   rule (a single-file export is generated from it).
-2. **Pack versioning** — **per-rule version + a rolled-up pack semver**, on the memory
-   store's provenance primitives.
-3. **Licensing** — **MIT, public, no monetization**; the method/pattern tiers differ in
-   content and positioning only, never in license or price.
-4. **Canonical source** — **memory store now, this repo later**: coco stays canonical and
-   this repo is the derived render until the interchange format can round-trip, then this
-   public repo becomes canonical and coco imports the method back.
-
-## Explicitly not in scope here
-
-- No memory store preloaded with firm concepts (an optional starter seeded with *only* the
-  method is the most any runtime should carry publicly).
-- The method is not welded to any one memory store, IDE, or tool.
-- No firm-specific programming patterns are imported into this repo.
+- **Not tied to any one agent, IDE, or memory-store product.** The framework names *roles*,
+  not products: a primary agent and a shared MCP memory store are **required**, but *which*
+  tools fill them are yours to choose (coco, mem0, … are optional examples).
+- **Not a memory, and not a file-based "project memory."** Unlike spec-driven-development
+  approaches that accrete project knowledge into a pile of files, Atlas keeps the durable
+  universal layer in a shared, agent-queryable memory store and keeps project-specifics lean
+  (orientation + status + specs). It defines methodology and discipline — nothing more.
+- **Not a product description.** How a system *works* lives in its own code and docs; Atlas is
+  about orientation, decisions, status, and the flow of work.
+- **Not firm-specific.** No firm- or product-specific programming patterns — only the
+  tool-agnostic conventions any team can adopt.
 
 ---
 
-> **Status.** This is the first real draft of the method, rendered tool-agnostically from an
-> operational practice. It is a writing/structuring artifact — nothing here is executable. The
-> method's canonical home is the memory store for now, flipping to this repo once the pack
-> interchange format can round-trip (decision 4 above).
+> **Status.** First real draft of the framework, rendered tool-agnostically from an operational
+> practice. It is a writing/structuring artifact — nothing here is executable.
