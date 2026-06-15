@@ -1,0 +1,24 @@
+# Atlas
+
+> A tool-agnostic, spec-driven framework for running large, multi-repo, AI-assisted projects — so any agent, in any tool, can open a project cold and know what it is, where it lives, where the work stands, and how work ships.
+
+Atlas defines a methodology and a discipline, not a product. It is project-agnostic: it says where each kind of knowledge belongs and how a unit of work travels from idea to shipped. It requires a primary AI agent and a shared memory store every agent can query over MCP (coco and mem0 are optional examples of that role); the specific tools are your choice. It does not store project knowledge in a pile of files the way other spec-driven-development approaches do.
+
+The canonical content is the markdown in this repo; the files below are the whole framework, in reading order.
+
+## The framework
+- [Overview](README.md): What Atlas is, the framework in one screen, required roles vs. optional tools.
+- [Method overview](method/README.md): Reading order and the role↔reference-implementation map.
+- [The Atlas model](method/01-the-atlas.md): An Atlas — a symlink aggregator of a project's repos giving a single-CWD agent the whole territory.
+- [The stores model](method/02-stores-model.md): Where each kind of knowledge lives; the required shared MCP memory store; the universal-only boundary.
+- [Atlas anatomy](method/03-atlas-anatomy.md): The files of record, naming, the per-repo orientation block, and the optional candidates file.
+- [The SPEC lifecycle](method/04-spec-lifecycle.md): No code without a SPEC; READY → IN PROGRESS → IN REVIEW → SHIPPED → archived.
+- [The discipline](method/05-discipline.md): Small deliverable specs; independent review before "shipped" (never trust an agent's self-report).
+- [Bootstrap recipe](method/06-bootstrap.md): How to stand up a new Atlas, plus the orientation-file template.
+
+## Optional
+- [Optional git-versioning](method/07-optional-git-versioning.md): Versioning an Atlas's own planning files via the symlink-as-pointer mechanic (optional).
+- [Repository structure](STRUCTURE.md): How this repo is organized and how it maps onto the mini-site.
+
+## Full text
+- [llms-full.txt](llms-full.txt): Every document above, concatenated in reading order, for ingesting the whole framework in one fetch.

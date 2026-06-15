@@ -1,0 +1,845 @@
+# Atlas — full text
+
+> A tool-agnostic, spec-driven framework for running large, multi-repo, AI-assisted projects.
+
+Every document in this repo, concatenated in reading order. GENERATED from the markdown
+by build-llms-full.sh — do not edit by hand; re-run that script after changing the docs.
+
+================================================================================
+# FILE: README.md
+================================================================================
+
+# Atlas
+
+**A spec-driven framework for running large, multi-repo, AI-assisted projects** — so any
+agent, in any tool, on any day, can open a project cold and have complete clarity about what
+it is, where it lives, where the work stands, and how work gets shipped.
+
+Atlas is a small, tool-agnostic set of conventions: **where each kind of knowledge lives**,
+and **how a unit of work travels from idea to shipped**. It assumes you drive development with
+AI agents, but requires **no particular agent, IDE, editor, or memory product**. Where a
+concrete tool helps, it's named as a *reference implementation* playing a *role* you can swap.
+
+> **About this repo.** This is the formal write-up of the framework. The practice originated as
+> an operational concept (`workspace-architecture`) kept in a memory store; this repository is
+> its standalone, tool-agnostic formalization — and the basis for a small documentation site
+> (and an `llms.txt`) later. MIT-licensed, public.
+
+## Start here
+
+| If you want to… | Go to |
+|---|---|
+| Understand and adopt the framework | **[method/README.md](method/README.md)** — overview + reading order |
+| See how this repo is organized | **[STRUCTURE.md](STRUCTURE.md)** |
+
+## The framework in one screen
+
+- **The Atlas** — one directory that aggregates all of a project's repos **by symlink** (not
+  by copying), so a single-CWD agent sees the whole territory at once while each repo keeps
+  its own git, CI, and release cadence. → [method/01-the-atlas.md](method/01-the-atlas.md)
+- **The stores model** — a fixed answer to "where does *this* knowledge go?": project
+  orientation + standing decisions in an orientation file; universal rules in a **shared
+  memory store every agent queries over MCP** (required); current state in a regenerable
+  status digest; each with exactly one home.
+  → [method/02-stores-model.md](method/02-stores-model.md)
+- **The SPEC lifecycle** — nothing is coded without a small, deliverable spec; every spec
+  travels `READY → IN PROGRESS → IN REVIEW → SHIPPED → archived`.
+  → [method/04-spec-lifecycle.md](method/04-spec-lifecycle.md)
+- **The discipline** — small deliverable specs and **independent review before "shipped"**
+  (never trust an agent's self-report). → [method/05-discipline.md](method/05-discipline.md)
+
+## Roles and reference implementations
+
+Atlas describes each component by the **role** it plays, then names a concrete tool that fills
+it. The tools are swappable and optional; the first two **roles are required**, the last two
+are strengtheners.
+
+| Role | Reference implementation (optional) | Alternatives |
+|---|---|---|
+| Primary agent / tool *(required)* | Claude Code | Cursor, Codex, Cline, … |
+| Cross-tool memory store, over MCP *(required)* | coco (an MCP memory server) | mem0, any cross-tool rule store agents query over MCP |
+| Skill / cheat-sheet mechanism | Claude Code skills | any reusable-prompt affordance |
+| Forced-discipline mechanism | Claude Code hooks | any event automation |
+
+## Optional: versioning the Atlas itself
+
+An Atlas works fine unversioned — it's just a folder of symlinks plus planning files. If you
+*want* a git history of its planning artifacts, there's a clean symlink/git recipe that
+versions the artifacts without touching the member repos. It stays **optional**. →
+[method/07-optional-git-versioning.md](method/07-optional-git-versioning.md)
+
+## What this repo is not
+
+- **Not tied to any one agent, IDE, or memory-store product.** The framework names *roles*,
+  not products: a primary agent and a shared MCP memory store are **required**, but *which*
+  tools fill them are yours to choose (coco, mem0, … are optional examples).
+- **Not a memory, and not a file-based "project memory."** Unlike spec-driven-development
+  approaches that accrete project knowledge into a pile of files, Atlas keeps the durable
+  universal layer in a shared, agent-queryable memory store and keeps project-specifics lean
+  (orientation + status + specs). It defines methodology and discipline — nothing more.
+- **Not a product description.** How a system *works* lives in its own code and docs; Atlas is
+  about orientation, decisions, status, and the flow of work.
+- **Not firm-specific.** No firm- or product-specific programming patterns — only the
+  tool-agnostic conventions any team can adopt.
+
+---
+
+> **Status.** First real draft of the framework, rendered tool-agnostically from an operational
+> practice. It is a writing/structuring artifact — nothing here is executable.
+
+
+================================================================================
+# FILE: method/README.md
+================================================================================
+
+# The Atlas method
+
+A tool-agnostic way to run **large, multi-repo, AI-assisted projects** so that any
+agent — in any tool, on any day — can open the project cold and have complete clarity
+about *what it is, where it lives, where the work stands, and how work gets shipped*.
+
+The method is small. It is a handful of conventions about **where each kind of
+knowledge lives** and **how a unit of work travels from idea to shipped**. It assumes
+you drive the project with AI coding agents, but it does **not** require any particular
+agent, IDE, editor, or memory product. Where a concrete tool is useful, this doc names
+it as a *reference implementation* and tells you what role it is playing, so you can
+swap it.
+
+## Why it exists
+
+AI agents are stateless between sessions and blind across tools. Without a discipline
+for where knowledge persists, every session re-explains the project, decisions evaporate,
+"done" means "an agent said it was done," and a project with several repos becomes
+impossible for an agent to hold in its head. The Atlas method fixes that with four moving
+parts:
+
+1. **The Atlas** — one directory that aggregates all of a project's repos (by reference,
+   not by copying) so a single-CWD agent sees the whole territory at once.
+2. **The stores model** — a fixed answer to "where does *this* piece of knowledge go?",
+   so orientation, universal rules, current status, and decisions each have exactly one home.
+3. **The SPEC lifecycle** — nothing is coded without a small, deliverable spec; every spec
+   travels `READY → IN PROGRESS → IN REVIEW → SHIPPED → archived` through one set of files.
+4. **The discipline** — small specs, independent review before "shipped," and a few
+   standing rules that keep agents from drifting.
+
+## Read in this order
+
+| # | File | What it covers |
+|---|------|----------------|
+| 1 | [01-the-atlas.md](01-the-atlas.md) | The Atlas model — what an Atlas is and why it exists |
+| 2 | [02-stores-model.md](02-stores-model.md) | The stores model — where each kind of knowledge lives, **described by role** |
+| 3 | [03-atlas-anatomy.md](03-atlas-anatomy.md) | The files of record at the Atlas root, their naming, and per-repo orientation |
+| 4 | [04-spec-lifecycle.md](04-spec-lifecycle.md) | The workitem lifecycle and its status values |
+| 5 | [05-discipline.md](05-discipline.md) | Small deliverable specs, exhaustive review, ship criteria |
+| 6 | [06-bootstrap.md](06-bootstrap.md) | The bootstrap recipe — how to stand up a new Atlas |
+| 7 | [07-optional-git-versioning.md](07-optional-git-versioning.md) | The **optional** git/symlink versioning mechanic |
+
+## A note on roles vs. reference implementations
+
+Throughout, the framework describes each component by the **role** it plays and then names a
+concrete tool that *could* fill it. The roles are what the framework requires; the tools are
+optional and swappable. The mapping:
+
+| Role | Reference implementation (optional) | Alternatives exist |
+|------|--------------------------|---------------------|
+| **Primary agent / tool** *(required)* — the AI coding tool you drive the project with | Claude Code | Cursor, Codex, Cline, any CLI/IDE agent |
+| **Cross-tool memory store, over MCP** *(required)* — universal knowledge every agent queries live | coco (an MCP memory server) | mem0, or any cross-tool rule store an agent can query over MCP |
+| **Skill / cheat-sheet mechanism** *(strengthener)* — reusable, on-demand guides that *point into* the memory store | Claude Code skills | any tool affordance for reusable prompts |
+| **Forced-discipline mechanism** *(strengthener)* — automation that injects behavior on events (session start, etc.) | Claude Code hooks | any event/automation hook your tool offers |
+
+The first two roles are **required**: a primary agent and a **shared memory store every agent
+reaches over MCP**. The named tools are only examples — pick your own. The last two are
+*strengtheners*: use them if your tool offers them, and degrade gracefully if it doesn't.
+
+> **Provenance.** This framework is the tool-agnostic render of an operational practice that
+> originated as the concept `workspace-architecture` in a memory store. This repository is its
+> formal, standalone home.
+
+
+================================================================================
+# FILE: method/01-the-atlas.md
+================================================================================
+
+# The Atlas model
+
+## What an Atlas is
+
+An **Atlas** is an aggregator directory whose entries are **symlinks to real, independent
+repositories**, sitting alongside a small set of its own planning files. It gives an AI
+tool a single working directory (CWD) that presents the whole project as one tree, while
+every underlying repo keeps its own git history, its own CI, and its own release cadence.
+
+It's called an *Atlas* because it is a **map of the project's repos**: open it and you see
+the whole territory at once.
+
+```
+_<topic>-default/                 (the Atlas — a directory, not a repo)
+├── repo-a/   → /real/path/to/repo-a    — core product
+├── repo-b/   → /real/path/to/repo-b    — supporting infrastructure
+├── repo-c/   → /real/path/to/repo-c    — reference / read-only
+│
+├── CLAUDE.md            ┐
+├── STATUS.md            │
+├── BACKLOG.md           │  the Atlas's own planning files
+├── DEVIATIONS.md        │  (its "files of record" — see 03-atlas-anatomy.md)
+├── SPEC_*.md / DRAFT_*  │
+├── _archived/           ┘
+└── CANDIDATES.md           (optional — memory-store staging)
+```
+
+Editing a file *through* a symlink writes to the underlying real repo. The Atlas adds no
+git layer over those repos — it only **colocates visibility**.
+
+> **Naming.** The term is deliberately **Atlas**, not "workspace." "Workspace" is
+> hopelessly overloaded (editor multi-root workspace files, billing/tenant workspaces,
+> per-customer workspaces, …). "Atlas" names the concept cleanly so any agent grasps it
+> instantly. The reference convention is to name the directory `_<topic>-default/` and
+> keep all of a topic's Atlases under one parent folder — but the *name* is a convention,
+> not a load-bearing part of the method.
+
+## Why the pattern exists
+
+Two complementary reasons:
+
+1. **The single-CWD constraint.** Most CLI/app AI agents (Claude Code, Codex, Cursor, and
+   friends) operate against a single working directory and do **not** honor an editor's
+   multi-root workspace format. A symlink Atlas hands the agent one CWD it sees as a
+   unified tree, while preserving each repo's independence underneath.
+
+2. **Bringing related / reference repos into reach.** An Atlas is also where you colocate
+   repos that aren't direct parts of the product but benefit from being one `cd` away
+   during a task: sibling products sharing a framework, supporting infrastructure, guides
+   and reference implementations, repos being reviewed or audited, historical codebases.
+   Each stays fully independent in git; the Atlas only makes it *visible*.
+
+These projects are large and **always multi-repo** — not single landing pages. The Atlas
+exists so that opening one cold, in any tool, gives complete clarity without re-explaining
+the project every session.
+
+## What an Atlas is *not*
+
+- **Not a git repo of its own** (by default). The aggregation is non-git: it never folds
+  the member repos into a single history. (You *may* optionally version the Atlas's own
+  planning files — and only those — without touching the member repos. That mechanic is
+  [07-optional-git-versioning.md](07-optional-git-versioning.md), and it stays optional.)
+- **Not a monorepo.** Member repos are not vendored, submoduled, or copied. They are
+  referenced by symlink and remain authoritative in their own location.
+- **Not a place for product description.** How the system *works* lives in code and docs
+  inside the member repos. The Atlas holds **orientation, decisions, status, and work** —
+  see the stores model next.
+
+
+================================================================================
+# FILE: method/02-stores-model.md
+================================================================================
+
+# The stores model
+
+The heart of the method is a fixed answer to one question: **"where does this piece of
+knowledge go?"** Get that right and an agent never has to guess, never duplicates, and
+never loses a decision between sessions.
+
+Knowledge is sorted by **two axes**:
+
+- **Scope** — is it *universal* (true for any project), *project-specific* (true for this
+  one project), or *transient* (true right now)?
+- **Audience** — does *every* tool need it, or only the primary agent you drive the
+  project with?
+
+## The four stores (by role)
+
+| Store (role) | Holds | Read by | Reference impl |
+|---|---|---|---|
+| **Orientation file** | Project orientation (what the product is, each repo's purpose/stack) **+ standing project-specific decisions & conventions** (durable choices true of *this* project that don't generalize) **+ footguns** | The primary agent; the relevant slice is passed to delegated sub-agents via prompt | `CLAUDE.md` at the Atlas root (Claude Code) |
+| **Memory store** | **Universal** rules, patterns, and anti-patterns that hold across *all* your projects | **Every** agent, in any tool, querying it live over MCP | a shared MCP memory server queried by all agents — e.g. coco; alternatives: mem0, or any cross-tool rule store an agent can query over MCP |
+| **Skill / cheat-sheet store** | Domain cheat-sheets that **point into** the memory store — never duplicate its content | The primary agent | Per-skill files (Claude Code skills) |
+| **Forced-discipline store** | Behavior injected on events (e.g. "load STATUS at session start") so discipline doesn't depend on an agent remembering | The primary agent | Event hooks (Claude Code hooks) |
+
+Two of these are required and two are strengtheners:
+
+- **Required: the orientation file + the memory store.** Project-specific orientation in a
+  plain file at the Atlas root; universal knowledge in a **shared memory store that every
+  agent reaches over MCP**. Both are part of the framework — with these two, the method works.
+- **Strengtheners: skills + hooks.** If your primary tool supports reusable cheat-sheets
+  and event automation, use them to make the discipline automatic. If it doesn't, the
+  method still holds — you just apply the same discipline by hand.
+
+**On the memory store — the framework requires the *role*, recommends MCP, and names no
+tool.** The universal layer must live in a store that **all of your agents can query live,
+across tools** — and MCP is the recommended way to expose it, so the same universal knowledge
+is one query away for every agent regardless of which one is running. A memory store of this
+kind is **required**; the specific tool is **your choice and optional**. **coco** is one MCP
+memory server that plays this role; **mem0** is another; any cross-tool, agent-queryable rule
+store works.
+
+> The method does **not** use per-tool config files (`.cursorrules`, `GEMINI.md`,
+> `AGENTS.md`, symlinked entrypoints, …). They were rejected as unmaintainable: the memory
+> store covers the universal layer cross-tool, and project orientation reaches other agents
+> through the primary agent's delegation prompt.
+
+## What the framework is — and what it deliberately is not
+
+Atlas defines a **methodology and a discipline**. It is **project-agnostic**: it says *where
+each kind of knowledge belongs* and *how work flows from idea to shipped*, never what your
+product is.
+
+So, deliberately:
+
+- **The framework is not itself a memory, and it does not store a project's knowledge in a
+  pile of files.** Unlike spec-driven-development approaches that accrete a file-based
+  "project memory," Atlas keeps the durable **universal** layer in a shared, agent-queryable
+  **memory store** (required, over MCP), and keeps project-specifics **lean**: orientation +
+  standing decisions in one file, current state in a regenerable digest, and buildable work as
+  specs. The Atlas files are **planning and orientation artifacts, not a knowledge dump.**
+- **The framework names roles, not products.** A memory store is required; *which* one is your
+  call. The same holds for the primary agent and the optional strengtheners.
+
+## The critical boundary: the memory store is universal-only
+
+This is the rule people get wrong, so it gets its own section.
+
+**The memory store holds only cross-project, universal knowledge** — patterns,
+anti-patterns, behavior rules, decisions that would be true for an unrelated project too.
+It is **not** a per-project description dump.
+
+Every project has many decisions that are **durable and real but project-specific**: stack
+choices, "we use X here," product-specific architecture. These are **neither universal**
+(so not the memory store) **nor transient** (so not status). They live in the project's
+**orientation file**. Pushing them into the shared memory store would turn it into a
+per-project description dump and make it useless to every other project.
+
+> **The test:** *Would this be true for a different, unrelated project?*
+> **Yes →** memory store. **No →** orientation file.
+
+## Where new knowledge goes — the decision tree
+
+When something worth persisting appears, route it:
+
+1. **Product description** (how the system works) → *not memory.* Lives in code or docs in
+   the member repos.
+2. **Task-scoped instruction** ("for this one case, do X") → apply now, persist nothing.
+3. **Where we are right now / current work** → the project's **status digest**
+   (`STATUS.md`) — and every line there must trace to a workitem artifact (see
+   [04-spec-lifecycle.md](04-spec-lifecycle.md)).
+4. **A standing project-specific decision or convention** (stack choice, "we use X here,"
+   product architecture, a footgun) → the project's **orientation file**. *Not* the memory
+   store.
+5. **A universal, cross-project pattern / rule / anti-pattern** → the **memory store** —
+   ideally staged first in an optional **candidates file** for a dedicated curation session,
+   then promoted (or promoted directly if you don't keep a staging file).
+6. **A buildable workitem** (feature / fix / refactor / a plan handed over by another
+   tool) → a **SPEC** (shape it as a DRAFT first if still undecided), indexed in the
+   backlog. *No coding without a SPEC.*
+7. **A known divergence from a memory-store rule that applies here** → the **deviations
+   file**.
+
+## No autonomous writes
+
+Writes to any persistent store — the memory store, the orientation file, skills, hooks —
+require **explicit human approval**. New universal rules are promoted only in a dedicated
+curation session, never mid-task — optionally *staged* in a candidates file in between. This
+is what keeps the stores from drifting out from under you.
+
+> **If your tool has an autonomous file-memory feature** (one that writes its own memory
+> files as it goes), **turn it off.** It will duplicate the memory store with
+> uncontrolled, autonomous writes — exactly the drift this model exists to prevent. The
+> reference tool exposes a single setting for this (`autoMemoryEnabled: false`); whatever
+> your tool calls it, disable it and let the deliberate stores be the only memory.
+
+
+================================================================================
+# FILE: method/03-atlas-anatomy.md
+================================================================================
+
+# Atlas anatomy — the files of record
+
+Every Atlas keeps a fixed set of planning files at its root (never inside a member repo).
+The **fixed scaffold** is created empty at bootstrap, so every Atlas has the same skeleton
+from day one and an agent always knows where each thing goes. The **per-workitem** files
+appear as work arrives.
+
+## The fixed scaffold (always present)
+
+| File | Role |
+|---|---|
+| **`CLAUDE.md`** *(orientation file)* | Project orientation + standing project-specific decisions & conventions + footguns. Static — changes only when an orientation fact or a standing decision changes. |
+| **`STATUS.md`** | A thin, **regenerable digest** of where the project is *now*, derived from the workitem artifacts. Points to them; never duplicates them; holds no rules and no decisions. |
+| **`BACKLOG.md`** | Index-only — one line per open workitem, linking to its `SPEC_*` or `DRAFT_*`. No bodies, no rules, no decisions. |
+| **`DEVIATIONS.md`** | Explicit, documented divergences from a memory-store rule *that applies here* — "the rule says X; here we do Y because …". Not a catalog of rules that simply don't apply. |
+| **`_archived/`** | Where shipped SPECs go — the project's shipped history. Holds **only shipped SPECs**, plus a `README.md` explaining the folder. |
+| **`.claude/settings.local.json`** *(tool-local settings)* | Tool-local settings for the primary agent (permissions, additional readable directories). Machine-specific; not portable. No event hooks here — those live tool-global. |
+
+## Optional files
+
+| File | Role |
+|---|---|
+| **`CANDIDATES.md`** *(candidates file)* | Staging area for universal rules aspiring to the memory store, awaiting a dedicated curation session. **Optional** — add it only if you run a memory-store promotion workflow (you stage universal rules here, then promote them in a dedicated curation session). Teams that don't keep a shared memory store, or promote rules directly, can skip it. |
+
+> The candidates file's **role** is "staging for universal-rule promotion." `CANDIDATES.md`
+> is the neutral default; name it to match your memory store if you prefer.
+
+## The per-workitem files (appear as work arrives)
+
+| File | Role |
+|---|---|
+| **`SPEC_NNNN_<SLUG>.md`** | A buildable workitem. Created when a workitem appears (not pre-created at bootstrap). See lifecycle. |
+| **`DRAFT_*.md`** | An item still being shaped on its way to a SPEC. Created on demand. A DRAFT either graduates to a SPEC or is discarded — it is never a destination. |
+
+## The two living files: `CLAUDE.md` vs `STATUS.md`
+
+These two are easy to confuse, so the split is strict:
+
+- **`CLAUDE.md` is the static "what / why."** What the product is, what each repo
+  contributes, the standing decisions. It changes only when an orientation fact or a
+  standing decision changes.
+- **`STATUS.md` is the living "where are we now."** What we're actively on, a rollup of the
+  active SPECs/DRAFTs, what shipped recently. It is a **digest**: every line traces 1:1 to
+  a `BACKLOG` / `SPEC_` / `DRAFT_` / `_archived` artifact. If a line isn't backed by an
+  artifact, either create the artifact or drop the line. **Routine actions (commits, ad-hoc
+  ops) are never status.**
+
+The **structured workitem artifacts are the authoritative status**; `STATUS.md` is just the
+at-a-glance summary over them. It is regenerated, not hand-maintained — ideally on demand
+via a "sync" command, and ideally injected automatically at the start of every session so
+an agent never starts cold. (Reference implementation: a session-start hook cats `STATUS.md`
+into context; a "sync" command regenerates it. Both are tool affordances — wire up whatever
+your tool offers, or do it by hand.)
+
+## The per-repo orientation block
+
+Inside `CLAUDE.md`, **every symlinked repo gets a standard block** so any agent understands
+the territory cold. Group repos by role when there are many. Each block is:
+
+- **Role** — core product / reference / infrastructure / tooling
+- **Contributes** — one paragraph: what this repo holds and does for the project
+- **Stack** — languages / frameworks / key libraries
+- **Cadence** — how it releases or deploys (or "reference only: read, don't modify")
+
+> Fill these from each repo's own README (or package description). If it's missing or
+> ambiguous, **ask** — don't infer the repo's purpose from its file layout.
+
+## Naming conventions
+
+- **SPECs: `SPEC_NNNN_<SLUG>.md`** — a 4-digit zero-padded sequence (per-Atlas, assigned at
+  creation, never reused) so the name reflects creation order, then an `UPPER_SNAKE` slug.
+  Created/ship dates live *inside* the file, not in the name. E.g.
+  `SPEC_0001_PROVENANCE_DECOUPLING.md`.
+- **DRAFTs: `DRAFT_<SLUG>.md`** — same spirit, for items still being shaped.
+- **Legacy files predating this naming are left as-is** — history is not renamed.
+
+Each thing has exactly one home: orientation + standing decisions in `CLAUDE.md`, universal
+rules in the memory store, current state in `STATUS.md`, buildable work in a `SPEC_`, known
+divergences in `DEVIATIONS.md`, shipped history in `_archived/`.
+
+
+================================================================================
+# FILE: method/04-spec-lifecycle.md
+================================================================================
+
+# The SPEC lifecycle
+
+Everything buildable enters as a **SPEC**. A SPEC is the unit of work: one feature, one
+fix, one refactor, or a plan handed over by another tool — converted into a small,
+deliverable specification *before any code is written*.
+
+## The rule: no coding without a SPEC
+
+1. **Nothing gets coded without a SPEC.** Every workitem becomes a `SPEC_NNNN_<SLUG>.md`
+   before any code is written. A loose plan — even a good one handed over by another agent
+   — is **converted into a SPEC first**. You don't code from a loose plan.
+2. **`DRAFT_*.md` is the optional shaping stage**, for an item still being decided (open
+   questions, placeholders, unknowns). A DRAFT either **graduates to a SPEC** once its
+   shape is fully defined, or is **discarded**. It is never a destination.
+3. **The backlog indexes the open SPECs/DRAFTs** — one line each, index-only (never item
+   bodies, never rules, never candidate universal rules).
+4. **A shipped SPEC moves to `_archived/`** (same name). `_archived/` holds *only* shipped
+   SPECs.
+
+## Status values
+
+A SPEC travels through these states. The distinction between the last few is the whole
+point of the ship discipline (see [05-discipline.md](05-discipline.md)):
+
+```
+READY  →  IN PROGRESS  →  IN REVIEW  →  SHIPPED  →  archived
+```
+
+| Status | Meaning |
+|---|---|
+| **READY** | Shaped and buildable; not yet started. |
+| **IN PROGRESS** | An agent is actively implementing it. |
+| **IN REVIEW** | The implementing agent is *done*; an **independent review** is underway — running the suites and exercising the change, not reading the agent's report. |
+| **SHIPPED** | A commit exists. The change is real, reviewed, and committed. |
+| **archived** | The SPEC has moved to `_archived/`. This happens **at SHIPPED — after review and commit — never on the agent's say-so.** |
+
+> **"Shipped" is a claim about reality, not about an agent's completion message.** It
+> requires, in order: (1) the implementing agent finished, (2) an *independent* review
+> verified the work against the SPEC by running and exercising it, and (3) the change was
+> committed. Archiving a SPEC or marking status "done" on an agent's self-report alone is
+> premature on two counts — independent review routinely produces substantial corrections,
+> and uncommitted work is by definition not shipped. If a SPEC was archived early,
+> **un-archive it**: move it back to the Atlas root with status IN REVIEW rather than
+> "reviewing history."
+
+## The deviations registry
+
+`DEVIATIONS.md` runs **independently** of the SPEC flow. It records explicit, deliberate
+divergences from a memory-store rule *that applies to this Atlas* — a rule you'd be
+expected to follow but deliberately (or for now) don't, with the reason. A divergence may
+also spawn a SPEC to resolve it.
+
+It is **not** a list of out-of-domain rules that simply don't apply — you don't enumerate
+what the project *isn't*. (A memory-server project doesn't record "I'm not a web app.")
+
+## Each artifact's job, recapped
+
+- **`BACKLOG.md`** — the index of *open* work.
+- **`SPEC_*` / `DRAFT_*`** — the work itself, one file per item.
+- **`_archived/`** — shipped history.
+- **`DEVIATIONS.md`** — known, deliberate divergences.
+- **`STATUS.md`** — the digest over all of the above (regenerated, never the source of
+  truth).
+
+
+================================================================================
+# FILE: method/05-discipline.md
+================================================================================
+
+# The discipline
+
+The Atlas and the stores tell you *where things live*. The discipline is the handful of
+standing rules that keep AI-driven work honest. These are **method-level and universal** —
+they hold regardless of language, framework, or product.
+
+## 1. Specs are small and independently deliverable
+
+A SPEC is sized to be **built, reviewed, and shipped as one coherent unit** — not an epic.
+If a workitem can't be described, implemented, and verified end-to-end without dragging in
+half the system, it is too big: split it into SPECs that each ship on their own.
+
+Small-and-deliverable is what makes the rest of the discipline affordable. Independent
+review (below) is only practical when the change under review is bounded. A spec that
+sprawls can't be exhaustively reviewed, can't be cleanly reverted, and tends to hide
+"done-ish" work behind its own size.
+
+> Rules of thumb: one SPEC should have a single clear "this is what shipped" sentence; it
+> should be reviewable in one focused sitting; and it should leave the project in a
+> shippable state when it lands, not "shippable once the next three SPECs also land."
+
+## 2. A SPEC is never shipped on an agent's self-report
+
+This is the core ship-discipline rule. An agent's "I'm done" message is **not** evidence
+that the work is done. Before a SPEC is SHIPPED:
+
+1. the implementing agent finishes its work, **then**
+2. an **independent review** verifies the work against the SPEC — *running the suites and
+   exercising the change*, not reading the agent's report, **then**
+3. the change is **committed**.
+
+Independent review routinely produces substantial corrections (boundary conditions, error
+handling, naming, test coverage, dependency layout). Skipping it — trusting the
+self-report — is how subtly-wrong work gets archived as "shipped." See
+[04-spec-lifecycle.md](04-spec-lifecycle.md) for the `IN REVIEW → SHIPPED` transition and
+the un-archive rule when something was shipped early.
+
+---
+
+These two are the universal core. Anything more specific — a particular error-handling
+pattern, a framework convention, a naming scheme — is **not the framework**: it's a
+project-specific choice that belongs in your orientation file, or a universal one that belongs
+in your memory store. Not here.
+
+
+================================================================================
+# FILE: method/06-bootstrap.md
+================================================================================
+
+# Bootstrap recipe — standing up a new Atlas
+
+This is the step-by-step for creating the baseline files of a new Atlas. It is written
+**tool-agnostically**; where the reference implementation (Claude Code) uses a specific
+affordance, that's called out as *reference impl* so you can map it to your tool or do it
+by hand.
+
+The recipe assumes **the Atlas directory and its symlinks already exist** — a human creates
+those before bootstrapping. The current working directory is the Atlas directory.
+
+> **Reference impl:** the reference author runs this recipe via an `/atlas-init` command,
+> and regenerates `STATUS.md` later via `/atlas-sync`. Those are *machinery* that recall
+> the definition and apply it — they don't re-encode it. If your tool has reusable
+> commands, wire equivalents; otherwise follow the steps directly.
+
+## Prerequisites (a human handles these first)
+
+- The **Atlas directory** exists (reference convention:
+  `~/Code/<container>/<topic>/_<topic>-default/`).
+- **Symlinks to the real repos** are already in place inside it
+  (`ln -s /real/path/to/repo <repo-name>`).
+- *(Optional)* an editor multi-root workspace file lives **one level above** the Atlas
+  (at the topic folder), listing the symlinks. Putting it inside the Atlas would be
+  cyclically redundant.
+- **Once-per-machine tool setup is already done** (not per Atlas): autonomous file-memory
+  is disabled; any session-start and stop automations are installed tool-global.
+  *(Reference impl: `autoMemoryEnabled: false` plus a `SessionStart` hook that injects
+  `STATUS.md` and a `Stop` hook that nudges a status re-sync — all in user-global tool
+  settings, installed once.)*
+
+## Steps
+
+1. **Discover the symlinks** at CWD and resolve each to its real target path. If an
+   optional workspace file exists in the parent topic folder, confirm the two agree. **If
+   the workspace file lists folders absent as symlinks (or vice versa), stop and ask the
+   human before continuing.**
+
+2. **Recall the method** before creating files — pull the Atlas model, this recipe, and the
+   orientation-file template from wherever the canonical definition lives (the memory store
+   for the reference author; this document otherwise). Don't reconstruct it from memory.
+
+3. **Create the orientation file (`CLAUDE.md`)** from the template (below). Fill the "what
+   lives here" section with the symlinks, each with a **per-repo orientation block** (role ·
+   contributes · stack · cadence). Read each repo's own README / package description for the
+   content. **If it's missing or ambiguous, ask the human — do not infer it from the file
+   layout.** Leave the workflow / domain / establishing-conventions sections mostly as
+   placeholders.
+
+4. **Create the tool-local settings** (`.claude/settings.local.json` for the reference tool)
+   granting the agent read access to the real symlink target paths. **No event hooks here** —
+   those are tool-global, installed once per machine.
+
+   ```json
+   {
+     "permissions": {
+       "allow": [],
+       "additionalDirectories": [
+         "/real/path/to/repo-1",
+         "/real/path/to/repo-2"
+       ]
+     }
+   }
+   ```
+
+5. **Create the fixed scaffold — all start empty** so every Atlas has the same skeleton
+   from day one:
+   - `STATUS.md` — the thin digest (one-line product summary; "Active" and "Recently
+     shipped" start empty).
+   - `BACKLOG.md` — index only; "Open" starts empty.
+   - `DEVIATIONS.md` — starts empty.
+   - `_archived/README.md` — explains that the folder holds only shipped `SPEC_NNNN_<SLUG>.md`
+     files.
+
+6. **Optionally create `CANDIDATES.md`** (the candidates file) — only if you run a
+   memory-store promotion workflow. It stages universal rules for a later curation session;
+   starts empty, with the entry format documented inline. Skip it otherwise.
+
+7. **Do NOT pre-create `SPEC_*.md` / `DRAFT_*.md`.** Those are per-workitem, created when the
+   first workitem appears — not at bootstrap.
+
+8. **Do NOT touch once-per-machine tool setup** (tool-global settings, skills) during Atlas
+   bootstrap.
+
+Done. The Atlas is scaffolded: standing decisions accumulate in the orientation file;
+buildable work enters as `SPEC_NNNN_<SLUG>.md` (indexed in the backlog, shipped to
+`_archived/`); `STATUS.md` digests it all; and, if you stage universal rules for promotion,
+they collect in the optional candidates file.
+
+## The orientation-file template
+
+Copy this skeleton, then fill the `<...>` placeholders. Universal behavior rules are **not**
+in this template — they live in the memory store; don't re-add them per Atlas.
+
+````markdown
+# <Topic> Atlas — agent instructions
+
+This is the **<topic> Atlas** — a symlink-aggregator project root. Project orientation +
+Atlas-specific glue only. Universal rules and behavior live in the memory store; autonomous
+file-memory is off. **Current state & next steps live in [STATUS.md](STATUS.md) — read it
+first.**
+
+---
+
+## 1. What lives here — symlinks and their purposes
+
+Each top-level entry is a symlink into a real, independent git repo:
+
+```
+_<topic>-default/                  (Atlas; not a repo)
+├── repo-a/   → <real-path>        — <one-line purpose>
+├── repo-b/   → <real-path>        — <one-line purpose>
+└── repo-c/   → <real-path>        — <one-line purpose>
+```
+
+Editing a file under a symlink writes to the underlying real repo. Cross-repo changes are
+flagged explicitly.
+
+### <repo-name> — <role: core product | reference | infrastructure | tooling>
+- **Contributes:** <one paragraph>
+- **Stack:** <languages / frameworks / key libs>
+- **Cadence:** <how it releases — or "reference only: read, don't modify">
+
+---
+
+## 2. How I work in this Atlas
+- **Before editing, identify the target repo** — most changes belong to exactly one repo;
+  cross-repo changes are called out explicitly.
+- <Atlas-specific tooling notes — environment naming, dev-server entrypoints, lint/format>
+- <Atlas-specific footguns unique to this Atlas — generic ones live in the memory store>
+
+---
+
+## 3. <Project domain> — product / architecture
+_(no domain conventions yet)_
+
+---
+
+## 5. Conventions we're establishing (Atlas-level, not in the memory store)
+_Rules that apply to this Atlas and that we've decided not (yet) to lift into the memory
+store. Keep it short; promote to the memory store only after a dedicated session, and only
+if they generalize._
+- _(empty — fill in as conventions get decided.)_
+````
+
+**Applying the template:**
+
+- The **per-repo orientation block** is the heart of §1 — it's what lets any agent
+  understand each repo without re-explanation.
+- §2 = how you work; §3+ = domain; an optional §4 = a separable sub-domain; §5 = conventions
+  you're establishing locally. **Section numbers are fixed**: if you omit §4, §5 stays §5 —
+  don't renumber. The stable §1/§2/§3/§5 shape is recognizable across Atlases.
+- At bootstrap, §3 is a single `_(no domain conventions yet)_` line. **Don't pre-create
+  sub-sections** — empty 3.1/3.2 read as "I forgot to fill this in," not "fresh Atlas." Add
+  them only when there's real content.
+- Don't put current-state / progress in the orientation file — that's `STATUS.md`'s job.
+
+
+================================================================================
+# FILE: method/07-optional-git-versioning.md
+================================================================================
+
+# Optional: versioning the Atlas itself (git + symlinks)
+
+**Versioning an Atlas with git is OPTIONAL** — a choice the adopter makes, neither required
+nor forbidden by the method. An Atlas works perfectly well unversioned: it's just a folder
+of symlinks plus planning files. This section exists only so that *if* you choose to version
+it, you do it cleanly. The default stance is **"your call."**
+
+## Reconciling with "an Atlas is a non-git aggregator"
+
+The core model calls an Atlas a *non-git aggregator*, and that stays true in spirit: git
+here **never** subsumes the aggregated repos into one history. What this optional mechanic
+adds is narrower — the Atlas's **own planning files** (decisions, SPEC evolution, status
+over time) are ordinary text worth a history, and they *can* be versioned in their own repo
+**without touching or duplicating the member repos**.
+
+So: **the aggregation stays non-git; only the artifacts are optionally versioned.** Opt in
+when that history has value (long-lived project, multiple SPECs shipping, decisions worth a
+diff); skip it for a throwaway or single-purpose Atlas.
+
+## Why it's safe — git stores a symlink as a pointer, not as contents
+
+A committed symlink is a tiny blob (git mode `120000`) whose entire content is the **target
+path string** — git never recurses through it into the linked repo. So `git add` over an
+Atlas records the planning files plus one small (~50-byte) pointer blob per symlink, and
+**never** the member repos' files, history, or `.git`. Each member repo keeps its own git,
+history, and release cadence; nothing is re-sent or embedded.
+
+> Verified empirically (2026-06-13): committing an Atlas with a symlink to a repo tracked
+> only the link's path string, never the repo's files.
+
+## The caveat that drives the recipe — version the artifacts, not the pointers
+
+Atlas symlinks are typically **absolute, machine-specific paths** (`/Users/<me>/Code/…`), so
+a committed symlink is a dangling pointer on any other machine. The tool-local settings file
+has the same problem (machine-specific absolute paths; its `.local` suffix already implies
+"untracked"). So **version the text artifacts and ignore the symlinks** (and the local
+settings).
+
+## Recipe — whitelist `.gitignore`, then `git init`
+
+Ignore everything, then re-include only the planning artifacts:
+
+```gitignore
+/*
+!/*.md
+!/_archived/
+!/.gitignore
+# plus any other fixed artifact dirs the method defines
+```
+
+Any current **or future** symlink is ignored automatically — zero per-repo maintenance — and
+only the planning artifacts are tracked.
+
+**Prefer this whitelist over a hand-maintained blocklist of repo names.** `.gitignore` has
+**no "ignore by filetype = symlink" selector** — matching is purely by path/name — so
+"deny everything, allow the known artifact set" is the robust, future-proof form. A blocklist
+must be edited every time a new repo is symlinked in; the whitelist never does.
+
+
+================================================================================
+# FILE: STRUCTURE.md
+================================================================================
+
+# Repository structure
+
+This repo holds the **Atlas framework** as a tool-agnostic, formal write-up. It is structured
+so it can later be rendered as a small documentation site (and emit an `llms.txt` index)
+without reorganization.
+
+## Layout
+
+```
+atlas/
+├── README.md                 ← landing / index for the whole repo (also doc page "Overview")
+├── STRUCTURE.md              ← this file
+│
+├── method/                   ← THE FRAMEWORK, split into focused, self-contained files
+│   ├── README.md             ← overview + reading order + role↔reference-impl map
+│   ├── 01-the-atlas.md       ← the Atlas model (what / why)
+│   ├── 02-stores-model.md    ← the stores model, described by role
+│   ├── 03-atlas-anatomy.md   ← files of record, naming, per-repo orientation
+│   ├── 04-spec-lifecycle.md  ← workitem lifecycle + status values
+│   ├── 05-discipline.md      ← small deliverable specs, review, ship criteria
+│   ├── 06-bootstrap.md       ← bootstrap recipe + orientation-file template
+│   └── 07-optional-git-versioning.md  ← the optional symlink/git mechanic
+│
+│   # mini-site (zero-build; renders the markdown above, client-side)
+├── index.html                ← the site: sidebar (reading order) + client-side md renderer
+├── styles.css                ← site styling (responsive, auto dark mode)
+├── llms.txt                  ← llmstxt.org index of the docs (served at the site root)
+├── Dockerfile                ← serves the static site via nginx
+├── .dockerignore             ← keeps .git / tooling out of the image
+└── .nojekyll                 ← lets GitHub Pages serve the files as-is
+```
+
+## Why the framework is split into files
+
+It is one document conceptually, but it has genuinely distinct parts that get read and linked
+independently (the stores model vs. the lifecycle vs. the bootstrap recipe). Splitting keeps
+each part skimmable and makes cross-links precise.
+
+## The mini-site
+
+The repo ships a **zero-build documentation site**. `index.html` renders the same markdown
+files client-side (a single pinned dependency, the `marked` parser, from a CDN) with a sidebar
+in reading order — so the markdown stays the **single source of truth**; there is no generated,
+drift-prone HTML copy. `llms.txt` (llmstxt.org format) sits at the site root so an LLM can pull
+the whole framework directly.
+
+### Run it
+
+```bash
+# Option A — Docker (nginx)
+docker build -t atlas-site .
+docker run --rm -p 8000:80 atlas-site
+# → http://localhost:8000/
+
+# Option B — any static file server (no Docker)
+python3 -m http.server 8000      # serves static files only; no install, no project code
+# → http://localhost:8000/
+
+# Option C — GitHub Pages: serve from the repo root; the site and llms.txt work as-is.
+```
+
+Each `method/` file is **self-contained and rule-shaped**, with a single clear topic and a
+stable filename, so a page-per-file site needs no reorganization and new files appear by adding
+one nav entry in `index.html`.
+

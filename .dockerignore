@@ -1,0 +1,7 @@
+# Keep the image to just the served static site.
+.git
+.gitignore
+.claude
+.nojekyll
+Dockerfile
+.dockerignore
