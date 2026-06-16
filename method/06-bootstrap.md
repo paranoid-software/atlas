@@ -86,6 +86,10 @@ buildable work enters as `SPEC_NNNN_<SLUG>.md` (indexed in the backlog, shipped 
 `_archived/`); `STATUS.md` digests it all; and, if you stage universal rules for promotion,
 they collect in the optional candidates file.
 
+> **Bootstrap runs once.** Adding or removing a repo later is **not** a re-bootstrap — it's a
+> sync that reconciles the per-repo orientation blocks and tool-local settings to the new
+> symlink set. See [03-atlas-anatomy.md](03-atlas-anatomy.md) → "Adding or removing a repo."
+
 ## The orientation-file template
 
 Copy this skeleton, then fill the `<...>` placeholders. Universal behavior rules are **not**

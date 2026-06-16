@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ title }} · Atlas</title>
+  <meta name="description" content="{{ tagline }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+  <button class="menu-toggle" aria-label="Toggle navigation" onclick="document.body.classList.toggle('nav-open')">☰</button>
+  <div class="backdrop" onclick="document.body.classList.remove('nav-open')"></div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="logo"><a href="/">Atlas</a></span>
+        <span class="ver">framework</span>
+      </div>
+      <p class="tagline">A spec-driven framework for AI-assisted, multi-repo projects.</p>
+      <nav>
+        {% for group in groups %}
+          <div class="nav-group-label">{{ group.name }}</div>
+          {% for item in group['items'] %}
+            <a class="nav-link {% if item.url == current %}active{% endif %}" href="{{ item.url }}">{% if item.num %}<span class="num">{{ item.num }}</span>{% endif %}{{ item.title }}</a>
+          {% endfor %}
+        {% endfor %}
+        <div class="nav-group-label">For machines</div>
+        <a class="nav-link" href="/llms.txt">llms.txt</a>
+        <a class="nav-link" href="/llms-full.txt">llms-full.txt</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <article class="content">
+        {{ content | safe }}
+        <div class="doc-footer"><span>Atlas — MIT · rendered from the markdown (single source of truth)</span></div>
+      </article>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,7 +1,9 @@
-# Keep the image to just the served static site.
+# Keep the image to just the app + content.
 .git
 .gitignore
 .claude
-.nojekyll
+.venv
+__pycache__
+*.pyc
 Dockerfile
 .dockerignore

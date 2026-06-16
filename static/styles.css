@@ -70,7 +70,7 @@ a:hover { text-decoration: underline; }
 
 .nav-group-label {
   font-size: .68rem; text-transform: uppercase; letter-spacing: .08em;
-  color: var(--fg-soft); padding: .75rem .5rem .25rem; font-weight: 600;
+  color: var(--fg-soft); padding: 1rem .5rem .25rem; font-weight: 600;
 }
 nav a.nav-link {
   display: block; padding: .35rem .5rem; border-radius: 6px;

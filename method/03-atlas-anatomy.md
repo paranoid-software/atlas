@@ -65,6 +65,26 @@ the territory cold. Group repos by role when there are many. Each block is:
 > Fill these from each repo's own README (or package description). If it's missing or
 > ambiguous, **ask** — don't infer the repo's purpose from its file layout.
 
+## Adding or removing a repo from an existing Atlas
+
+The set of symlinked repos is part of the Atlas's reality, so changing it is a **sync, not a
+re-init**. Bootstrapping (`atlas-init` in the reference impl) is one-time and refuses to run on
+an already-scaffolded Atlas; adding or removing a repo afterward is handled by the **sync**
+operation, because a repo change *is* an orientation-fact change.
+
+When the symlink set changes, the sync reconciles the artifacts to it:
+
+- **Repo added** (new symlink) → add its **per-repo orientation block** to `CLAUDE.md` §1
+  (read its README; ask if ambiguous), and add its real target path to the tool-local
+  settings' readable-directories list.
+- **Repo removed** (symlink gone) → flag the now-stale orientation block and its settings
+  entry, and **ask before deleting** them.
+- **Mismatch** between the symlinks present and the orientation blocks (or a multi-root
+  workspace file, if you keep one) → surface it; don't silently guess.
+
+This keeps the rule simple: **new Atlas → bootstrap; any later change to the repo set (or the
+status) → sync.**
+
 ## Naming conventions
 
 - **SPECs: `SPEC_NNNN_<SLUG>.md`** — a 4-digit zero-padded sequence (per-Atlas, assigned at

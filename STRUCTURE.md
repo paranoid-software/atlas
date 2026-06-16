@@ -1,8 +1,8 @@
 # Repository structure
 
-This repo holds the **Atlas framework** as a tool-agnostic, formal write-up. It is structured
-so it can later be rendered as a small documentation site (and emit an `llms.txt` index)
-without reorganization.
+This repo holds the **Atlas framework** as a tool-agnostic, formal write-up, plus a small
+Flask app that serves it as a site and as machine endpoints — all rendered from the same
+markdown.
 
 ## Layout
 
@@ -21,19 +21,14 @@ atlas/
 │   ├── 06-bootstrap.md       ← bootstrap recipe + orientation-file template
 │   └── 07-optional-git-versioning.md  ← the optional symlink/git mechanic
 │
-│   # mini-site (zero-build; renders the markdown above, client-side)
-├── index.html                ← the site: sidebar (reading order) + client-side md renderer
-├── styles.css                ← site styling (responsive, auto dark mode)
-├── llms.txt                  ← llmstxt.org index of the docs (served at the site root)
-├── llms-full.txt             ← all docs concatenated in reading order (generated)
-├── build-llms-full.sh        ← regenerates llms-full.txt from the markdown
-├── Dockerfile                ← serves the static site via nginx
-├── .dockerignore             ← keeps .git / tooling out of the image
-└── .nojekyll                 ← lets GitHub Pages serve the files as-is
+│   # the site — a small Flask app that renders the markdown above (nothing pre-generated)
+├── app.py                    ← Flask: pages, raw .md, /llms.txt, /llms-full.txt
+├── templates/page.html       ← page layout (sidebar in reading order + content)
+├── static/styles.css         ← styling (responsive, auto dark mode)
+├── requirements.txt          ← Flask · Markdown · gunicorn
+├── Dockerfile                ← python image, serves via gunicorn
+└── .dockerignore             ← keeps .git / .venv / tooling out of the image
 ```
-
-> `llms-full.txt` is **generated** from the markdown — the single source of truth stays the
-> `.md` files. Re-run `sh build-llms-full.sh` after editing any doc to refresh it.
 
 ## Why the framework is split into files
 
@@ -41,29 +36,33 @@ It is one document conceptually, but it has genuinely distinct parts that get re
 independently (the stores model vs. the lifecycle vs. the bootstrap recipe). Splitting keeps
 each part skimmable and makes cross-links precise.
 
-## The mini-site
+## The site (Flask)
 
-The repo ships a **zero-build documentation site**. `index.html` renders the same markdown
-files client-side (a single pinned dependency, the `marked` parser, from a CDN) with a sidebar
-in reading order — so the markdown stays the **single source of truth**; there is no generated,
-drift-prone HTML copy. `llms.txt` (llmstxt.org format) sits at the site root so an LLM can pull
-the whole framework directly.
+`app.py` serves everything **from the markdown** — there is no generated, drift-prone copy and
+no build step. Routes:
+
+| Route | Serves |
+|---|---|
+| `/`, `/method/<name>`, `/structure` | the doc **rendered to HTML** (server-side), with a sidebar in reading order |
+| `/method/<name>.md`, `/README.md`, … | the **raw markdown** (this is what the `atlas-fetch` machinery consumes) |
+| `/llms.txt` | the [llmstxt.org](https://llmstxt.org) index, generated from the page manifest |
+| `/llms-full.txt` | every doc concatenated in reading order, generated on request |
+
+Adding a doc = drop the `.md` file and add one entry to the `PAGES` list in `app.py` (nav,
+routes, llms.txt and llms-full.txt all follow).
 
 ### Run it
 
 ```bash
-# Option A — Docker (nginx)
+# Docker
 docker build -t atlas-site .
-docker run --rm -p 8000:80 atlas-site
-# → http://localhost:8000/
+docker run --rm -p 8088:80 atlas-site        # → http://localhost:8088/
 
-# Option B — any static file server (no Docker)
-python3 -m http.server 8000      # serves static files only; no install, no project code
-# → http://localhost:8000/
-
-# Option C — GitHub Pages: serve from the repo root; the site and llms.txt work as-is.
+# Local dev (project venv — never the system Python)
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+.venv/bin/python app.py                       # → http://localhost:8088/
 ```
 
-Each `method/` file is **self-contained and rule-shaped**, with a single clear topic and a
-stable filename, so a page-per-file site needs no reorganization and new files appear by adding
-one nav entry in `index.html`.
+This is the source the machinery points at: `~/.claude/atlas-source` holds the base URL (e.g.
+`http://localhost:8088`, later `https://atlas.paranoid.software`) and `~/.claude/atlas-fetch.sh`
+fetches `method/*.md` / `llms*.txt` from it.

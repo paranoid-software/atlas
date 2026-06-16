@@ -98,6 +98,40 @@ When something worth persisting appears, route it:
 7. **A known divergence from a memory-store rule that applies here** → the **deviations
    file**.
 
+### Triaging a candidate — when it turns out *not* to be universal
+
+The candidates file (step 5) stages things that *aspire* to be universal. It is **not a
+destination**: in a curation pass, each candidate resolves to exactly one home. A candidate
+that, on reflection, is **not** universal is **re-routed**, not left in the candidates file.
+
+> **The one question:** *Should this guide future work in this Atlas, beyond the SPEC that
+> introduced it?*
+
+| The candidate turns out to be… | Home |
+|---|---|
+| Universal — true for an unrelated project too | **memory store** (promote) |
+| A standing convention/decision **of this Atlas** | **orientation file** — the "establishing conventions" section (§5) |
+| A deliberate divergence from a memory-store rule that applies here | **deviations file** |
+| Just how one workitem was done, with no standing rule for the future | **leave it in its SPEC**, drop the candidate — once shipped, the `_archived/` SPEC is its only record |
+
+The last row is the subtle one: an archived SPEC is the *record of the work*, not where an
+agent looks for *standing rules* — orientation comes from `CLAUDE.md` + the status digest,
+never from reading shipped history. A durable convention buried in an archived SPEC is
+effectively lost; promote it to the orientation file. Only knowledge with **no**
+future-guiding character stays in the SPEC.
+
+**Worked examples** (generic — your real conventions live in your orientation file or memory store):
+
+- *"Standardize on the project's existing date library; don't add another."* → if it's how
+  *any* project should behave, **memory store**; if it's "in **this** Atlas we picked library
+  X," **orientation file**.
+- *"This layer maps errors to typed results, not exceptions."* → a standing convention of this
+  Atlas → **orientation file**.
+- *"For `SPEC_0007` we special-cased the legacy importer; don't generalize it."* → scoped to
+  that work, no future rule → **stays in the SPEC**.
+- *"A memory-store rule applies here, but a legacy area doesn't follow it yet; new work does."*
+  → a known divergence → **deviations file**.
+
 ## No autonomous writes
 
 Writes to any persistent store — the memory store, the orientation file, skills, hooks —
