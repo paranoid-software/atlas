@@ -11,8 +11,8 @@ concrete tool helps, it's named as a *reference implementation* playing a *role*
 
 > **About this repo.** This is the formal write-up of the framework. The practice originated as
 > an operational concept (`workspace-architecture`) kept in a memory store; this repository is
-> its standalone, tool-agnostic formalization — and the basis for a small documentation site
-> (and an `llms.txt`) later. MIT-licensed, public.
+> its standalone, tool-agnostic formalization, served as a small documentation site (and an
+> `llms.txt`). Its official home is **https://atlas.paranoid.software**. MIT-licensed, public.
 
 ## Start here
 

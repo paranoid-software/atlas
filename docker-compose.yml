@@ -1,0 +1,19 @@
+# Atlas framework site — DEVELOPMENT compose.
+# Live docs: the repo is bind-mounted read-only and gunicorn auto-reloads, so editing any
+# .md (or app.py / template) shows up at http://localhost:8088/ without a rebuild.
+#
+#   docker compose up -d        # start (build on first run)
+#   docker compose down         # stop
+#
+# Deployment uses a SEPARATE compose (no bind-mount; serves the baked image).
+services:
+  atlas-site:
+    build: .
+    image: atlas-site
+    container_name: atlas-site
+    ports:
+      - "8088:80"
+    volumes:
+      - ./:/app:ro            # live source; remove this line to serve the baked image instead
+    command: gunicorn --bind 0.0.0.0:80 --workers 2 --reload app:app
+    restart: unless-stopped

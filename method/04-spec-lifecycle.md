@@ -43,6 +43,23 @@ READY  →  IN PROGRESS  →  IN REVIEW  →  SHIPPED  →  archived
 > **un-archive it**: move it back to the Atlas root with status IN REVIEW rather than
 > "reviewing history."
 
+## Planning the *how* is the tool's job — not an Atlas artifact
+
+A SPEC fixes the **what** (and its acceptance). The **how** — the implementation approach,
+and any task breakdown — is planned at the `READY → IN PROGRESS` boundary by **your tool's
+plan mode** (e.g. Claude Code's or Cursor's): feed it the SPEC, it produces the approach
+(and tasks if it wants), a human approves it, then it executes. For a non-trivial SPEC this
+approval is the **cheap, early review gate** — catching a wrong approach *before* code is
+written, the same spirit as never shipping on an agent's self-report. A tool without a plan
+mode degrades gracefully: the agent states its approach and the human approves before coding.
+
+**This plan is transient and tool-owned — it is never an Atlas artifact.** Do **not** create
+`PLAN_*.md` / `TASKS_*.md` files; that is exactly the "pile of files" Atlas avoids. The plan
+is a task-scoped instruction → *apply now, persist nothing*. Its only durable traces are the
+ones Atlas already keeps: the **code** is the record of how it was built, a **how-decision
+with standing value** graduates to `CLAUDE.md`, and the **archived SPEC** records the *what*
+that shipped.
+
 ## The deviations registry
 
 `DEVIATIONS.md` runs **independently** of the SPEC flow. It records explicit, deliberate

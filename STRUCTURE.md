@@ -26,8 +26,14 @@ atlas/
 ├── templates/page.html       ← page layout (sidebar in reading order + content)
 ├── static/styles.css         ← styling (responsive, auto dark mode)
 ├── requirements.txt          ← Flask · Markdown · gunicorn
-├── Dockerfile                ← python image, serves via gunicorn
-└── .dockerignore             ← keeps .git / .venv / tooling out of the image
+├── Dockerfile                ← python image, serves via gunicorn (shared by dev & deploy)
+│
+│   # running it
+├── docker-compose.yml        ← DEV: bind-mount + auto-reload (live docs)
+├── docker-compose.deploy.yml ← example: run the published image (no build)
+├── .dockerignore             ← keeps .git / .venv / tooling out of the image
+└── .github/workflows/
+    └── publish.yml           ← build + push the image to GHCR (on push to main / v* tag / manual)
 ```
 
 ## Why the framework is split into files
@@ -54,15 +60,33 @@ routes, llms.txt and llms-full.txt all follow).
 ### Run it
 
 ```bash
-# Docker
-docker build -t atlas-site .
-docker run --rm -p 8088:80 atlas-site        # → http://localhost:8088/
+# Development — docker-compose.yml (bind-mount + auto-reload): edit any .md, refresh, no rebuild
+docker compose up -d            # → http://localhost:8088/
+docker compose down
 
-# Local dev (project venv — never the system Python)
+# Local, without Docker (project venv — never the system Python):
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
-.venv/bin/python app.py                       # → http://localhost:8088/
+.venv/bin/python app.py
 ```
 
-This is the source the machinery points at: `~/.claude/atlas-source` holds the base URL (e.g.
-`http://localhost:8088`, later `https://atlas.paranoid.software`) and `~/.claude/atlas-fetch.sh`
-fetches `method/*.md` / `llms*.txt` from it.
+In development the markdown is read **live from the bind-mount** (each request re-reads the
+file). **Deployment uses a separate compose** (no bind-mount) that serves the content **baked
+into the image** — there a doc change needs a rebuild. The `Dockerfile` is shared by both;
+only the compose differs.
+
+This is the source the machinery points at: `~/.claude/atlas-source` holds the base URL — the
+official site **`https://atlas.paranoid.software`**, or `http://localhost:8088` for local dev —
+and `~/.claude/atlas-fetch.sh` fetches `method/*.md` / `llms*.txt` from it.
+
+### Published image & CI
+
+`publish.yml` builds the image and pushes it to **GHCR** (`ghcr.io/<owner>/atlas`, multi-arch)
+on every **push to `main`**, on `v*` tags, and on manual run. That's all CI does — **build &
+push, no deploy**. Anyone can then pull and run it however they like (self-hosted, local, …):
+
+```bash
+docker compose -f docker-compose.deploy.yml up -d   # → http://localhost:8088/
+```
+
+> First publish: the GHCR package starts **private** — make it public in the repo's *Packages*
+> settings if you want anonymous `docker pull`.

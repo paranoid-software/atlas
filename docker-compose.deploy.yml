@@ -1,0 +1,14 @@
+# Example deployment compose — uses the PUBLISHED image (no build, no bind-mount).
+# For anyone who just wants to run Atlas:
+#
+#   docker compose -f docker-compose.deploy.yml up -d      # -> http://localhost:8088/
+#
+# Pin a tag instead of `latest` for reproducible deploys; ATLAS_IMAGE_TAG overrides it.
+# How you expose it publicly is up to whoever deploys it.
+services:
+  atlas-site:
+    image: ghcr.io/paranoid-software/atlas:${ATLAS_IMAGE_TAG:-latest}
+    container_name: atlas-site
+    ports:
+      - "8088:80"
+    restart: unless-stopped
