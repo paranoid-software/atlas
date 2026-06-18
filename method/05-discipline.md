@@ -35,9 +35,43 @@ self-report — is how subtly-wrong work gets archived as "shipped." See
 [04-spec-lifecycle.md](04-spec-lifecycle.md) for the `IN REVIEW → SHIPPED` transition and
 the un-archive rule when something was shipped early.
 
+## 3. Start each SPEC from a clean baseline
+
+Before implementing a SPEC, check the **affected repo's** working tree. If it has **staged or
+uncommitted changes that aren't part of this SPEC, stop and surface them** — don't build on top
+of unrelated work-in-progress. Pre-existing changes mixed into a SPEC pollute its diff: the
+change is no longer independently reviewable or cleanly revertable, which breaks the contract
+that **a SPEC's commit equals the SPEC's work**.
+
+Resolve it first — the unrelated changes get committed or set aside (a human runs the write), or
+they're confirmed to belong to this SPEC — *then* begin. A clean baseline per workitem is what
+makes the independent review and a clean revert possible.
+
+## 4. A commit message says what the commit does — nothing else
+
+When you draft a commit message, describe **only what this commit changes**, at a verbosity that
+matches the change:
+
+- **Subject** — one imperative line ("Add X", "Fix Y"), ~50 chars, no trailing period.
+- **Body** *(only when the change needs it)* — what changed and why, in present terms. A small
+  change needs no body.
+
+Leave out:
+
+- **archaeology** — how you got here, dead ends, prior attempts, "previously…", session narration;
+- **what is *not* done** — TODOs, "still missing", "next we'll…", caveats about unrelated work.
+  The message documents the commit, not the roadmap.
+
+Simple but complete: someone reading the history understands exactly what this commit did —
+without the backstory, and without a list of what it didn't do.
+
+> Commit **authorship / attribution** (who runs the commit, signatures, trailers) is a separate
+> **project/business policy — not part of this discipline.** This rule is only about the message's
+> content.
+
 ---
 
-These two are the universal core. Anything more specific — a particular error-handling
+These four are the universal core. Anything more specific — a particular error-handling
 pattern, a framework convention, a naming scheme — is **not the framework**: it's a
 project-specific choice that belongs in your orientation file, or a universal one that belongs
 in your memory store. Not here.
