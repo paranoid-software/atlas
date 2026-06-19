@@ -62,7 +62,25 @@ LLMS_INTRO = (
     "reading order."
 )
 
+ATLAS_VERSION = os.environ.get("ATLAS_VERSION", "dev")   # baked at image build (git SHA); "dev" for bind-mount
+ATLAS_BUILT = os.environ.get("ATLAS_BUILT", "")          # build timestamp, set by CI
+
 app = Flask(__name__)
+
+
+@app.after_request
+def _version_header(resp):
+    # Every response carries the version, so you can check freshness on any request.
+    resp.headers["X-Atlas-Version"] = ATLAS_VERSION
+    return resp
+
+
+@app.route("/version")
+def version():
+    body = "version: %s\n" % ATLAS_VERSION
+    if ATLAS_BUILT:
+        body += "built:   %s\n" % ATLAS_BUILT
+    return Response(body, mimetype="text/plain")
 
 
 def read(file):

@@ -90,3 +90,17 @@ docker compose -f docker-compose.deploy.yml up -d   # → http://localhost:8088/
 
 > First publish: the GHCR package starts **private** — make it public in the repo's *Packages*
 > settings if you want anonymous `docker pull`.
+
+### Is what's published the latest? — one-line check
+
+CI bakes the **git commit SHA** into the image (`ATLAS_VERSION`), and the app exposes it at
+`/version` and on every response as the `X-Atlas-Version` header. So freshness is a diff:
+
+```bash
+curl -s https://atlas.paranoid.software/version        # what's live  -> version: <sha>
+git rev-parse --short HEAD                              # what's latest -> <sha>
+```
+
+If they match, the published site is up to date. (A bind-mount **dev** container reports
+`version: dev`, since it serves the live working tree rather than a pinned build.) The GHCR
+image is also tagged with the short SHA, so the tag itself names the version.
