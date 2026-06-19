@@ -4,8 +4,9 @@
 #
 #   docker compose -f docker-compose.deploy.yml up -d
 #
-# Pin a tag instead of `latest` for reproducible deploys; ATLAS_IMAGE_TAG overrides it.
-# Ingress (proxy on the `primary` network) handles how it's exposed publicly. The `ports`
+# Pin an immutable tag instead of `latest` for reproducible deploys (CI tags every image
+# yyyymmdd.<run>):  ATLAS_IMAGE_TAG=20260619.42 docker compose -f docker-compose.deploy.yml up -d
+# Ingress on the `primary` network handles how it's exposed publicly. The `ports`
 # line below is optional host access for testing — drop it when the proxy fronts it.
 services:
   atlas-site:

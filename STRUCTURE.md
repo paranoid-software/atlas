@@ -93,14 +93,15 @@ docker compose -f docker-compose.deploy.yml up -d   # → http://localhost:8088/
 
 ### Is what's published the latest? — one-line check
 
-CI bakes the **git commit SHA** into the image (`ATLAS_VERSION`), and the app exposes it at
-`/version` and on every response as the `X-Atlas-Version` header. So freshness is a diff:
+CI tags each image **`yyyymmdd.<run>`** (e.g. `20260619.42`) plus `latest`, and bakes that tag,
+the git commit, and the build time into it. The app reports them at `/version` and on every
+response as the `X-Atlas-Version` header. So freshness is a one-line diff against the repo:
 
 ```bash
-curl -s https://atlas.paranoid.software/version        # what's live  -> version: <sha>
-git rev-parse --short HEAD                              # what's latest -> <sha>
+curl -s https://atlas.paranoid.software/version    # version: 20260619.42 / commit: <sha> / built: …
+git rev-parse --short HEAD                          # the repo's latest commit
 ```
 
-If they match, the published site is up to date. (A bind-mount **dev** container reports
-`version: dev`, since it serves the live working tree rather than a pinned build.) The GHCR
-image is also tagged with the short SHA, so the tag itself names the version.
+If the `commit:` line matches `HEAD`, the published site is current. (A bind-mount **dev**
+container reports `version: dev`, since it serves the live working tree.) **Deploy by the
+immutable `yyyymmdd.<run>` tag**, not `latest`, so you always know exactly what's running.

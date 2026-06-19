@@ -10,11 +10,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Version stamp — CI passes the git SHA + build time; exposed at /version and the
-# X-Atlas-Version header so freshness is a one-line check.
+# Version stamp — CI passes the build tag (yyyymmdd.run), the commit, and the build time;
+# exposed at /version and the X-Atlas-Version header so freshness is a one-line check.
 ARG ATLAS_VERSION=dev
+ARG ATLAS_COMMIT=""
 ARG ATLAS_BUILT=""
 ENV ATLAS_VERSION=${ATLAS_VERSION} \
+    ATLAS_COMMIT=${ATLAS_COMMIT} \
     ATLAS_BUILT=${ATLAS_BUILT}
 
 EXPOSE 80

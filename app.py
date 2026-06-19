@@ -62,10 +62,14 @@ LLMS_INTRO = (
     "reading order."
 )
 
-ATLAS_VERSION = os.environ.get("ATLAS_VERSION", "dev")   # baked at image build (git SHA); "dev" for bind-mount
+ATLAS_VERSION = os.environ.get("ATLAS_VERSION", "dev")   # build tag yyyymmdd.run (baked by CI); "dev" for bind-mount
+ATLAS_COMMIT = os.environ.get("ATLAS_COMMIT", "")        # git short SHA the image was built from
 ATLAS_BUILT = os.environ.get("ATLAS_BUILT", "")          # build timestamp, set by CI
 
 app = Flask(__name__)
+# In dev (bind-mount, ATLAS_VERSION unset) re-read templates per request so edits show live;
+# in a baked image they never change, so leave Jinja's cache on.
+app.config["TEMPLATES_AUTO_RELOAD"] = (ATLAS_VERSION == "dev")
 
 
 @app.after_request
@@ -75,9 +79,17 @@ def _version_header(resp):
     return resp
 
 
+@app.context_processor
+def _inject_version():
+    # Makes the version available to every template (shown in the page footer).
+    return {"atlas_version": ATLAS_VERSION, "atlas_commit": ATLAS_COMMIT}
+
+
 @app.route("/version")
 def version():
     body = "version: %s\n" % ATLAS_VERSION
+    if ATLAS_COMMIT:
+        body += "commit:  %s\n" % ATLAS_COMMIT
     if ATLAS_BUILT:
         body += "built:   %s\n" % ATLAS_BUILT
     return Response(body, mimetype="text/plain")
