@@ -69,9 +69,21 @@ without the backstory, and without a list of what it didn't do.
 > **project/business policy — not part of this discipline.** This rule is only about the message's
 > content.
 
+## 5. No archaeology — artifacts are snapshots, not logs
+
+Every Atlas file of record describes the **current** state or intent, and is **rewritten in
+place — never appended to**. No "previously…", "we used to…", "changed from X to Y",
+"attempt 1 failed", "no longer…", dead ends or migration narration — not in `CLAUDE.md`, not
+in a SPEC, not in `STATUS.md`, not in the backlog. Agents are strongly inclined to leave this
+trail; it adds nothing and only inflates the text a future reader has to wade through.
+
+History has exactly two homes: **git** (what changed and why, per commit — see §4) and
+**`_archived/`** (what shipped). If a piece of history matters, it is in one of those; if it
+isn't, it doesn't belong anywhere.
+
 ---
 
-These four are the universal core. Anything more specific — a particular error-handling
+These five are the universal core. Anything more specific — a particular error-handling
 pattern, a framework convention, a naming scheme — is **not the framework**: it's a
 project-specific choice that belongs in your orientation file, or a universal one that belongs
 in your memory store. Not here.

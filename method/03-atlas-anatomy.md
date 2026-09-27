@@ -10,11 +10,14 @@ appear as work arrives.
 | File | Role |
 |---|---|
 | **`CLAUDE.md`** *(orientation file)* | Project orientation + standing project-specific decisions & conventions + footguns. Static — changes only when an orientation fact or a standing decision changes. |
-| **`STATUS.md`** | A thin, **regenerable digest** of where the project is *now*, derived from the workitem artifacts. Points to them; never duplicates them; holds no rules and no decisions. |
-| **`BACKLOG.md`** | Index-only — one line per open workitem, linking to its `SPEC_*` or `DRAFT_*`. No bodies, no rules, no decisions. |
+| **`STATUS.md`** | Where the project is *now*, in **three fixed sections that never mix**: **What it is** (one line) · **Active** (the in-flight board — one block per SPEC in progress/review with its status and a short *where-we-left-off* note: Done / Next / Blocked) · **Recently shipped** (a short rolling window into `_archived/`). Holds no rules and no decisions. |
+| **`BACKLOG.md`** | The **queue**: one line per open workitem (`SPEC_*` / `DRAFT_*`) **not yet in flight**, index-only — no bodies, no rules, no decisions. `READY` = in the backlog and not yet in `STATUS → Active`. |
 | **`DEVIATIONS.md`** | Explicit, documented divergences from a memory-store rule *that applies here* — "the rule says X; here we do Y because …". Not a catalog of rules that simply don't apply. |
 | **`_archived/`** | Where shipped SPECs go — the project's shipped history. Holds **only shipped SPECs**, plus a `README.md` explaining the folder. |
 | **`.claude/settings.local.json`** *(tool-local settings)* | Tool-local settings for the primary agent (permissions, additional readable directories). Machine-specific; not portable. No event hooks here — those live tool-global. |
+
+> All files of record are **current-state snapshots, rewritten in place — never logs**.
+> History lives only in git and `_archived/` (see [05-discipline.md](05-discipline.md) §5).
 
 ## Optional files
 
@@ -39,17 +42,27 @@ These two are easy to confuse, so the split is strict:
 - **`CLAUDE.md` is the static "what / why."** What the product is, what each repo
   contributes, the standing decisions. It changes only when an orientation fact or a
   standing decision changes.
-- **`STATUS.md` is the living "where are we now."** What we're actively on, a rollup of the
-  active SPECs/DRAFTs, what shipped recently. It is a **digest**: every line traces 1:1 to
-  a `BACKLOG` / `SPEC_` / `DRAFT_` / `_archived` artifact. If a line isn't backed by an
-  artifact, either create the artifact or drop the line. **Routine actions (commits, ad-hoc
-  ops) are never status.**
+- **`STATUS.md` is the living "where are we now."** Three fixed sections that **never mix**:
+  - **What `<topic>` is** — one line.
+  - **Active** — the **in-flight board**: one block per SPEC currently `IN PROGRESS` or
+    `IN REVIEW`, with its status and a short **resume note — where we left off** — in 2–4
+    bullets: **Done** / **Next** / **Blocked**. This is the *single home* of in-flight state
+    (it is **not** in the SPEC). Each block is **rewritten to the current state, never
+    appended as a log**, and a SPEC **leaves Active the moment it ships**.
+  - **Recently shipped** — a short rolling window (last N) pointing into `_archived/`. The
+    full history is `_archived/`, never this section.
 
-The **structured workitem artifacts are the authoritative status**; `STATUS.md` is just the
-at-a-glance summary over them. It is regenerated, not hand-maintained — ideally on demand
-via a "sync" command, and ideally injected automatically at the start of every session so
+  Every line traces to an artifact (an Active block to its SPEC, a shipped line to
+  `_archived/`). **Routine actions (commits, ad-hoc ops) are never status.** No rules, no
+  decisions.
+
+The **structured workitem artifacts are the authoritative record**; `STATUS.md` is the
+at-a-glance view over them — plus the one thing only it holds: the **Active resume notes**,
+which you keep current at every checkpoint. "Recently shipped" and the one-liner are
+*derived*; the Active blocks are *maintained* (refreshed via the "sync" command when you stop
+or hand off). Ideally `STATUS.md` is injected automatically at the start of every session so
 an agent never starts cold. (Reference implementation: a session-start hook cats `STATUS.md`
-into context; a "sync" command regenerates it. Both are tool affordances — wire up whatever
+into context; a "sync" command refreshes it. Both are tool affordances — wire up whatever
 your tool offers, or do it by hand.)
 
 ## The per-repo orientation block

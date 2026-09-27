@@ -64,8 +64,9 @@ those before bootstrapping. The current working directory is the Atlas directory
 
 5. **Create the fixed scaffold — all start empty** so every Atlas has the same skeleton
    from day one:
-   - `STATUS.md` — the thin digest (one-line product summary; "Active" and "Recently
-     shipped" start empty).
+   - `STATUS.md` — three fixed sections (template below): the one-line product summary,
+     **Active** (the in-flight board — one block per SPEC with Done / Next / Blocked; starts
+     empty), and **Recently shipped** (starts empty).
    - `BACKLOG.md` — index only; "Open" starts empty.
    - `DEVIATIONS.md` — starts empty.
    - `_archived/README.md` — explains that the folder holds only shipped `SPEC_NNNN_<SLUG>.md`
@@ -157,3 +158,65 @@ if they generalize._
   sub-sections** — empty 3.1/3.2 read as "I forgot to fill this in," not "fresh Atlas." Add
   them only when there's real content.
 - Don't put current-state / progress in the orientation file — that's `STATUS.md`'s job.
+
+## The SPEC template
+
+A SPEC is the *what* and its *route* (the Plan) — nothing else (see
+[04-spec-lifecycle.md](04-spec-lifecycle.md)). Copy this shape; **do not add sections**.
+
+````markdown
+# SPEC_NNNN_<SLUG>
+created: <date>
+repos: <repo-a>, <repo-b>        ← the repos this SPEC may touch
+
+## What
+<the change, as behavior / outcome — the goal>
+
+## Acceptance
+<observable criteria that make it done — not steps>
+
+## Out of scope
+<explicit boundaries>
+
+## Plan
+<the ordered steps / milestones that deliver the What — the route, in prose.
+ No technique, no code, no checkboxes: the how of each step is decided live, with the human.>
+````
+
+**Never add:** a status line, progress, checkboxes, the how / technique, code (no fenced blocks
+— reference a path instead), verification results, archaeology ("previously…", "changed
+from…"), session notes. Where-we-are lives in `STATUS.md → Active`; the how is decided live and
+its record is the code (general working rules already live in the memory store); verification
+in the review's report.
+
+## The STATUS.md template
+
+Three fixed sections that never mix. **Active** is the in-flight board — one resume note per
+SPEC — **rewritten to the current state at every checkpoint, never appended**.
+
+````markdown
+# <Topic> — STATUS (living)
+
+Where this project is now. Standing decisions + orientation live in CLAUDE.md; the
+BACKLOG / SPEC_ / _archived artifacts are the record. Refresh with `/atlas-sync`.
+
+_Last updated: <date>_
+
+## What <topic> is (one line)
+<one-line product summary>
+
+## Active
+_(one block per SPEC in progress / in review — rewritten to the current state, never appended)_
+
+### SPEC_NNNN_<SLUG> — IN PROGRESS
+- **Done:** <what is already in place>
+- **Next:** <the very next step — where to resume>
+- **Blocked:** <what's in the way — omit the line if nothing>
+
+## Recently shipped
+_(short rolling window — last N — pointing into _archived/; the full history lives there)_
+- SPEC_NNNN_<SLUG> → _archived/ (<date>)
+````
+
+A SPEC **leaves Active the moment it ships** and appears under Recently shipped; `BACKLOG.md`
+holds what is queued and not yet in flight.

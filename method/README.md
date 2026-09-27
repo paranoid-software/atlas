@@ -35,8 +35,8 @@ parts:
 | 1 | [01-the-atlas.md](01-the-atlas.md) | The Atlas model — what an Atlas is and why it exists |
 | 2 | [02-stores-model.md](02-stores-model.md) | The stores model — where each kind of knowledge lives, **described by role** |
 | 3 | [03-atlas-anatomy.md](03-atlas-anatomy.md) | The files of record at the Atlas root, their naming, and per-repo orientation |
-| 4 | [04-spec-lifecycle.md](04-spec-lifecycle.md) | The workitem lifecycle and its status values |
-| 5 | [05-discipline.md](05-discipline.md) | Small deliverable specs · review before shipped · clean baseline per SPEC · commit-message hygiene |
+| 4 | [04-spec-lifecycle.md](04-spec-lifecycle.md) | The workitem lifecycle, what a SPEC is (and is not), Plan ≠ how, and how to resume one |
+| 5 | [05-discipline.md](05-discipline.md) | Small deliverable specs · review before shipped · clean baseline per SPEC · commit-message hygiene · no archaeology |
 | 6 | [06-bootstrap.md](06-bootstrap.md) | The bootstrap recipe — how to stand up a new Atlas |
 | 7 | [07-optional-git-versioning.md](07-optional-git-versioning.md) | The **optional** git/symlink versioning mechanic |
 
