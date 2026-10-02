@@ -9,10 +9,9 @@ and **how a unit of work travels from idea to shipped**. It assumes you drive de
 AI agents, but requires **no particular agent, IDE, editor, or memory product**. Where a
 concrete tool helps, it's named as a *reference implementation* playing a *role* you can swap.
 
-> **About this repo.** This is the formal write-up of the framework. The practice originated as
-> an operational concept (`workspace-architecture`) kept in a memory store; this repository is
-> its standalone, tool-agnostic formalization, served as a small documentation site (and an
-> `llms.txt`). Its official home is **https://atlas.paranoid.software**. MIT-licensed, public.
+> **About this repo.** The formal, tool-agnostic write-up of the framework, served as a small
+> documentation site (and an `llms.txt`). Official home: **https://atlas.paranoid.software**.
+> MIT-licensed, public.
 
 ## Start here
 
@@ -70,8 +69,3 @@ versions the artifacts without touching the member repos. It stays **optional**.
   about orientation, decisions, status, and the flow of work.
 - **Not firm-specific.** No firm- or product-specific programming patterns — only the
   tool-agnostic conventions any team can adopt.
-
----
-
-> **Status.** First real draft of the framework, rendered tool-agnostically from an operational
-> practice. It is a writing/structuring artifact — nothing here is executable.

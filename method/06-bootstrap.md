@@ -62,6 +62,28 @@ those before bootstrapping. The current working directory is the Atlas directory
    }
    ```
 
+   **For VS Code–family editors (VS Code, Cursor, the Claude Code desktop Code tab), also
+   create `.vscode/settings.json`** listing every symlinked repo under `git.scanRepositories`
+   (relative paths, through the symlinks), and set `git.autoRepositoryDetection` to `true` —
+   the list is only read when detection scans sub-folders, and some editors (Cursor) default to
+   `openEditors`, which skips it. Without both the child repos never appear in Source
+   Control — the editor's git extension does not follow symlinks (and, if the Atlas root is
+   versioned, files open through a symlink are attributed to the root repo). See
+   [03-atlas-anatomy.md](03-atlas-anatomy.md) → the editor-git-settings note. Add a line
+   whenever a new repo is symlinked in (that's part of the add-a-repo sync); reload the window
+   to apply.
+
+   ```json
+   {
+     "git.autoRepositoryDetection": true,
+     "git.scanRepositories": [
+       "repo-1",
+       "repo-2",
+       "group/nested-repo"
+     ]
+   }
+   ```
+
 5. **Create the fixed scaffold — all start empty** so every Atlas has the same skeleton
    from day one:
    - `STATUS.md` — three fixed sections (template below): the one-line product summary,

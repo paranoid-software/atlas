@@ -15,9 +15,23 @@ appear as work arrives.
 | **`DEVIATIONS.md`** | Explicit, documented divergences from a memory-store rule *that applies here* — "the rule says X; here we do Y because …". Not a catalog of rules that simply don't apply. |
 | **`_archived/`** | Where shipped SPECs go — the project's shipped history. Holds **only shipped SPECs**, plus a `README.md` explaining the folder. |
 | **`.claude/settings.local.json`** *(tool-local settings)* | Tool-local settings for the primary agent (permissions, additional readable directories). Machine-specific; not portable. No event hooks here — those live tool-global. |
+| **`.vscode/settings.json`** *(editor git settings — reference impl)* | For **VS Code–family editors** (VS Code, Cursor, the Claude Code desktop Code tab), whose git integration does **not** follow symlinks: a `git.scanRepositories` list of the child repos (relative paths, through the symlinks) plus `git.autoRepositoryDetection: true`, so each appears in Source Control on its own. Kept in sync with the symlink set. See the note below. |
 
 > All files of record are **current-state snapshots, rewritten in place — never logs**.
 > History lives only in git and `_archived/` (see [05-discipline.md](05-discipline.md) §5).
+
+> **Why editor git settings are needed.** A VS Code–family editor's git extension never
+> follows a symlink during its workspace scan (a symlink reports as a file, not a directory),
+> so the child repos never show up in Source Control on their own. And if you versioned the
+> Atlas root itself (the optional layer in [07-optional-git-versioning.md](07-optional-git-versioning.md)),
+> a file opened *through* a symlink is attributed to the **root** repo instead of its own.
+> Listing each child under `git.scanRepositories` (relative paths, through the symlinks) makes
+> the editor open each repo at startup at its symlinked path — i.e. inside the workspace.
+> That list is only read when `git.autoRepositoryDetection` scans sub-folders (`true` or
+> `subFolders`); some editors (Cursor) default to `openEditors`, which ignores it — so set
+> `git.autoRepositoryDetection: true` explicitly alongside the list.
+> Other editors that follow symlinks need no such list; this is a reference-impl detail, not a
+> core requirement.
 
 ## Optional files
 
@@ -88,10 +102,11 @@ operation, because a repo change *is* an orientation-fact change.
 When the symlink set changes, the sync reconciles the artifacts to it:
 
 - **Repo added** (new symlink) → add its **per-repo orientation block** to `CLAUDE.md` §1
-  (read its README; ask if ambiguous), and add its real target path to the tool-local
-  settings' readable-directories list.
-- **Repo removed** (symlink gone) → flag the now-stale orientation block and its settings
-  entry, and **ask before deleting** them.
+  (read its README; ask if ambiguous); add its real target path to the tool-local settings'
+  readable-directories list; and, for VS Code–family editors, add its symlink path to
+  `git.scanRepositories` in `.vscode/settings.json`.
+- **Repo removed** (symlink gone) → flag the now-stale orientation block, its settings entry,
+  and its `git.scanRepositories` line, and **ask before deleting** them.
 - **Mismatch** between the symlinks present and the orientation blocks (or a multi-root
   workspace file, if you keep one) → surface it; don't silently guess.
 

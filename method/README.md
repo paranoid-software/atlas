@@ -56,7 +56,3 @@ optional and swappable. The mapping:
 The first two roles are **required**: a primary agent and a **shared memory store every agent
 reaches over MCP**. The named tools are only examples — pick your own. The last two are
 *strengtheners*: use them if your tool offers them, and degrade gracefully if it doesn't.
-
-> **Provenance.** This framework is the tool-agnostic render of an operational practice that
-> originated as the concept `workspace-architecture` in a memory store. This repository is its
-> formal, standalone home.
