@@ -148,6 +148,7 @@ _(one block per SPEC in progress / in review — rewritten to the current state,
 - **Done:** <what is already in place>
 - **Next:** <the very next step — where to resume>
 - **Blocked:** <what's in the way — omit the line if nothing>
+- **Paused:** <repos> — stash "SPEC_NNNN paused" — omit the line if not paused
 
 ## Recently closed
 _(short rolling window — last N — pointing into _archived/; the full history lives there)_

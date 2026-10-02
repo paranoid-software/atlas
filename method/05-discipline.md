@@ -3,6 +3,49 @@
 The Atlas tells you *where things live*. The discipline is the handful of rules that keep
 AI-driven work honest — method-level, regardless of language, framework or product.
 
+## The cadence
+
+The suggested flow of work. It is what turns steady work into good software, in any kind of
+project — and what breaks first under pressure.
+
+1. **Something rubs** — a bug, an idea, a friction found while working.
+2. **Decide** what to do about it, in conversation.
+3. **Write a bounded SPEC** ([04](04-spec-lifecycle.md)).
+4. **Create its branch** — the human creates `spec/NNNN-<slug>` from `develop` in each repo
+   the SPEC touches.
+5. **Step by step** — for each Plan step the agent proposes the how, the human approves, the
+   agent executes. What is learned on the way goes to the findings file.
+6. **Independent review** in the code.
+7. **The human commits on the SPEC branch and closes the SPEC.** After the close — done by
+   the human, never a condition to close — the branch returns to `develop`; `main` only ever
+   receives `develop`.
+
+**Drift signals.** An agent that sees one says so **once**, then follows the human's call —
+nothing blocks:
+
+- code is requested and there is no SPEC in `STATUS → Active`;
+- more than one SPEC is in progress, and not paused, in the same repo;
+- work happens outside the SPEC's branch, or on `main`;
+- a step is coded without its how approved;
+- a close is asked without an independent review or a commit.
+
+### When something interrupts
+
+| Situation | What to do |
+|---|---|
+| **Urgent bug in the middle of a SPEC** | Pause the SPEC (below). The fix is a minimal SPEC — What, one criterion, one step — on its own branch (`git switch -c spec/MMMM-<slug> develop`). Close it, then resume. |
+| **A new idea** | One line in the backlog, or a DRAFT. Not acted on now. |
+| **The SPEC is wrongly posed** | A finding, and the SPEC is corrected. |
+| **The SPEC turns out too big** | Split it: what is done closes, the rest becomes a new SPEC. |
+| **The SPEC is no longer wanted** | Discard it: out of Active or the backlog, its SPEC and findings files deleted, its branch deleted and any paused stash dropped by the human. Never archived. |
+
+**Pausing a SPEC without a commit.** In each repo with changes the human runs
+`git stash push -u -m "SPEC_NNNN paused"`, and the SPEC's Active block gains a line
+`Paused: <repos> — stash "SPEC_NNNN paused"`. **Resuming:** in each of those repos, `git switch spec/NNNN-<slug>`, then
+`git stash pop stash@{n}` — where `n` is the position of `SPEC_NNNN paused` in `git stash list`,
+so the right stash comes back even if there are several — and remove the Paused line. The agent
+reads `git stash list` and gives the exact commands; the human runs them.
+
 ## 1. The human gates
 
 The agent proposes and executes; the human decides at these four points:
@@ -17,7 +60,9 @@ Everything mechanical between the gates is the agent's or the CLI's job.
 ## 2. One branch per SPEC
 
 Each SPEC works on **`spec/NNNN-<slug>`** in every repo of its `repos:` line, created by the
-human. The Atlas root itself works on `main` only.
+human **from `develop`**, and returns to `develop` after it is closed (by the human — not a
+close condition). **A SPEC never touches
+`main`** — `main` only receives `develop`. The Atlas root itself works on `main` only.
 
 ## 3. Specs are small and independently deliverable
 

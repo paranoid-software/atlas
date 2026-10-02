@@ -63,7 +63,9 @@ too early goes back to the root as **IN REVIEW**.
 ## Picking up a SPEC, and leaving it
 
 A fresh agent resumes in two reads: its block in **`STATUS.md → Active`** (**Done / Next /
-Blocked** — where we left off), then the **SPEC** (what we are doing). Continue from **Next**.
+Blocked** — where we left off), then the **SPEC** (what we are doing). Continue from **Next** —
+and if the block has a **Paused** line, resume the stash first
+([05-discipline.md](05-discipline.md)).
 
 Before stopping or handing off, **rewrite that Active block** to the current state — never append
 to it. That is the checkpoint `/atlas-sync` refreshes.
