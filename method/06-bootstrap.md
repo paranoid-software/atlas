@@ -12,10 +12,15 @@ and `STATUS.md` from the templates below, with no sources and no SPECs; an empty
 `_archived/README.md` saying what the folder holds; `_settings/atlas.toml` with the current
 model version and no sources nor plugins; `.claude/settings.local.json` with no readable
 directories; `.vscode/settings.json` with `git.autoRepositoryDetection: true` and an empty
-`git.scanRepositories`.
+`git.scanRepositories`; `.gitignore` with the whitelist of
+[07-sharing-an-atlas.md](07-sharing-an-atlas.md).
 
 No SPECs, DRAFTs or plugin files: those appear when there is work or a plugin is enabled.
-`atlas init` refuses a folder that is already an Atlas.
+`atlas init` refuses a folder that is already an Atlas (it has `_settings/atlas.toml`,
+`CLAUDE.md` or `STATUS.md`). Settings found in a fresh folder are completed, never replaced —
+`.claude/settings.local.json` and `.vscode/settings.json` gain what the Atlas needs — and an
+existing `.gitignore` is kept, with a reminder to check it against
+[07-sharing-an-atlas.md](07-sharing-an-atlas.md).
 
 ## 2. Add sources — `atlas link`
 

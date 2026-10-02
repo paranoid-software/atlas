@@ -19,7 +19,7 @@ my-project/                        (the Atlas)
 ├── SPEC_* / DRAFT_*         │  (see 03-atlas-anatomy.md)
 ├── _archived/               │
 ├── _settings/               │
-├── .claude/  .vscode/       ┘
+├── .claude/  .vscode/  .gitignore  ┘
 ```
 
 Editing a file *through* a symlink writes to the source itself. Any agent that opens the
