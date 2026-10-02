@@ -2,7 +2,7 @@
 
 An Atlas root holds two kinds of entries: **sources**, each a symlink, and the **Atlas's own
 files**. Telling them apart takes no guessing: **anything starting with `_`, the uppercase
-`.md` files, `.claude/` and `.vscode/` belong to the Atlas; everything else is a source.**
+`.md` files, `.claude/`, `.vscode/` and `.gitignore` belong to the Atlas; everything else is a source.**
 
 The **base set** is created by `atlas init`, so every Atlas has the same skeleton from day one
 and an agent always knows where each thing goes. The **per-workitem** files appear as work
@@ -19,6 +19,7 @@ arrives.
 | **`_settings/`** | The Atlas's configuration, in `atlas.toml` (below). Versioned with the Atlas. |
 | **`.claude/settings.local.json`** | Claude's settings for this Atlas: the real path of each source as a readable directory. Machine-specific — rewritten by `atlas link`, never versioned. |
 | **`.vscode/settings.json`** | Editor git settings, so every git source shows in Source Control (below). Relative paths — the same on every machine, versioned. |
+| **`.gitignore`** | Keeps only the Atlas's own files under git, never the symlinks nor `.claude/` ([07-sharing-an-atlas.md](07-sharing-an-atlas.md)). Ready from day one, whether or not the Atlas is ever shared. |
 
 > All the Atlas's files are **current-state snapshots, rewritten in place — never logs**.
 > History lives only in git and `_archived/` (see [05-discipline.md](05-discipline.md) §7).
