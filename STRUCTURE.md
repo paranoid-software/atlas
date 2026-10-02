@@ -15,11 +15,11 @@ atlas/
 │   ├── README.md             ← overview + reading order + role↔reference-impl map
 │   ├── 01-the-atlas.md       ← the Atlas model (what / why)
 │   ├── 02-stores-model.md    ← the stores model, described by role
-│   ├── 03-atlas-anatomy.md   ← files of record, naming, per-repo orientation
+│   ├── 03-atlas-anatomy.md   ← the Atlas's own files, _settings/, sources, naming
 │   ├── 04-spec-lifecycle.md  ← workitem lifecycle + status values
 │   ├── 05-discipline.md      ← human gates, branch per SPEC, independent review before close
 │   ├── 06-bootstrap.md       ← bootstrap recipe + orientation-file template
-│   └── 07-optional-git-versioning.md  ← the optional symlink/git mechanic
+│   └── 07-sharing-an-atlas.md  ← git as how an Atlas is shared
 │
 │   # the site — a small Flask app that renders the markdown above (nothing pre-generated)
 ├── app.py                    ← Flask: pages, raw .md, /llms.txt, /llms-full.txt

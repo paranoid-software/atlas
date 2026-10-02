@@ -49,12 +49,11 @@ are strengtheners.
 | Skill / cheat-sheet mechanism | Claude Code skills | any reusable-prompt affordance |
 | Forced-discipline mechanism | Claude Code hooks | any event automation |
 
-## Optional: versioning the Atlas itself
+## Sharing an Atlas
 
-An Atlas works fine unversioned — it's just a folder of symlinks plus planning files. If you
-*want* a git history of its planning artifacts, there's a clean symlink/git recipe that
-versions the artifacts without touching the member repos. It stays **optional**. →
-[method/07-optional-git-versioning.md](method/07-optional-git-versioning.md)
+Git is how an Atlas is shared: its own files go in a repo of their own, the symlinks never do,
+and each person rebuilds the sources on their machine. →
+[method/07-sharing-an-atlas.md](method/07-sharing-an-atlas.md)
 
 ## What this repo is not
 
