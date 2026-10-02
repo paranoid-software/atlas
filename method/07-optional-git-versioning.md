@@ -14,7 +14,7 @@ over time) are ordinary text worth a history, and they *can* be versioned in the
 **without touching or duplicating the member repos**.
 
 So: **the aggregation stays non-git; only the artifacts are optionally versioned.** Opt in
-when that history has value (long-lived project, multiple SPECs shipping, decisions worth a
+when that history has value (long-lived project, multiple SPECs closing, decisions worth a
 diff); skip it for a throwaway or single-purpose Atlas.
 
 ## Why it's safe — git stores a symlink as a pointer, not as contents

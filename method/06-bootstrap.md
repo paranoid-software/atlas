@@ -88,11 +88,11 @@ those before bootstrapping. The current working directory is the Atlas directory
    from day one:
    - `STATUS.md` — three fixed sections (template below): the one-line product summary,
      **Active** (the in-flight board — one block per SPEC with Done / Next / Blocked; starts
-     empty), and **Recently shipped** (starts empty).
+     empty), and **Recently closed** (starts empty).
    - `BACKLOG.md` — index only; "Open" starts empty.
    - `DEVIATIONS.md` — starts empty.
-   - `_archived/README.md` — explains that the folder holds only shipped `SPEC_NNNN_<SLUG>.md`
-     files.
+   - `_archived/README.md` — explains that the folder holds only closed `SPEC_NNNN_<SLUG>.md`
+     files and their findings files.
 
 6. **Optionally create `CANDIDATES.md`** (the candidates file) — only if you run a
    memory-store promotion workflow. It stages universal rules for a later curation session;
@@ -105,8 +105,8 @@ those before bootstrapping. The current working directory is the Atlas directory
    bootstrap.
 
 Done. The Atlas is scaffolded: standing decisions accumulate in the orientation file;
-buildable work enters as `SPEC_NNNN_<SLUG>.md` (indexed in the backlog, shipped to
-`_archived/`); `STATUS.md` digests it all; and, if you stage universal rules for promotion,
+buildable work enters as `SPEC_NNNN_<SLUG>.md` (indexed in the backlog, archived to
+`_archived/` when closed); `STATUS.md` digests it all; and, if you stage universal rules for promotion,
 they collect in the optional candidates file.
 
 > **Bootstrap runs once.** Adding or removing a repo later is **not** a re-bootstrap — it's a
@@ -205,11 +205,8 @@ repos: <repo-a>, <repo-b>        ← the repos this SPEC may touch
  No technique, no code, no checkboxes: the how of each step is decided live, with the human.>
 ````
 
-**Never add:** a status line, progress, checkboxes, the how / technique, code (no fenced blocks
-— reference a path instead), verification results, archaeology ("previously…", "changed
-from…"), session notes. Where-we-are lives in `STATUS.md → Active`; the how is decided live and
-its record is the code (general working rules already live in the memory store); verification
-in the review's report.
+**Never add** anything on the "never in a SPEC" list in
+[04-spec-lifecycle.md](04-spec-lifecycle.md) — findings go to `SPEC_NNNN_FINDINGS.md` beside it.
 
 ## The STATUS.md template
 
@@ -235,10 +232,10 @@ _(one block per SPEC in progress / in review — rewritten to the current state,
 - **Next:** <the very next step — where to resume>
 - **Blocked:** <what's in the way — omit the line if nothing>
 
-## Recently shipped
+## Recently closed
 _(short rolling window — last N — pointing into _archived/; the full history lives there)_
 - SPEC_NNNN_<SLUG> → _archived/ (<date>)
 ````
 
-A SPEC **leaves Active the moment it ships** and appears under Recently shipped; `BACKLOG.md`
+A SPEC **leaves Active the moment it closes** and appears under Recently closed; `BACKLOG.md`
 holds what is queued and not yet in flight.

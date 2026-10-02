@@ -2,10 +2,10 @@
 
 A tool-agnostic way to run **large, multi-repo, AI-assisted projects** so that any
 agent — in any tool, on any day — can open the project cold and have complete clarity
-about *what it is, where it lives, where the work stands, and how work gets shipped*.
+about *what it is, where it lives, where the work stands, and how work gets closed*.
 
 The method is small. It is a handful of conventions about **where each kind of
-knowledge lives** and **how a unit of work travels from idea to shipped**. It assumes
+knowledge lives** and **how a unit of work travels from idea to closed**. It assumes
 you drive the project with AI coding agents, but it does **not** require any particular
 agent, IDE, editor, or memory product. Where a concrete tool is useful, this doc names
 it as a *reference implementation* and tells you what role it is playing, so you can
@@ -24,8 +24,8 @@ parts:
 2. **The stores model** — a fixed answer to "where does *this* piece of knowledge go?",
    so orientation, universal rules, current status, and decisions each have exactly one home.
 3. **The SPEC lifecycle** — nothing is coded without a small, deliverable spec; every spec
-   travels `READY → IN PROGRESS → IN REVIEW → SHIPPED → archived` through one set of files.
-4. **The discipline** — small specs, independent review before "shipped," and a few
+   travels `READY → IN PROGRESS → IN REVIEW → CLOSED → archived` through one set of files.
+4. **The discipline** — small specs, independent review before "closed," and a few
    standing rules that keep agents from drifting.
 
 ## Read in this order
@@ -36,7 +36,7 @@ parts:
 | 2 | [02-stores-model.md](02-stores-model.md) | The stores model — where each kind of knowledge lives, **described by role** |
 | 3 | [03-atlas-anatomy.md](03-atlas-anatomy.md) | The files of record at the Atlas root, their naming, and per-repo orientation |
 | 4 | [04-spec-lifecycle.md](04-spec-lifecycle.md) | The workitem lifecycle, what a SPEC is (and is not), Plan ≠ how, and how to resume one |
-| 5 | [05-discipline.md](05-discipline.md) | Small deliverable specs · review before shipped · clean baseline per SPEC · commit-message hygiene · no archaeology |
+| 5 | [05-discipline.md](05-discipline.md) | Human gates · branch per SPEC · small deliverable specs · review before close · clean baseline · commit-message hygiene · no archaeology |
 | 6 | [06-bootstrap.md](06-bootstrap.md) | The bootstrap recipe — how to stand up a new Atlas |
 | 7 | [07-optional-git-versioning.md](07-optional-git-versioning.md) | The **optional** git/symlink versioning mechanic |
 

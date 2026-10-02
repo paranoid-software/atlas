@@ -45,7 +45,7 @@ store works.
 ## What the framework is — and what it deliberately is not
 
 Atlas defines a **methodology and a discipline**. It is **project-agnostic**: it says *where
-each kind of knowledge belongs* and *how work flows from idea to shipped*, never what your
+each kind of knowledge belongs* and *how work flows from idea to closed*, never what your
 product is.
 
 So, deliberately:
@@ -112,11 +112,11 @@ that, on reflection, is **not** universal is **re-routed**, not left in the cand
 | Universal — true for an unrelated project too | **memory store** (promote) |
 | A standing convention/decision **of this Atlas** | **orientation file** — the "establishing conventions" section (§5) |
 | A deliberate divergence from a memory-store rule that applies here | **deviations file** |
-| Just how one workitem was done, with no standing rule for the future | **leave it in its SPEC**, drop the candidate — once shipped, the `_archived/` SPEC is its only record |
+| Just how one workitem was done, with no standing rule for the future | **leave it in its SPEC**, drop the candidate — once closed, the `_archived/` SPEC is its only record |
 
 The last row is the subtle one: an archived SPEC is the *record of the work*, not where an
 agent looks for *standing rules* — orientation comes from `CLAUDE.md` + the status digest,
-never from reading shipped history. A durable convention buried in an archived SPEC is
+never from reading archived SPECs. A durable convention buried in an archived SPEC is
 effectively lost; promote it to the orientation file. Only knowledge with **no**
 future-guiding character stays in the SPEC.
 

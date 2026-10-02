@@ -17,7 +17,7 @@ atlas/
 │   ├── 02-stores-model.md    ← the stores model, described by role
 │   ├── 03-atlas-anatomy.md   ← files of record, naming, per-repo orientation
 │   ├── 04-spec-lifecycle.md  ← workitem lifecycle + status values
-│   ├── 05-discipline.md      ← small deliverable specs, review, ship criteria
+│   ├── 05-discipline.md      ← human gates, branch per SPEC, independent review before close
 │   ├── 06-bootstrap.md       ← bootstrap recipe + orientation-file template
 │   └── 07-optional-git-versioning.md  ← the optional symlink/git mechanic
 │

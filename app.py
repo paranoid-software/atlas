@@ -33,9 +33,9 @@ PAGES = [
     {"file": "method/03-atlas-anatomy.md",         "url": "/method/03-atlas-anatomy", "title": "Atlas anatomy",         "group": "The framework",
      "summary": "The files of record, naming, the per-repo orientation block, adding/removing a repo, and the optional candidates file."},
     {"file": "method/04-spec-lifecycle.md",        "url": "/method/04-spec-lifecycle","title": "The SPEC lifecycle",    "group": "The framework",
-     "summary": "No code without a SPEC; READY -> IN PROGRESS -> IN REVIEW -> SHIPPED -> archived."},
+     "summary": "No code without a SPEC; READY -> IN PROGRESS -> IN REVIEW -> CLOSED -> archived."},
     {"file": "method/05-discipline.md",            "url": "/method/05-discipline",    "title": "The discipline",        "group": "The framework",
-     "summary": "Small deliverable specs; independent review before 'shipped' (never trust an agent's self-report)."},
+     "summary": "Human gates; branch per SPEC; independent review in the code before close."},
     {"file": "method/06-bootstrap.md",             "url": "/method/06-bootstrap",     "title": "Bootstrap recipe",      "group": "The framework",
      "summary": "How to stand up a new Atlas, plus the orientation-file template."},
     {"file": "method/07-optional-git-versioning.md","url": "/method/07-optional-git-versioning","title": "Optional git-versioning","group": "The framework",
@@ -54,7 +54,7 @@ for _p in PAGES:
 TAGLINE = "A tool-agnostic, spec-driven framework for running large, multi-repo, AI-assisted projects."
 LLMS_INTRO = (
     "Atlas defines a methodology and a discipline, not a product. It is project-agnostic: it says "
-    "where each kind of knowledge belongs and how a unit of work travels from idea to shipped. It "
+    "where each kind of knowledge belongs and how a unit of work travels from idea to closed. It "
     "requires a primary AI agent and a shared memory store every agent can query over MCP (coco and "
     "mem0 are optional examples of that role); the specific tools are your choice. It does not store "
     "project knowledge in a pile of files the way other spec-driven-development approaches do.\n\n"

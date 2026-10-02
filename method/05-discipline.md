@@ -1,89 +1,57 @@
 # The discipline
 
-The Atlas and the stores tell you *where things live*. The discipline is the handful of
-standing rules that keep AI-driven work honest. These are **method-level and universal** —
-they hold regardless of language, framework, or product.
+The Atlas tells you *where things live*. The discipline is the handful of rules that keep
+AI-driven work honest — method-level, regardless of language, framework or product.
 
-## 1. Specs are small and independently deliverable
+## 1. The human gates
 
-A SPEC is sized to be **built, reviewed, and shipped as one coherent unit** — not an epic.
-If a workitem can't be described, implemented, and verified end-to-end without dragging in
-half the system, it is too big: split it into SPECs that each ship on their own.
+The agent proposes and executes; the human decides at these four points:
 
-Small-and-deliverable is what makes the rest of the discipline affordable. Independent
-review (below) is only practical when the change under review is bounded. A spec that
-sprawls can't be exhaustively reviewed, can't be cleanly reverted, and tends to hide
-"done-ish" work behind its own size.
+1. **create the branch** for a SPEC;
+2. **approve the how** of each step before it is coded ([04](04-spec-lifecycle.md));
+3. **commit**;
+4. **close** the SPEC.
 
-> Rules of thumb: one SPEC should have a single clear "this is what shipped" sentence; it
-> should be reviewable in one focused sitting; and it should leave the project in a
-> shippable state when it lands, not "shippable once the next three SPECs also land."
+Everything mechanical between the gates is the agent's or the CLI's job.
 
-## 2. A SPEC is never shipped on an agent's self-report
+## 2. One branch per SPEC
 
-This is the core ship-discipline rule. An agent's "I'm done" message is **not** evidence
-that the work is done. Before a SPEC is SHIPPED:
+Each SPEC works on **`spec/NNNN-<slug>`** in every repo of its `repos:` line, created by the
+human. The Atlas root itself works on `main` only.
 
-1. the implementing agent finishes its work, **then**
-2. an **independent review** verifies the work against the SPEC — *running the suites and
-   exercising the change*, not reading the agent's report, **then**
-3. the change is **committed**.
+## 3. Specs are small and independently deliverable
 
-Independent review routinely produces substantial corrections (boundary conditions, error
-handling, naming, test coverage, dependency layout). Skipping it — trusting the
-self-report — is how subtly-wrong work gets archived as "shipped." See
-[04-spec-lifecycle.md](04-spec-lifecycle.md) for the `IN REVIEW → SHIPPED` transition and
-the un-archive rule when something was shipped early.
+A SPEC is sized to be **built, reviewed and closed as one unit** — not an epic. If it can't be
+described, implemented and verified without dragging in half the system, split it. Rules of
+thumb: one clear "this is what it does" sentence; reviewable in one focused sitting; the project
+works when it lands, not "once the next three SPECs also land."
 
-## 3. Start each SPEC from a clean baseline
+## 4. Never closed on an agent's self-report
 
-Before implementing a SPEC, check the **affected repo's** working tree. If it has **staged or
-uncommitted changes that aren't part of this SPEC, stop and surface them** — don't build on top
-of unrelated work-in-progress. Pre-existing changes mixed into a SPEC pollute its diff: the
-change is no longer independently reviewable or cleanly revertable, which breaks the contract
-that **a SPEC's commit equals the SPEC's work**.
+An agent's "I'm done" is not evidence. Before a SPEC closes, the work is **verified in the
+code by a reviewer other than the implementer** — running the suites and exercising the
+change, not reading the agent's report. The review's corrections go into the code.
 
-Resolve it first — the unrelated changes get committed or set aside (a human runs the write), or
-they're confirmed to belong to this SPEC — *then* begin. A clean baseline per workitem is what
-makes the independent review and a clean revert possible.
+## 5. Start each SPEC from a clean baseline
 
-## 4. A commit message says what the commit does — nothing else
+Before implementing, check each affected repo's working tree. **Changes that aren't part of
+this SPEC → stop and surface them**; they get committed or set aside by the human first. A
+SPEC's commit equals the SPEC's work — that is what keeps it reviewable and revertable.
 
-When you draft a commit message, describe **only what this commit changes**, at a verbosity that
-matches the change:
+## 6. A commit message says what the commit does — nothing else
 
 - **Subject** — one imperative line ("Add X", "Fix Y"), ~50 chars, no trailing period.
-- **Body** *(only when the change needs it)* — what changed and why, in present terms. A small
-  change needs no body.
+- **Body** *(only when needed)* — what changed and why, in present terms.
 
-Leave out:
+Leave out archaeology (how you got here, prior attempts) and what is *not* done (TODOs, "next
+we'll…"). Authorship and attribution are project policy, not this rule.
 
-- **archaeology** — how you got here, dead ends, prior attempts, "previously…", session narration;
-- **what is *not* done** — TODOs, "still missing", "next we'll…", caveats about unrelated work.
-  The message documents the commit, not the roadmap.
+## 7. Only files of record, SPECs and DRAFTs — and no archaeology
 
-Simple but complete: someone reading the history understands exactly what this commit did —
-without the backstory, and without a list of what it didn't do.
+The Atlas root holds the files of record, SPECs (with their findings files) and DRAFTs. **No
+other kind of planning file** — a north-star, a brief or a plan is either a DRAFT or a SPEC.
 
-> Commit **authorship / attribution** (who runs the commit, signatures, trailers) is a separate
-> **project/business policy — not part of this discipline.** This rule is only about the message's
-> content.
-
-## 5. No archaeology — artifacts are snapshots, not logs
-
-Every Atlas file of record describes the **current** state or intent, and is **rewritten in
-place — never appended to**. No "previously…", "we used to…", "changed from X to Y",
-"attempt 1 failed", "no longer…", dead ends or migration narration — not in `CLAUDE.md`, not
-in a SPEC, not in `STATUS.md`, not in the backlog. Agents are strongly inclined to leave this
-trail; it adds nothing and only inflates the text a future reader has to wade through.
-
-History has exactly two homes: **git** (what changed and why, per commit — see §4) and
-**`_archived/`** (what shipped). If a piece of history matters, it is in one of those; if it
-isn't, it doesn't belong anywhere.
-
----
-
-These five are the universal core. Anything more specific — a particular error-handling
-pattern, a framework convention, a naming scheme — is **not the framework**: it's a
-project-specific choice that belongs in your orientation file, or a universal one that belongs
-in your memory store. Not here.
+Every file of record describes the **current** state or intent and is **rewritten in place —
+never appended to**. No "previously…", "changed from X to Y", "attempt 1 failed" — not in
+`CLAUDE.md`, a SPEC, `STATUS.md` or the backlog. History has two homes: **git** and
+**`_archived/`**.
