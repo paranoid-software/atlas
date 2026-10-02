@@ -13,7 +13,7 @@ arrives.
 | File | Role |
 |---|---|
 | **`CLAUDE.md`** *(orientation file)* | Project orientation + standing project-specific decisions & conventions + footguns. Static — changes only when an orientation fact or a standing decision changes. |
-| **`STATUS.md`** | Where the project is *now*, in **three fixed sections that never mix**: **What it is** (one line) · **Active** (the in-flight board — one block per SPEC in progress/review with its status and a short *where-we-left-off* note: Done / Next / Blocked) · **Recently closed** (a short rolling window into `_archived/`). Holds no rules and no decisions. |
+| **`STATUS.md`** | Where the project is *now*, in **three fixed sections that never mix**: **What it is** (one line) · **Active** (the in-flight board — one block per SPEC in progress/review with its status and a short *where-we-left-off* note: Done / Next / Blocked, and Paused when it is paused) · **Recently closed** (a short rolling window into `_archived/`). Holds no rules and no decisions. |
 | **`BACKLOG.md`** | The **queue**: one line per open workitem (`SPEC_*` / `DRAFT_*`) **not yet in flight**, index-only — no bodies, no rules, no decisions. `READY` = in the backlog and not yet in `STATUS → Active`. |
 | **`_archived/`** | Where closed SPECs go — the project's history of work. Holds **only closed SPECs** and their findings files, plus a `README.md` explaining the folder. |
 | **`_settings/`** | The Atlas's configuration, in `atlas.toml` (below). Versioned with the Atlas. |
@@ -81,7 +81,8 @@ These two are easy to confuse, so the split is strict:
   - **What `<topic>` is** — one line.
   - **Active** — the **in-flight board**: one block per SPEC currently `IN PROGRESS` or
     `IN REVIEW`, with its status and a short **resume note — where we left off** — in 2–4
-    bullets: **Done** / **Next** / **Blocked**. This is the *single home* of in-flight state
+    bullets: **Done** / **Next** / **Blocked** — plus **Paused** while the SPEC is paused
+    ([05-discipline.md](05-discipline.md)). This is the *single home* of in-flight state
     (it is **not** in the SPEC). Each block is **rewritten to the current state, never
     appended as a log**, and a SPEC **leaves Active the moment it closes**.
   - **Recently closed** — a short rolling window (last N) pointing into `_archived/`. The
