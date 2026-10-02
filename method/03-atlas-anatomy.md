@@ -10,15 +10,15 @@ appear as work arrives.
 | File | Role |
 |---|---|
 | **`CLAUDE.md`** *(orientation file)* | Project orientation + standing project-specific decisions & conventions + footguns. Static — changes only when an orientation fact or a standing decision changes. |
-| **`STATUS.md`** | Where the project is *now*, in **three fixed sections that never mix**: **What it is** (one line) · **Active** (the in-flight board — one block per SPEC in progress/review with its status and a short *where-we-left-off* note: Done / Next / Blocked) · **Recently shipped** (a short rolling window into `_archived/`). Holds no rules and no decisions. |
+| **`STATUS.md`** | Where the project is *now*, in **three fixed sections that never mix**: **What it is** (one line) · **Active** (the in-flight board — one block per SPEC in progress/review with its status and a short *where-we-left-off* note: Done / Next / Blocked) · **Recently closed** (a short rolling window into `_archived/`). Holds no rules and no decisions. |
 | **`BACKLOG.md`** | The **queue**: one line per open workitem (`SPEC_*` / `DRAFT_*`) **not yet in flight**, index-only — no bodies, no rules, no decisions. `READY` = in the backlog and not yet in `STATUS → Active`. |
 | **`DEVIATIONS.md`** | Explicit, documented divergences from a memory-store rule *that applies here* — "the rule says X; here we do Y because …". Not a catalog of rules that simply don't apply. |
-| **`_archived/`** | Where shipped SPECs go — the project's shipped history. Holds **only shipped SPECs**, plus a `README.md` explaining the folder. |
+| **`_archived/`** | Where closed SPECs go — the project's history of work. Holds **only closed SPECs** and their findings files, plus a `README.md` explaining the folder. |
 | **`.claude/settings.local.json`** *(tool-local settings)* | Tool-local settings for the primary agent (permissions, additional readable directories). Machine-specific; not portable. No event hooks here — those live tool-global. |
 | **`.vscode/settings.json`** *(editor git settings — reference impl)* | For **VS Code–family editors** (VS Code, Cursor, the Claude Code desktop Code tab), whose git integration does **not** follow symlinks: a `git.scanRepositories` list of the child repos (relative paths, through the symlinks) plus `git.autoRepositoryDetection: true`, so each appears in Source Control on its own. Kept in sync with the symlink set. See the note below. |
 
 > All files of record are **current-state snapshots, rewritten in place — never logs**.
-> History lives only in git and `_archived/` (see [05-discipline.md](05-discipline.md) §5).
+> History lives only in git and `_archived/` (see [05-discipline.md](05-discipline.md) §7).
 
 > **Why editor git settings are needed.** A VS Code–family editor's git extension never
 > follows a symlink during its workspace scan (a symlink reports as a file, not a directory),
@@ -48,6 +48,7 @@ appear as work arrives.
 |---|---|
 | **`SPEC_NNNN_<SLUG>.md`** | A buildable workitem. Created when a workitem appears (not pre-created at bootstrap). See lifecycle. |
 | **`DRAFT_*.md`** | An item still being shaped on its way to a SPEC. Created on demand. A DRAFT either graduates to a SPEC or is discarded — it is never a destination. |
+| **`SPEC_NNNN_FINDINGS.md`** | What was found while resolving that SPEC — blockers, misconceptions that can't be resolved within it, wrongly-posed parts. Created on the first finding; archived with its SPEC. See lifecycle. |
 
 ## The two living files: `CLAUDE.md` vs `STATUS.md`
 
@@ -62,17 +63,17 @@ These two are easy to confuse, so the split is strict:
     `IN REVIEW`, with its status and a short **resume note — where we left off** — in 2–4
     bullets: **Done** / **Next** / **Blocked**. This is the *single home* of in-flight state
     (it is **not** in the SPEC). Each block is **rewritten to the current state, never
-    appended as a log**, and a SPEC **leaves Active the moment it ships**.
-  - **Recently shipped** — a short rolling window (last N) pointing into `_archived/`. The
+    appended as a log**, and a SPEC **leaves Active the moment it closes**.
+  - **Recently closed** — a short rolling window (last N) pointing into `_archived/`. The
     full history is `_archived/`, never this section.
 
-  Every line traces to an artifact (an Active block to its SPEC, a shipped line to
+  Every line traces to an artifact (an Active block to its SPEC, a closed line to
   `_archived/`). **Routine actions (commits, ad-hoc ops) are never status.** No rules, no
   decisions.
 
 The **structured workitem artifacts are the authoritative record**; `STATUS.md` is the
 at-a-glance view over them — plus the one thing only it holds: the **Active resume notes**,
-which you keep current at every checkpoint. "Recently shipped" and the one-liner are
+which you keep current at every checkpoint. "Recently closed" and the one-liner are
 *derived*; the Active blocks are *maintained* (refreshed via the "sync" command when you stop
 or hand off). Ideally `STATUS.md` is injected automatically at the start of every session so
 an agent never starts cold. (Reference implementation: a session-start hook cats `STATUS.md`
@@ -117,11 +118,12 @@ status) → sync.**
 
 - **SPECs: `SPEC_NNNN_<SLUG>.md`** — a 4-digit zero-padded sequence (per-Atlas, assigned at
   creation, never reused) so the name reflects creation order, then an `UPPER_SNAKE` slug.
-  Created/ship dates live *inside* the file, not in the name. E.g.
+  Created/close dates live *inside* the file, not in the name. E.g.
   `SPEC_0001_PROVENANCE_DECOUPLING.md`.
+- **Findings: `SPEC_NNNN_FINDINGS.md`** — the companion of the SPEC with the same number.
 - **DRAFTs: `DRAFT_<SLUG>.md`** — same spirit, for items still being shaped.
 - **Legacy files predating this naming are left as-is** — history is not renamed.
 
 Each thing has exactly one home: orientation + standing decisions in `CLAUDE.md`, universal
 rules in the memory store, current state in `STATUS.md`, buildable work in a `SPEC_`, known
-divergences in `DEVIATIONS.md`, shipped history in `_archived/`.
+divergences in `DEVIATIONS.md`, closed work in `_archived/`.

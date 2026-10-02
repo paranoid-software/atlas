@@ -2,10 +2,10 @@
 
 **A spec-driven framework for running large, multi-repo, AI-assisted projects** — so any
 agent, in any tool, on any day, can open a project cold and have complete clarity about what
-it is, where it lives, where the work stands, and how work gets shipped.
+it is, where it lives, where the work stands, and how work gets closed.
 
 Atlas is a small, tool-agnostic set of conventions: **where each kind of knowledge lives**,
-and **how a unit of work travels from idea to shipped**. It assumes you drive development with
+and **how a unit of work travels from idea to closed**. It assumes you drive development with
 AI agents, but requires **no particular agent, IDE, editor, or memory product**. Where a
 concrete tool helps, it's named as a *reference implementation* playing a *role* you can swap.
 
@@ -31,9 +31,9 @@ concrete tool helps, it's named as a *reference implementation* playing a *role*
   status digest; each with exactly one home.
   → [method/02-stores-model.md](method/02-stores-model.md)
 - **The SPEC lifecycle** — nothing is coded without a small, deliverable spec; every spec
-  travels `READY → IN PROGRESS → IN REVIEW → SHIPPED → archived`.
+  travels `READY → IN PROGRESS → IN REVIEW → CLOSED → archived`.
   → [method/04-spec-lifecycle.md](method/04-spec-lifecycle.md)
-- **The discipline** — small deliverable specs and **independent review before "shipped"**
+- **The discipline** — small deliverable specs and **independent review before "closed"**
   (never trust an agent's self-report). → [method/05-discipline.md](method/05-discipline.md)
 
 ## Roles and reference implementations
