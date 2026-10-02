@@ -35,11 +35,13 @@ SPEC and read only *what we are doing and in what order*.
 
 ## Findings — beside the SPEC, never in it
 
-What you find while resolving a SPEC — something that blocks it, a misconception that can't
-be resolved within it, or something wrongly posed in the SPEC itself — goes to
-**`SPEC_NNNN_FINDINGS.md`**, the SPEC's companion (same number). Create it on the first
-finding. Before the SPEC closes, each finding is either **resolved** (in the code or in the
-SPEC) or **moved** to its own DRAFT or SPEC; the file is archived with its SPEC.
+**`SPEC_NNNN_FINDINGS.md`**, the SPEC's companion (same number), keeps what you learn while
+resolving it — something that blocks it, a misconception that can't be resolved within it,
+something wrongly posed in the SPEC itself — so it isn't lost and doesn't turn the SPEC into a
+log. Create it on the first finding.
+
+It is a **record, not a checklist: findings never hold a SPEC open.** A finding worth pursuing
+becomes its own DRAFT or SPEC; the file is archived with its SPEC.
 
 ## Status values
 

@@ -1,37 +1,57 @@
-# Atlas anatomy — the files of record
+# Atlas anatomy — the Atlas's own files
 
-Every Atlas keeps a fixed set of planning files at its root (never inside a member repo).
-The **fixed scaffold** is created empty at bootstrap, so every Atlas has the same skeleton
-from day one and an agent always knows where each thing goes. The **per-workitem** files
-appear as work arrives.
+An Atlas root holds two kinds of entries: **sources**, each a symlink, and the **Atlas's own
+files**. Telling them apart takes no guessing: **anything starting with `_`, the uppercase
+`.md` files, `.claude/` and `.vscode/` belong to the Atlas; everything else is a source.**
 
-## The fixed scaffold (always present)
+The **base set** is created by `atlas init`, so every Atlas has the same skeleton from day one
+and an agent always knows where each thing goes. The **per-workitem** files appear as work
+arrives.
+
+## The base set
 
 | File | Role |
 |---|---|
 | **`CLAUDE.md`** *(orientation file)* | Project orientation + standing project-specific decisions & conventions + footguns. Static — changes only when an orientation fact or a standing decision changes. |
 | **`STATUS.md`** | Where the project is *now*, in **three fixed sections that never mix**: **What it is** (one line) · **Active** (the in-flight board — one block per SPEC in progress/review with its status and a short *where-we-left-off* note: Done / Next / Blocked) · **Recently closed** (a short rolling window into `_archived/`). Holds no rules and no decisions. |
 | **`BACKLOG.md`** | The **queue**: one line per open workitem (`SPEC_*` / `DRAFT_*`) **not yet in flight**, index-only — no bodies, no rules, no decisions. `READY` = in the backlog and not yet in `STATUS → Active`. |
-| **`DEVIATIONS.md`** | Explicit, documented divergences from a memory-store rule *that applies here* — "the rule says X; here we do Y because …". Not a catalog of rules that simply don't apply. |
 | **`_archived/`** | Where closed SPECs go — the project's history of work. Holds **only closed SPECs** and their findings files, plus a `README.md` explaining the folder. |
-| **`.claude/settings.local.json`** *(tool-local settings)* | Tool-local settings for the primary agent (permissions, additional readable directories). Machine-specific; not portable. No event hooks here — those live tool-global. |
-| **`.vscode/settings.json`** *(editor git settings — reference impl)* | For **VS Code–family editors** (VS Code, Cursor, the Claude Code desktop Code tab), whose git integration does **not** follow symlinks: a `git.scanRepositories` list of the child repos (relative paths, through the symlinks) plus `git.autoRepositoryDetection: true`, so each appears in Source Control on its own. Kept in sync with the symlink set. See the note below. |
+| **`_settings/`** | The Atlas's configuration, in `atlas.toml` (below). Versioned with the Atlas. |
+| **`.claude/settings.local.json`** | Claude's settings for this Atlas: the real path of each source as a readable directory. Machine-specific — rewritten by `atlas link`, never versioned. |
+| **`.vscode/settings.json`** | Editor git settings, so every git source shows in Source Control (below). Relative paths — the same on every machine, versioned. |
 
-> All files of record are **current-state snapshots, rewritten in place — never logs**.
+> All the Atlas's files are **current-state snapshots, rewritten in place — never logs**.
 > History lives only in git and `_archived/` (see [05-discipline.md](05-discipline.md) §7).
 
-> **Why editor git settings are needed.** A VS Code–family editor's git extension never
-> follows a symlink during its workspace scan (a symlink reports as a file, not a directory),
-> so the child repos never show up in Source Control on their own. And if you versioned the
-> Atlas root itself (the optional layer in [07-optional-git-versioning.md](07-optional-git-versioning.md)),
-> a file opened *through* a symlink is attributed to the **root** repo instead of its own.
-> Listing each child under `git.scanRepositories` (relative paths, through the symlinks) makes
-> the editor open each repo at startup at its symlinked path — i.e. inside the workspace.
-> That list is only read when `git.autoRepositoryDetection` scans sub-folders (`true` or
-> `subFolders`); some editors (Cursor) default to `openEditors`, which ignores it — so set
-> `git.autoRepositoryDetection: true` explicitly alongside the list.
-> Other editors that follow symlinks need no such list; this is a reference-impl detail, not a
-> core requirement.
+### `_settings/atlas.toml`
+
+```toml
+version = 1                              # the Atlas model version this Atlas follows
+
+[sources.log-daemon]
+remote = "git@github.com:me/log-daemon.git"
+
+[sources.specs]                          # not in git: the name is all there is
+
+[plugins]                                # none by default
+```
+
+It declares **which sources the Atlas has**, never **where** they live: the location is the
+symlink itself, chosen by each person on their machine and never versioned.
+
+### Editor git settings
+
+VS Code–family editors (VS Code, Cursor, the Claude Code desktop Code tab) don't follow
+symlinks when looking for repos, so without help no source shows in Source Control — and if
+the Atlas itself is versioned, a file opened through a symlink is attributed to the Atlas's
+repo. `.vscode/settings.json` fixes both: `git.scanRepositories` lists every source (relative
+paths, through the symlinks), and `git.autoRepositoryDetection` is set to `true` — the list is
+only read when detection scans sub-folders, and Cursor defaults to `openEditors`, which
+ignores it. Reload the window after changing it.
+
+To check what the editor actually does, raise the Git log level to Trace (`Developer: Set Log
+Level`), reload the window and read the Git output log: its `doInitialScan` line prints the
+effective `autoRepositoryDetection`.
 
 ## Optional files
 
@@ -48,13 +68,13 @@ appear as work arrives.
 |---|---|
 | **`SPEC_NNNN_<SLUG>.md`** | A buildable workitem. Created when a workitem appears (not pre-created at bootstrap). See lifecycle. |
 | **`DRAFT_*.md`** | An item still being shaped on its way to a SPEC. Created on demand. A DRAFT either graduates to a SPEC or is discarded — it is never a destination. |
-| **`SPEC_NNNN_FINDINGS.md`** | What was found while resolving that SPEC — blockers, misconceptions that can't be resolved within it, wrongly-posed parts. Created on the first finding; archived with its SPEC. See lifecycle. |
+| **`SPEC_NNNN_FINDINGS.md`** | What was found while resolving that SPEC — blockers, misconceptions that can't be resolved within it, wrongly-posed parts. A record, never a condition to close. Created on the first finding; archived with its SPEC. See lifecycle. |
 
 ## The two living files: `CLAUDE.md` vs `STATUS.md`
 
 These two are easy to confuse, so the split is strict:
 
-- **`CLAUDE.md` is the static "what / why."** What the product is, what each repo
+- **`CLAUDE.md` is the static "what / why."** What the product is, what each source
   contributes, the standing decisions. It changes only when an orientation fact or a
   standing decision changes.
 - **`STATUS.md` is the living "where are we now."** Three fixed sections that **never mix**:
@@ -80,39 +100,40 @@ an agent never starts cold. (Reference implementation: a session-start hook cats
 into context; a "sync" command refreshes it. Both are tool affordances — wire up whatever
 your tool offers, or do it by hand.)
 
-## The per-repo orientation block
+## The source orientation block
 
-Inside `CLAUDE.md`, **every symlinked repo gets a standard block** so any agent understands
-the territory cold. Group repos by role when there are many. Each block is:
+Inside `CLAUDE.md`, **every source gets a standard block** so any agent understands the
+territory cold. The block describes the source's role **in this Atlas** — the same source can
+be core in one project and read-only reference in another. Group sources by role when there
+are many. Each block is:
 
 - **Role** — core product / reference / infrastructure / tooling
-- **Contributes** — one paragraph: what this repo holds and does for the project
+- **Contributes** — one paragraph: what this source holds and does for the project
 - **Stack** — languages / frameworks / key libraries
 - **Cadence** — how it releases or deploys (or "reference only: read, don't modify")
 
-> Fill these from each repo's own README (or package description). If it's missing or
-> ambiguous, **ask** — don't infer the repo's purpose from its file layout.
+> Fill these from the source's own README (or package description). If it's missing or
+> ambiguous, **ask** — don't infer its purpose from its file layout.
 
-## Adding or removing a repo from an existing Atlas
+## Sources: declared once, located per machine
 
-The set of symlinked repos is part of the Atlas's reality, so changing it is a **sync, not a
-re-init**. Bootstrapping (`atlas-init` in the reference impl) is one-time and refuses to run on
-an already-scaffolded Atlas; adding or removing a repo afterward is handled by the **sync**
-operation, because a repo change *is* an orientation-fact change.
+`_settings/atlas.toml` says which sources the Atlas has; each machine has its own symlinks.
+Two commands keep them in line:
 
-When the symlink set changes, the sync reconciles the artifacts to it:
+- **`atlas link <name> <path>`** — adds or rebinds a source: creates the symlink, declares the
+  source (with its `remote` when it is a git repo), adds it to `.vscode/settings.json` and
+  writes its real path to `.claude/settings.local.json`. The creator of an Atlas and whoever
+  clones it run the same command.
+- **`atlas doctor`** — reports each declared source as **ok**, **missing** (with the exact
+  clone and link commands to run) or **broken** (the symlink points nowhere), and flags
+  symlinks that aren't declared. It writes nothing.
 
-- **Repo added** (new symlink) → add its **per-repo orientation block** to `CLAUDE.md` §1
-  (read its README; ask if ambiguous); add its real target path to the tool-local settings'
-  readable-directories list; and, for VS Code–family editors, add its symlink path to
-  `git.scanRepositories` in `.vscode/settings.json`.
-- **Repo removed** (symlink gone) → flag the now-stale orientation block, its settings entry,
-  and its `git.scanRepositories` line, and **ask before deleting** them.
-- **Mismatch** between the symlinks present and the orientation blocks (or a multi-root
-  workspace file, if you keep one) → surface it; don't silently guess.
+**The CLI never clones nor runs git**, beyond reading a source's remote — it tells the person
+exactly what to run. A new source also needs its orientation block in `CLAUDE.md`, written
+with the human.
 
-This keeps the rule simple: **new Atlas → bootstrap; any later change to the repo set (or the
-status) → sync.**
+To drop a source, remove its symlink, its declaration, its `.vscode/settings.json` entry and
+its orientation block — asking the human before deleting.
 
 ## Naming conventions
 
@@ -125,5 +146,5 @@ status) → sync.**
 - **Legacy files predating this naming are left as-is** — history is not renamed.
 
 Each thing has exactly one home: orientation + standing decisions in `CLAUDE.md`, universal
-rules in the memory store, current state in `STATUS.md`, buildable work in a `SPEC_`, known
-divergences in `DEVIATIONS.md`, closed work in `_archived/`.
+rules in the memory store, current state in `STATUS.md`, buildable work in a `SPEC_`, which
+sources the Atlas has in `_settings/`, closed work in `_archived/`.

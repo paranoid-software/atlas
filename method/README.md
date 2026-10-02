@@ -34,11 +34,11 @@ parts:
 |---|------|----------------|
 | 1 | [01-the-atlas.md](01-the-atlas.md) | The Atlas model — what an Atlas is and why it exists |
 | 2 | [02-stores-model.md](02-stores-model.md) | The stores model — where each kind of knowledge lives, **described by role** |
-| 3 | [03-atlas-anatomy.md](03-atlas-anatomy.md) | The files of record at the Atlas root, their naming, and per-repo orientation |
+| 3 | [03-atlas-anatomy.md](03-atlas-anatomy.md) | The Atlas's own files, `_settings/`, sources declared vs located, editor git settings, naming |
 | 4 | [04-spec-lifecycle.md](04-spec-lifecycle.md) | The workitem lifecycle, what a SPEC is (and is not), Plan ≠ how, and how to resume one |
 | 5 | [05-discipline.md](05-discipline.md) | Human gates · branch per SPEC · small deliverable specs · review before close · clean baseline · commit-message hygiene · no archaeology |
 | 6 | [06-bootstrap.md](06-bootstrap.md) | The bootstrap recipe — how to stand up a new Atlas |
-| 7 | [07-optional-git-versioning.md](07-optional-git-versioning.md) | The **optional** git/symlink versioning mechanic |
+| 7 | [07-sharing-an-atlas.md](07-sharing-an-atlas.md) | Git as how an Atlas is shared; what is versioned and the `.gitignore` |
 
 ## A note on roles vs. reference implementations
 
