@@ -9,7 +9,9 @@ The suggested flow of work. It is what turns steady work into good software, in 
 project — and what breaks first under pressure.
 
 1. **Something rubs** — a bug, an idea, a friction found while working.
-2. **Decide** what to do about it, in conversation.
+2. **Decide** what to do about it, in conversation — and write the decision right away where
+   it belongs: `CLAUDE.md`, the SPEC, its findings or the backlog (except the how of a step,
+   whose record is the code). What is not written is lost.
 3. **Write a bounded SPEC** ([04](04-spec-lifecycle.md)).
 4. **Create its branch** — the human creates `spec/NNNN-<slug>` from `develop` in each repo
    the SPEC touches.
@@ -19,6 +21,12 @@ project — and what breaks first under pressure.
 7. **The human commits on the SPEC branch and closes the SPEC.** After the close — done by
    the human, never a condition to close — the branch returns to `develop`; `main` only ever
    receives `develop`.
+
+**Sessions are disposable.** Every agent session starts blank; what carries the work from one
+to the next is the Atlas. So a decision taken in conversation is written the moment it is
+taken — except the how of a step, whose record is the code ([04](04-spec-lifecycle.md)) — and
+work is cut so a fresh session picks it up from the Atlas alone: one session per SPEC, or per
+large block of it, ending with the SPEC's Active block rewritten as the handoff.
 
 **Drift signals.** An agent that sees one says so **once**, then follows the human's call —
 nothing blocks:
