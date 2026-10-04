@@ -29,7 +29,15 @@ it into `.vscode/settings.json` and `.claude/settings.local.json`. Then write it
 block in `CLAUDE.md` §1 with the human — from the source's README; if there is none or it is
 ambiguous, ask. Sources keep being added this way for the life of the Atlas.
 
-## 3. Join an existing Atlas — `atlas doctor`
+## 3. Choose the coding-rules memory — `atlas plugin add` *(optional)*
+
+If this Atlas shares coding rules with others, declare where they come from:
+`atlas plugin add coding-rules mcp:<server>` (an MCP memory server, e.g. coco) or
+`atlas plugin add coding-rules file:<path>` (a `.md` in the Atlas). It writes the declaration in
+`_settings/atlas.toml` and creates `CODING_RULES_CANDIDATES.md` and `CODING_RULES_DEVIATIONS.md`
+([02-stores-model.md](02-stores-model.md)).
+
+## 4. Join an existing Atlas — `atlas doctor`
 
 Clone the Atlas, run `atlas doctor`: it lists every declared source that is missing or broken
 on this machine, with the exact commands to get it and link it. Put each source wherever you
@@ -38,14 +46,15 @@ like and `atlas link` it. Run `atlas doctor` again until everything is ok.
 ## The orientation-file template
 
 Copy this skeleton, then fill the `<...>` placeholders. Universal behavior rules are **not**
-in this template — they live in the memory store; don't re-add them per Atlas.
+in this template — they live in the coding-rules source, when the Atlas declares one; don't
+re-add them per Atlas.
 
 ````markdown
 # <Topic> Atlas — agent instructions
 
 This is the **<topic> Atlas** — the context of the <topic> project. Project orientation +
-Atlas-specific glue only. Universal rules and behavior live in the memory store; autonomous
-file-memory is off. **Current state & next steps live in [STATUS.md](STATUS.md) — read it
+Atlas-specific glue only. Universal rules live in the coding-rules source, when this Atlas
+declares one; autonomous file-memory is off. **Current state & next steps live in [STATUS.md](STATUS.md) — read it
 first.**
 
 ---
@@ -75,7 +84,7 @@ flagged explicitly.
 - **Before editing, identify the target source** — most changes belong to exactly one;
   changes across sources are called out explicitly.
 - <Atlas-specific tooling notes — environment naming, dev-server entrypoints, lint/format>
-- <Atlas-specific footguns unique to this Atlas — generic ones live in the memory store>
+- <Atlas-specific footguns unique to this Atlas — generic ones live in the coding-rules source>
 
 ---
 
@@ -84,10 +93,10 @@ _(no domain conventions yet)_
 
 ---
 
-## 5. Conventions we're establishing (Atlas-level, not in the memory store)
-_Rules that apply to this Atlas and that we've decided not (yet) to lift into the memory
-store. Keep it short; promote to the memory store only after a dedicated session, and only
-if they generalize._
+## 5. Conventions we're establishing (Atlas-level)
+_Rules that apply to this Atlas and that we've decided not (yet) to lift into the coding-rules
+source. Keep it short; promote through `CODING_RULES_CANDIDATES.md`, in a dedicated session,
+and only if they generalize._
 - _(empty — fill in as conventions get decided.)_
 ````
 

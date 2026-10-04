@@ -49,10 +49,10 @@ optional and swappable. The mapping:
 | Role | Reference implementation (optional) | Alternatives exist |
 |------|--------------------------|---------------------|
 | **Primary agent / tool** *(required)* — the AI coding tool you drive the project with | Claude Code | Cursor, Codex, Cline, any CLI/IDE agent |
-| **Cross-tool memory store, over MCP** *(required)* — universal knowledge every agent queries live | coco (an MCP memory server) | mem0, or any cross-tool rule store an agent can query over MCP |
-| **Skill / cheat-sheet mechanism** *(strengthener)* — reusable, on-demand guides that *point into* the memory store | Claude Code skills | any tool affordance for reusable prompts |
+| **Coding-rules source** *(plugin, chosen per Atlas)* — universal rules every agent queries before writing code | an MCP memory server, e.g. coco | a `.md` file in the Atlas |
+| **Skill / cheat-sheet mechanism** *(strengthener)* — reusable, on-demand guides that *point into* the coding-rules source | Claude Code skills | any tool affordance for reusable prompts |
 | **Forced-discipline mechanism** *(strengthener)* — automation that injects behavior on events (session start, etc.) | Claude Code hooks | any event/automation hook your tool offers |
 
-The first two roles are **required**: a primary agent and a **shared memory store every agent
-reaches over MCP**. The named tools are only examples — pick your own. The last two are
+The primary agent is **required**; the coding-rules source is a **plugin each Atlas chooses**,
+or not. The named tools are only examples — pick your own. The last two are
 *strengtheners*: use them if your tool offers them, and degrade gracefully if it doesn't.

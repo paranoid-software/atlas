@@ -29,7 +29,7 @@ PAGES = [
     {"file": "method/01-the-atlas.md",             "url": "/method/01-the-atlas",     "title": "The Atlas model",       "group": "The framework",
      "summary": "An Atlas keeps the context of a real project; its sources live once and enter by symlink, reused across Atlases."},
     {"file": "method/02-stores-model.md",          "url": "/method/02-stores-model",  "title": "The stores model",      "group": "The framework",
-     "summary": "Where each kind of knowledge lives; the required shared MCP memory store; the universal-only boundary; the decision tree."},
+     "summary": "Where each kind of knowledge lives; the coding-rules plugin each Atlas chooses; the universal-only boundary; the decision tree."},
     {"file": "method/03-atlas-anatomy.md",         "url": "/method/03-atlas-anatomy", "title": "Atlas anatomy",         "group": "The framework",
      "summary": "The Atlas's own files, _settings/atlas.toml, editor git settings, sources declared vs located, the source block, naming."},
     {"file": "method/04-spec-lifecycle.md",        "url": "/method/04-spec-lifecycle","title": "The SPEC lifecycle",    "group": "The framework",
@@ -55,8 +55,8 @@ TAGLINE = "A tool-agnostic, spec-driven framework for running large, multi-repo,
 LLMS_INTRO = (
     "Atlas defines a methodology and a discipline, not a product. It is project-agnostic: it says "
     "where each kind of knowledge belongs and how a unit of work travels from idea to closed. It "
-    "requires a primary AI agent and a shared memory store every agent can query over MCP (coco and "
-    "mem0 are optional examples of that role); the specific tools are your choice. It does not store "
+    "requires a primary AI agent; the shared coding-rules memory is a plugin each Atlas chooses (an MCP "
+    "memory server such as coco, or a .md file), or none. It does not store "
     "project knowledge in a pile of files the way other spec-driven-development approaches do.\n\n"
     "The canonical content is the markdown in this repo; the files below are the whole framework, in "
     "reading order."

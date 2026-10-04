@@ -26,8 +26,9 @@ concrete tool helps, it's named as a *reference implementation* playing a *role*
   by copying), so a single-CWD agent sees the whole territory at once while each repo keeps
   its own git, CI, and release cadence. → [method/01-the-atlas.md](method/01-the-atlas.md)
 - **The stores model** — a fixed answer to "where does *this* knowledge go?": project
-  orientation + standing decisions in an orientation file; universal rules in a **shared
-  memory store every agent queries over MCP** (required); current state in a regenerable
+  orientation + standing decisions in an orientation file; universal rules in the
+  **coding-rules source each Atlas chooses** (a plugin: an MCP memory server or a `.md`);
+  current state in a regenerable
   status digest; each with exactly one home.
   → [method/02-stores-model.md](method/02-stores-model.md)
 - **The SPEC lifecycle** — nothing is coded without a small, deliverable spec; every spec
@@ -45,7 +46,7 @@ are strengtheners.
 | Role | Reference implementation (optional) | Alternatives |
 |---|---|---|
 | Primary agent / tool *(required)* | Claude Code | Cursor, Codex, Cline, … |
-| Cross-tool memory store, over MCP *(required)* | coco (an MCP memory server) | mem0, any cross-tool rule store agents query over MCP |
+| Coding-rules source *(plugin, chosen per Atlas)* | an MCP memory server, e.g. coco | a `.md` file in the Atlas |
 | Skill / cheat-sheet mechanism | Claude Code skills | any reusable-prompt affordance |
 | Forced-discipline mechanism | Claude Code hooks | any event automation |
 
@@ -57,12 +58,11 @@ and each person rebuilds the sources on their machine. →
 
 ## What this repo is not
 
-- **Not tied to any one agent, IDE, or memory-store product.** The framework names *roles*,
-  not products: a primary agent and a shared MCP memory store are **required**, but *which*
-  tools fill them are yours to choose (coco, mem0, … are optional examples).
+- **Not tied to a memory product.** Each Atlas chooses its coding-rules source — an MCP memory
+  server such as coco, or a `.md` in the Atlas — or none; the framework assumes none.
 - **Not a memory, and not a file-based "project memory."** Unlike spec-driven-development
   approaches that accrete project knowledge into a pile of files, Atlas keeps the durable
-  universal layer in a shared, agent-queryable memory store and keeps project-specifics lean
+  universal layer in the coding-rules source its plugin declares and keeps project-specifics lean
   (orientation + status + specs). It defines methodology and discipline — nothing more.
 - **Not a product description.** How a system *works* lives in its own code and docs; Atlas is
   about orientation, decisions, status, and the flow of work.

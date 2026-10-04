@@ -35,6 +35,9 @@ remote = "git@github.com:me/log-daemon.git"
 [sources.specs]                          # not in git: the name is all there is
 
 [plugins]                                # none by default
+
+[plugins.coding-rules]                   # this Atlas's coding-rules source
+source = "mcp:coco"                      # or "file:CODING_RULES.md"
 ```
 
 It declares **which sources the Atlas has**, never **where** they live: the location is the
@@ -54,14 +57,16 @@ To check what the editor actually does, raise the Git log level to Trace (`Devel
 Level`), reload the window and read the Git output log: its `doInitialScan` line prints the
 effective `autoRepositoryDetection`.
 
-## Optional files
+## Plugin files
+
+A plugin's files exist only in an Atlas that enables it. The `coding-rules` plugin — the Atlas's
+choice of shared coding-rules memory ([02-stores-model.md](02-stores-model.md)) — is enabled with
+`atlas plugin add coding-rules <source>`, which declares it in `_settings/atlas.toml` and creates:
 
 | File | Role |
 |---|---|
-| **`CANDIDATES.md`** *(candidates file)* | Staging area for universal rules aspiring to the memory store, awaiting a dedicated curation session. **Optional** — add it only if you run a memory-store promotion workflow (you stage universal rules here, then promote them in a dedicated curation session). Teams that don't keep a shared memory store, or promote rules directly, can skip it. |
-
-> The candidates file's **role** is "staging for universal-rule promotion." `CANDIDATES.md`
-> is the neutral default; name it to match your memory store if you prefer.
+| **`CODING_RULES_CANDIDATES.md`** | Universal rules found while working, staged for promotion to the source in a dedicated session with the human's approval — never written straight to the source. |
+| **`CODING_RULES_DEVIATIONS.md`** | Deliberate divergences, in this Atlas, from a rule of the source: "the rule says X; here we do Y because …". Brought to the agent at session start. |
 
 ## The per-workitem files (appear as work arrives)
 
@@ -148,5 +153,5 @@ its orientation block — asking the human before deleting.
 - **Legacy files predating this naming are left as-is** — history is not renamed.
 
 Each thing has exactly one home: orientation + standing decisions in `CLAUDE.md`, universal
-rules in the memory store, current state in `STATUS.md`, buildable work in a `SPEC_`, which
+rules in the coding-rules source when the Atlas declares one, current state in `STATUS.md`, buildable work in a `SPEC_`, which
 sources the Atlas has in `_settings/`, closed work in `_archived/`.
