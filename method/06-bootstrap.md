@@ -121,6 +121,7 @@ A SPEC is the *what* and its *route* (the Plan) — nothing else (see
 # SPEC_NNNN_<SLUG>
 created: <date>
 repos: <repo-a>, <repo-b>        ← the repos this SPEC may touch
+mode: <paired | delegated>       ← optional; without it the Atlas default applies
 
 ## What
 <the change, as behavior / outcome — the goal>
@@ -133,7 +134,7 @@ repos: <repo-a>, <repo-b>        ← the repos this SPEC may touch
 
 ## Plan
 <the ordered steps / milestones that deliver the What — the route, in prose.
- No technique, no code, no checkboxes: the how of each step is decided live, with the human.>
+ No technique, no code, no checkboxes: the how of each step is decided live, per the SPEC's mode.>
 ````
 
 **Never add** anything on the "never in a SPEC" list in

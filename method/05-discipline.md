@@ -14,9 +14,10 @@ project — and what breaks first under pressure.
    whose record is the code). What is not written is lost.
 3. **Write a bounded SPEC** ([04](04-spec-lifecycle.md)).
 4. **Create its branch** — the human creates `spec/NNNN-<slug>` from `develop` in each repo
-   the SPEC touches.
-5. **Step by step** — for each Plan step the agent proposes the how, the human approves, the
-   agent executes. What is learned on the way goes to the findings file.
+   the SPEC touches. With its branch in place, the SPEC enters `STATUS → Active`.
+5. **Step by step** — for each Plan step the how is decided and executed: approved by the
+   human in **paired** mode, decided by the workbench and reviewed by the principal in
+   **delegated** mode (below). What is learned on the way goes to the findings file.
 6. **Independent review** in the code.
 7. **The human commits on the SPEC branch and closes the SPEC.** After the close — done by
    the human, never a condition to close — the branch returns to `develop`; `main` only ever
@@ -34,8 +35,25 @@ nothing blocks:
 - code is requested and there is no SPEC in `STATUS → Active`;
 - more than one SPEC is in progress, and not paused, in the same repo;
 - work happens outside the SPEC's branch, or on `main`;
-- a step is coded without its how approved;
+- in paired mode, a step is coded without its how approved;
 - a close is asked without an independent review or a commit.
+
+## Working modes
+
+A SPEC runs in one of two modes. Only the approval of the how changes; the human's other gates
+(§1) stay the same in both.
+
+| | **paired** | **delegated** |
+|---|---|---|
+| Who approves the how | The human, step by step | The principal, reviewing the complete execution and having corrections made |
+| The SPEC | May stay open; it is settled in conversation | **Complete** — executable without questions |
+| The executing agent stops | At every step | Only on a real blocker or a decision the SPEC doesn't cover |
+| The hand-over | — | A precise, self-contained prompt: what to build, the rules, the verification, what to leave staged, when to stop, the report expected. It never sends the workbench to research what the principal already knows. |
+
+In delegated mode the **principal** is the agent the human talks to (Claude); the
+**workbench** is whoever executes — another tool, another session, a subagent. The Atlas
+declares its default mode in its orientation file; a SPEC overrides it with a `mode:` line
+under `repos:`.
 
 ### When something interrupts
 
@@ -56,12 +74,14 @@ reads `git stash list` and gives the exact commands; the human runs them.
 
 ## 1. The human gates
 
-The agent proposes and executes; the human decides at these four points:
+The agent proposes and executes; the human decides at these points:
 
-1. **create the branch** for a SPEC;
-2. **approve the how** of each step before it is coded ([04](04-spec-lifecycle.md));
-3. **commit**;
-4. **close** the SPEC.
+1. **approve the SPEC** — the what;
+2. **create the branch** for it;
+3. **approve the how** of each step before it is coded — in paired mode only; in delegated mode
+   the principal reviews instead (Working modes);
+4. **commit**;
+5. **close** the SPEC.
 
 Everything mechanical between the gates is the agent's or the CLI's job.
 

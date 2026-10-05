@@ -17,8 +17,12 @@ written*.
 
 A SPEC is the **what** plus its **route**: the goal, its acceptance criteria, its repos, its
 boundaries, and a **Plan** — the ordered steps that deliver it. The fixed shape (template in
-[06-bootstrap.md](06-bootstrap.md)): `created` · `repos` · **What** · **Acceptance** · **Out of
-scope** · **Plan**. Nothing else.
+[06-bootstrap.md](06-bootstrap.md)): `created` · `repos` · optional `mode` · **What** ·
+**Acceptance** · **Out of scope** · **Plan**. Nothing else.
+
+A SPEC run in **delegated** mode ([05-discipline.md](05-discipline.md)) must be complete enough
+to execute without questions: its Acceptance covers the cases the workbench will meet,
+including the edge cases, so the workbench stops only on a real blocker.
 
 **Never in a SPEC:**
 - **state** — status, progress, where-we-are → `STATUS.md → Active`;
@@ -72,10 +76,11 @@ to it. That is the checkpoint `/atlas-sync` refreshes.
 
 ## The how is decided live
 
-The Plan gives the route; the **how** of each step is settled at execution time: the agent
-**proposes** an approach, the **human approves**, then it executes. Plan mode, where the tool has
-one, makes this a natural gate — and the cheapest review there is, catching a wrong approach
-before any code exists.
+The Plan gives the route; the **how** of each step is settled at execution time. In **paired**
+mode the agent **proposes** an approach, the **human approves**, then it executes — plan mode,
+where the tool has one, makes this a natural gate and the cheapest review there is, catching a
+wrong approach before any code exists. In **delegated** mode the workbench decides it from the
+SPEC and the rules, and the principal reviews the result ([05-discipline.md](05-discipline.md)).
 
 **Nothing about the how is written down.** The general way of working already lives in the
 coding-rules source, when the Atlas declares one; what remains is step-specific and its record is **the code**. No `PLAN_*.md`, no
