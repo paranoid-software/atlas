@@ -78,14 +78,16 @@ one, makes this a natural gate — and the cheapest review there is, catching a 
 before any code exists.
 
 **Nothing about the how is written down.** The general way of working already lives in the
-memory store; what remains is step-specific and its record is **the code**. No `PLAN_*.md`, no
+coding-rules source, when the Atlas declares one; what remains is step-specific and its record is **the code**. No `PLAN_*.md`, no
 `TASKS_*.md`, no design notes per step. A how-decision with standing value graduates to
-`CLAUDE.md` (project-specific) or the memory store (universal).
+`CLAUDE.md` (project-specific) or, through `CODING_RULES_CANDIDATES.md`, the coding-rules
+source (universal).
 
 ## The deviations registry
 
-`DEVIATIONS.md` runs **independently** of the SPEC flow. It records explicit, deliberate
-divergences from a memory-store rule *that applies to this Atlas* — a rule you'd be expected to
+`CODING_RULES_DEVIATIONS.md`, owned by the `coding-rules` plugin, runs **independently** of
+the SPEC flow. It records explicit, deliberate divergences from a coding rule *that applies to
+this Atlas* — a rule you'd be expected to
 follow but deliberately (or for now) don't, with the reason. A divergence may also spawn a SPEC
 to resolve it.
 
