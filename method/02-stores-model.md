@@ -13,7 +13,7 @@ Knowledge is sorted by **two axes**:
 
 ## The four stores (by role)
 
-| Store (role) | Holds | Read by | Reference impl |
+| Store (role) | Holds | Read by | In Claude Code |
 |---|---|---|---|
 | **Orientation file** | Project orientation (what the product is, each repo's purpose/stack) **+ standing project-specific decisions & conventions** (durable choices true of *this* project that don't generalize) **+ footguns** | The primary agent; the relevant slice is passed to delegated sub-agents via prompt | `CLAUDE.md` at the Atlas root (Claude Code) |
 | **Coding-rules source** *(plugin)* | **Universal** rules, patterns, and anti-patterns that hold across *all* your projects | **Every** agent, querying it before writing code | Declared per Atlas by the `coding-rules` plugin: an MCP server (e.g. coco) or a `.md` file in the Atlas |

@@ -3,6 +3,7 @@
 An Atlas root holds two kinds of entries: **sources**, each a symlink, and the **Atlas's own
 files**. Telling them apart takes no guessing: **anything starting with `_`, the uppercase
 `.md` files, `.claude/`, `.vscode/` and `.gitignore` belong to the Atlas; everything else is a source.**
+The Atlas's own files are never a tool's rule files.
 
 The **base set** is created by `atlas init`, so every Atlas has the same skeleton from day one
 and an agent always knows where each thing goes. The **per-workitem** files appear as work
@@ -103,16 +104,16 @@ at-a-glance view over them — plus the one thing only it holds: the **Active re
 which you keep current at every checkpoint. "Recently closed" and the one-liner are
 *derived*; the Active blocks are *maintained* (refreshed via the "sync" command when you stop
 or hand off). Ideally `STATUS.md` is injected automatically at the start of every session so
-an agent never starts cold. (Reference implementation: a session-start hook cats `STATUS.md`
-into context; a "sync" command refreshes it. Both are tool affordances — wire up whatever
-your tool offers, or do it by hand.)
+an agent never starts cold. (In Claude Code, a session-start hook injects `STATUS.md`
+into context; a "sync" command refreshes it.)
 
 ## The source orientation block
 
 Inside `CLAUDE.md`, **every source gets a standard block** so any agent understands the
 territory cold. The block describes the source's role **in this Atlas** — the same source can
 be core in one project and read-only reference in another. Group sources by role when there
-are many. Each block is:
+are many. A source carries no `CLAUDE.md`, `.claude/`, `AGENTS.md` or `.cursorrules` — see
+[01-the-atlas.md](01-the-atlas.md). Each block is:
 
 - **Role** — core product / reference / infrastructure / tooling
 - **Contributes** — one paragraph: what this source holds and does for the project

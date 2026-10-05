@@ -1,15 +1,13 @@
 # The Atlas method
 
-A tool-agnostic way to run **large, multi-repo, AI-assisted projects** so that any
-agent — in any tool, on any day — can open the project cold and have complete clarity
-about *what it is, where it lives, where the work stands, and how work gets closed*.
+A way to run **large, multi-repo, AI-assisted projects** so that an agent, on any day,
+can open the project cold and have complete clarity about *what it is, where it lives,
+where the work stands, and how work gets closed*.
 
 The method is small. It is a handful of conventions about **where each kind of
-knowledge lives** and **how a unit of work travels from idea to closed**. It assumes
-you drive the project with AI coding agents, but it does **not** require any particular
-agent, IDE, editor, or memory product. Where a concrete tool is useful, this doc names
-it as a *reference implementation* and tells you what role it is playing, so you can
-swap it.
+knowledge lives** and **how a unit of work travels from idea to closed**. It is anchored
+in **Claude** (Claude Code) as the primary agent, which delegates work to other agents —
+Cursor, Codex, subagents, local LLMs — as workbenches.
 
 ## Why it exists
 
@@ -40,19 +38,9 @@ parts:
 | 6 | [06-bootstrap.md](06-bootstrap.md) | The bootstrap recipe — how to stand up a new Atlas |
 | 7 | [07-sharing-an-atlas.md](07-sharing-an-atlas.md) | Git as how an Atlas is shared; what is versioned and the `.gitignore` |
 
-## A note on roles vs. reference implementations
+## Claude as the anchor
 
-Throughout, the framework describes each component by the **role** it plays and then names a
-concrete tool that *could* fill it. The roles are what the framework requires; the tools are
-optional and swappable. The mapping:
-
-| Role | Reference implementation (optional) | Alternatives exist |
-|------|--------------------------|---------------------|
-| **Primary agent / tool** *(required)* — the AI coding tool you drive the project with | Claude Code | Cursor, Codex, Cline, any CLI/IDE agent |
-| **Coding-rules source** *(plugin, chosen per Atlas)* — universal rules every agent queries before writing code | an MCP memory server, e.g. coco | a `.md` file in the Atlas |
-| **Skill / cheat-sheet mechanism** *(strengthener)* — reusable, on-demand guides that *point into* the coding-rules source | Claude Code skills | any tool affordance for reusable prompts |
-| **Forced-discipline mechanism** *(strengthener)* — automation that injects behavior on events (session start, etc.) | Claude Code hooks | any event/automation hook your tool offers |
-
-The primary agent is **required**; the coding-rules source is a **plugin each Atlas chooses**,
-or not. The named tools are only examples — pick your own. The last two are
-*strengtheners*: use them if your tool offers them, and degrade gracefully if it doesn't.
+Claude (Claude Code) is the primary agent. `CLAUDE.md`, skills, hooks and commands are
+first-class pieces of the framework. Other agents — Cursor, Codex, subagents, local LLMs —
+are workbenches Claude delegates to. The memory of rules is the **coding-rules** plugin
+each Atlas chooses.
