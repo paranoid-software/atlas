@@ -23,9 +23,9 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 # Reading order + index metadata. Bodies live in the markdown; this is just nav + summaries.
 PAGES = [
     {"file": "README.md",                          "url": "/",                       "title": "Overview",              "group": "Start here",
-     "summary": "What Atlas is, the framework in one screen, required roles vs. optional tools."},
+     "summary": "What Atlas is, the framework in one screen, Claude as the anchor."},
     {"file": "method/README.md",                   "url": "/method",                 "title": "Method overview",       "group": "The framework",
-     "summary": "Reading order and the role-to-reference-implementation map."},
+     "summary": "Reading order, and Claude as the anchor."},
     {"file": "method/01-the-atlas.md",             "url": "/method/01-the-atlas",     "title": "The Atlas model",       "group": "The framework",
      "summary": "An Atlas keeps the context of a real project; its sources live once and enter by symlink, reused across Atlases."},
     {"file": "method/02-stores-model.md",          "url": "/method/02-stores-model",  "title": "The stores model",      "group": "The framework",
@@ -51,7 +51,7 @@ for _p in PAGES:
     _m = re.match(r"(?:.*/)?(\d+)-", _p["file"])
     _p["num"] = _m.group(1) if _m else ""
 
-TAGLINE = "A tool-agnostic, spec-driven framework for running large, multi-repo, AI-assisted projects."
+TAGLINE = "A Claude-anchored, spec-driven framework for running large, multi-repo, AI-assisted projects."
 LLMS_INTRO = (
     "Atlas defines a methodology and a discipline, not a product. It is project-agnostic: it says "
     "where each kind of knowledge belongs and how a unit of work travels from idea to closed. It "

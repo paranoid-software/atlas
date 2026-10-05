@@ -1,15 +1,15 @@
 # Atlas
 
-**A spec-driven framework for running large, multi-repo, AI-assisted projects** — so any
-agent, in any tool, on any day, can open a project cold and have complete clarity about what
+**A spec-driven framework for running large, multi-repo, AI-assisted projects** — so an
+agent, on any day, can open a project cold and have complete clarity about what
 it is, where it lives, where the work stands, and how work gets closed.
 
-Atlas is a small, tool-agnostic set of conventions: **where each kind of knowledge lives**,
-and **how a unit of work travels from idea to closed**. It assumes you drive development with
-AI agents, but requires **no particular agent, IDE, editor, or memory product**. Where a
-concrete tool helps, it's named as a *reference implementation* playing a *role* you can swap.
+Atlas is a small set of conventions: **where each kind of knowledge lives**,
+and **how a unit of work travels from idea to closed**. It is anchored in **Claude**
+(Claude Code) as the primary agent, which delegates work to other agents — Cursor, Codex,
+subagents, local LLMs — as workbenches.
 
-> **About this repo.** The formal, tool-agnostic write-up of the framework, served as a small
+> **About this repo.** The formal write-up of the framework, served as a small
 > documentation site (and an `llms.txt`). Official home: **https://atlas.paranoid.software**.
 > MIT-licensed, public.
 
@@ -37,18 +37,12 @@ concrete tool helps, it's named as a *reference implementation* playing a *role*
 - **The discipline** — small deliverable specs and **independent review before "closed"**
   (never trust an agent's self-report). → [method/05-discipline.md](method/05-discipline.md)
 
-## Roles and reference implementations
+## Claude as the anchor
 
-Atlas describes each component by the **role** it plays, then names a concrete tool that fills
-it. The tools are swappable and optional; the first two **roles are required**, the last two
-are strengtheners.
-
-| Role | Reference implementation (optional) | Alternatives |
-|---|---|---|
-| Primary agent / tool *(required)* | Claude Code | Cursor, Codex, Cline, … |
-| Coding-rules source *(plugin, chosen per Atlas)* | an MCP memory server, e.g. coco | a `.md` file in the Atlas |
-| Skill / cheat-sheet mechanism | Claude Code skills | any reusable-prompt affordance |
-| Forced-discipline mechanism | Claude Code hooks | any event automation |
+Claude (Claude Code) is the primary agent. `CLAUDE.md`, skills, hooks and commands are
+first-class pieces of the framework. Other agents — Cursor, Codex, subagents, local LLMs —
+are workbenches Claude delegates to. The memory of rules is the **coding-rules** plugin
+each Atlas chooses.
 
 ## Sharing an Atlas
 
@@ -67,4 +61,4 @@ and each person rebuilds the sources on their machine. →
 - **Not a product description.** How a system *works* lives in its own code and docs; Atlas is
   about orientation, decisions, status, and the flow of work.
 - **Not firm-specific.** No firm- or product-specific programming patterns — only the
-  tool-agnostic conventions any team can adopt.
+  conventions any team can adopt.

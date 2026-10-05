@@ -1,6 +1,6 @@
 # Repository structure
 
-This repo holds the **Atlas framework** as a tool-agnostic, formal write-up, plus a small
+This repo holds the **Atlas framework** as a formal write-up, plus a small
 Flask app that serves it as a site and as machine endpoints — all rendered from the same
 markdown.
 
@@ -12,7 +12,7 @@ atlas/
 ├── STRUCTURE.md              ← this file
 │
 ├── method/                   ← THE FRAMEWORK, split into focused, self-contained files
-│   ├── README.md             ← overview + reading order + role↔reference-impl map
+│   ├── README.md             ← overview + reading order + Claude as the anchor
 │   ├── 01-the-atlas.md       ← the Atlas model (what / why)
 │   ├── 02-stores-model.md    ← the stores model, described by role
 │   ├── 03-atlas-anatomy.md   ← the Atlas's own files, _settings/, sources, naming
