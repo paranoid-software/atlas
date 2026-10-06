@@ -4,6 +4,9 @@ An Atlas is created with the `atlas` CLI and grows one source at a time. Every A
 from the same base set ([03-atlas-anatomy.md](03-atlas-anatomy.md)), so an agent always knows
 where each thing goes.
 
+The CLI and its Claude Code machinery are installed as its README
+on [PyPI](https://pypi.org/project/paranoid-atlas-cli/) says.
+
 ## 1. Create — `atlas init`
 
 In an empty folder, `atlas init` creates the base set of
