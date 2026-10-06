@@ -48,12 +48,25 @@ A SPEC runs in one of two modes. Only the approval of the how changes; the human
 | Who approves the how | The human, step by step | The principal, reviewing the complete execution and having corrections made |
 | The SPEC | May stay open; it is settled in conversation | **Complete** — executable without questions |
 | The executing agent stops | At every step | Only on a real blocker or a decision the SPEC doesn't cover |
-| The hand-over | — | A precise, self-contained prompt: what to build, the rules, the verification, what to leave staged, when to stop, the report expected. It never sends the workbench to research what the principal already knows. |
+| The hand-over | — | A precise, self-contained prompt: what to build, the rules, the verification, what to leave staged, when to stop, the report expected. It never sends the workbench to research what the principal already knows. It never prescribes tooling (see Environments and tooling). |
 
 In delegated mode the **principal** is the agent the human talks to (Claude); the
 **workbench** is whoever executes — another tool, another session, a subagent. The Atlas
 declares its default mode in its orientation file; a SPEC overrides it with a `mode:` line
 under `repos:`.
+
+## Environments and tooling
+
+Atlas imposes no language, framework, platform or tooling. How a source is built and run
+lives in the source; how work is done on a machine lives in that environment's own rules
+(in Claude Code, the user-level `CLAUDE.md` of that machine or container).
+
+An Atlas's orientation file carries no environment tooling rules, and a hand-over prompt
+(Working modes) never prescribes tooling.
+
+In any environment the agent looks at where it stands and what is available, and follows
+that environment's rules. Where there are none, it proposes carefully and asks the human
+before installing or changing anything — it never installs tooling to match a prompt.
 
 ### When something interrupts
 
