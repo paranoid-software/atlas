@@ -126,6 +126,11 @@ are many. A source carries no `CLAUDE.md`, `.claude/`, `AGENTS.md` or `.cursorru
 > Fill these from the source's own README (or package description). If it's missing or
 > ambiguous, **ask** — don't infer its purpose from its file layout.
 
+For a source that still has no README — empty or planned — the block is written from
+what the human says it is. **Contributes** records that purpose in their words; **Stack**
+and **Cadence** stay "not decided yet". Revisit the block once the source has a README.
+The agent never invents the purpose from whatever files are already there.
+
 ## Sources: declared once, located per machine
 
 `_settings/atlas.toml` says which sources the Atlas has; each machine has its own symlinks.
