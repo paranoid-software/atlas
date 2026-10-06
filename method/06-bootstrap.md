@@ -1,148 +1,79 @@
-# Bootstrap recipe — standing up a new Atlas
+# Creating an Atlas
 
-This is the step-by-step for creating the baseline files of a new Atlas. It is written
-**tool-agnostically**; where the reference implementation (Claude Code) uses a specific
-affordance, that's called out as *reference impl* so you can map it to your tool or do it
-by hand.
+An Atlas is created with the `atlas` CLI and grows one source at a time. Every Atlas starts
+from the same base set ([03-atlas-anatomy.md](03-atlas-anatomy.md)), so an agent always knows
+where each thing goes.
 
-The recipe assumes **the Atlas directory and its symlinks already exist** — a human creates
-those before bootstrapping. The current working directory is the Atlas directory.
+## 1. Create — `atlas init`
 
-> **Reference impl:** the reference author runs this recipe via an `/atlas-init` command,
-> and regenerates `STATUS.md` later via `/atlas-sync`. Those are *machinery* that recall
-> the definition and apply it — they don't re-encode it. If your tool has reusable
-> commands, wire equivalents; otherwise follow the steps directly.
+In an empty folder, `atlas init` creates the base set of
+[03-atlas-anatomy.md](03-atlas-anatomy.md) and nothing else. Its initial contents: `CLAUDE.md`
+and `STATUS.md` from the templates below, with no sources and no SPECs; an empty backlog;
+`_archived/README.md` saying what the folder holds; `_settings/atlas.toml` with the current
+model version and no sources nor plugins; `.claude/settings.local.json` with no readable
+directories; `.vscode/settings.json` with `git.autoRepositoryDetection: true` and an empty
+`git.scanRepositories`; `.gitignore` with the whitelist of
+[07-sharing-an-atlas.md](07-sharing-an-atlas.md).
 
-## Prerequisites (a human handles these first)
+No SPECs, DRAFTs or plugin files: those appear when there is work or a plugin is enabled.
+`atlas init` refuses a folder that is already an Atlas (it has `_settings/atlas.toml`,
+`CLAUDE.md` or `STATUS.md`). Settings found in a fresh folder are completed, never replaced —
+`.claude/settings.local.json` and `.vscode/settings.json` gain what the Atlas needs — and an
+existing `.gitignore` is kept, with a reminder to check it against
+[07-sharing-an-atlas.md](07-sharing-an-atlas.md).
 
-- The **Atlas directory** exists (reference convention:
-  `~/Code/<container>/<topic>/_<topic>-default/`).
-- **Symlinks to the real repos** are already in place inside it
-  (`ln -s /real/path/to/repo <repo-name>`).
-- *(Optional)* an editor multi-root workspace file lives **one level above** the Atlas
-  (at the topic folder), listing the symlinks. Putting it inside the Atlas would be
-  cyclically redundant.
-- **Once-per-machine tool setup is already done** (not per Atlas): autonomous file-memory
-  is disabled; any session-start and stop automations are installed tool-global.
-  *(Reference impl: `autoMemoryEnabled: false` plus a `SessionStart` hook that injects
-  `STATUS.md` and a `Stop` hook that nudges a status re-sync — all in user-global tool
-  settings, installed once.)*
+## 2. Add sources — `atlas link`
 
-## Steps
+For each source, `atlas link <name> <path>` creates the symlink, declares the source and wires
+it into `.vscode/settings.json` and `.claude/settings.local.json`. Then write its orientation
+block in `CLAUDE.md` §1 with the human — from the source's README; if there is none or it is
+ambiguous, ask. Sources keep being added this way for the life of the Atlas.
 
-1. **Discover the symlinks** at CWD and resolve each to its real target path. If an
-   optional workspace file exists in the parent topic folder, confirm the two agree. **If
-   the workspace file lists folders absent as symlinks (or vice versa), stop and ask the
-   human before continuing.**
+## 3. Choose the coding-rules memory — `atlas plugin add` *(optional)*
 
-2. **Recall the method** before creating files — pull the Atlas model, this recipe, and the
-   orientation-file template from wherever the canonical definition lives (the memory store
-   for the reference author; this document otherwise). Don't reconstruct it from memory.
+If this Atlas shares coding rules with others, declare where they come from:
+`atlas plugin add coding-rules mcp:<server>` (an MCP memory server, e.g. coco) or
+`atlas plugin add coding-rules file:<path>` (a `.md` in the Atlas). It writes the declaration in
+`_settings/atlas.toml` and creates `CODING_RULES_CANDIDATES.md` and `CODING_RULES_DEVIATIONS.md`
+([02-stores-model.md](02-stores-model.md)).
 
-3. **Create the orientation file (`CLAUDE.md`)** from the template (below). Fill the "what
-   lives here" section with the symlinks, each with a **per-repo orientation block** (role ·
-   contributes · stack · cadence). Read each repo's own README / package description for the
-   content. **If it's missing or ambiguous, ask the human — do not infer it from the file
-   layout.** Leave the workflow / domain / establishing-conventions sections mostly as
-   placeholders.
+## 4. Join an existing Atlas — `atlas doctor`
 
-4. **Create the tool-local settings** (`.claude/settings.local.json` for the reference tool)
-   granting the agent read access to the real symlink target paths. **No event hooks here** —
-   those are tool-global, installed once per machine.
-
-   ```json
-   {
-     "permissions": {
-       "allow": [],
-       "additionalDirectories": [
-         "/real/path/to/repo-1",
-         "/real/path/to/repo-2"
-       ]
-     }
-   }
-   ```
-
-   **For VS Code–family editors (VS Code, Cursor, the Claude Code desktop Code tab), also
-   create `.vscode/settings.json`** listing every symlinked repo under `git.scanRepositories`
-   (relative paths, through the symlinks), and set `git.autoRepositoryDetection` to `true` —
-   the list is only read when detection scans sub-folders, and some editors (Cursor) default to
-   `openEditors`, which skips it. Without both the child repos never appear in Source
-   Control — the editor's git extension does not follow symlinks (and, if the Atlas root is
-   versioned, files open through a symlink are attributed to the root repo). See
-   [03-atlas-anatomy.md](03-atlas-anatomy.md) → the editor-git-settings note. Add a line
-   whenever a new repo is symlinked in (that's part of the add-a-repo sync); reload the window
-   to apply.
-
-   ```json
-   {
-     "git.autoRepositoryDetection": true,
-     "git.scanRepositories": [
-       "repo-1",
-       "repo-2",
-       "group/nested-repo"
-     ]
-   }
-   ```
-
-5. **Create the fixed scaffold — all start empty** so every Atlas has the same skeleton
-   from day one:
-   - `STATUS.md` — three fixed sections (template below): the one-line product summary,
-     **Active** (the in-flight board — one block per SPEC with Done / Next / Blocked; starts
-     empty), and **Recently shipped** (starts empty).
-   - `BACKLOG.md` — index only; "Open" starts empty.
-   - `DEVIATIONS.md` — starts empty.
-   - `_archived/README.md` — explains that the folder holds only shipped `SPEC_NNNN_<SLUG>.md`
-     files.
-
-6. **Optionally create `CANDIDATES.md`** (the candidates file) — only if you run a
-   memory-store promotion workflow. It stages universal rules for a later curation session;
-   starts empty, with the entry format documented inline. Skip it otherwise.
-
-7. **Do NOT pre-create `SPEC_*.md` / `DRAFT_*.md`.** Those are per-workitem, created when the
-   first workitem appears — not at bootstrap.
-
-8. **Do NOT touch once-per-machine tool setup** (tool-global settings, skills) during Atlas
-   bootstrap.
-
-Done. The Atlas is scaffolded: standing decisions accumulate in the orientation file;
-buildable work enters as `SPEC_NNNN_<SLUG>.md` (indexed in the backlog, shipped to
-`_archived/`); `STATUS.md` digests it all; and, if you stage universal rules for promotion,
-they collect in the optional candidates file.
-
-> **Bootstrap runs once.** Adding or removing a repo later is **not** a re-bootstrap — it's a
-> sync that reconciles the per-repo orientation blocks and tool-local settings to the new
-> symlink set. See [03-atlas-anatomy.md](03-atlas-anatomy.md) → "Adding or removing a repo."
+Clone the Atlas, run `atlas doctor`: it lists every declared source that is missing or broken
+on this machine, with the exact commands to get it and link it. Put each source wherever you
+like and `atlas link` it. Run `atlas doctor` again until everything is ok.
 
 ## The orientation-file template
 
 Copy this skeleton, then fill the `<...>` placeholders. Universal behavior rules are **not**
-in this template — they live in the memory store; don't re-add them per Atlas.
+in this template — they live in the coding-rules source, when the Atlas declares one; don't
+re-add them per Atlas.
 
 ````markdown
 # <Topic> Atlas — agent instructions
 
-This is the **<topic> Atlas** — a symlink-aggregator project root. Project orientation +
-Atlas-specific glue only. Universal rules and behavior live in the memory store; autonomous
-file-memory is off. **Current state & next steps live in [STATUS.md](STATUS.md) — read it
+This is the **<topic> Atlas** — the context of the <topic> project. Project orientation +
+Atlas-specific glue only. Universal rules live in the coding-rules source, when this Atlas
+declares one; autonomous file-memory is off. **Current state & next steps live in [STATUS.md](STATUS.md) — read it
 first.**
 
 ---
 
-## 1. What lives here — symlinks and their purposes
+## 1. What lives here — sources and their purposes
 
-Each top-level entry is a symlink into a real, independent git repo:
+Each source is a symlink; where it lives is up to each machine and is never recorded here:
 
 ```
-_<topic>-default/                  (Atlas; not a repo)
-├── repo-a/   → <real-path>        — <one-line purpose>
-├── repo-b/   → <real-path>        — <one-line purpose>
-└── repo-c/   → <real-path>        — <one-line purpose>
+<topic>/                           (the Atlas)
+├── source-a/   — <one-line purpose>
+├── source-b/   — <one-line purpose>
+└── source-c/   — <one-line purpose>
 ```
 
-Editing a file under a symlink writes to the underlying real repo. Cross-repo changes are
+Editing a file under a symlink writes to the source itself. Changes across sources are
 flagged explicitly.
 
-### <repo-name> — <role: core product | reference | infrastructure | tooling>
+### <source-name> — <role: core product | reference | infrastructure | tooling>
 - **Contributes:** <one paragraph>
 - **Stack:** <languages / frameworks / key libs>
 - **Cadence:** <how it releases — or "reference only: read, don't modify">
@@ -150,10 +81,10 @@ flagged explicitly.
 ---
 
 ## 2. How I work in this Atlas
-- **Before editing, identify the target repo** — most changes belong to exactly one repo;
-  cross-repo changes are called out explicitly.
+- **Before editing, identify the target source** — most changes belong to exactly one;
+  changes across sources are called out explicitly.
 - <Atlas-specific tooling notes — environment naming, dev-server entrypoints, lint/format>
-- <Atlas-specific footguns unique to this Atlas — generic ones live in the memory store>
+- <Atlas-specific footguns unique to this Atlas — generic ones live in the coding-rules source>
 
 ---
 
@@ -162,17 +93,17 @@ _(no domain conventions yet)_
 
 ---
 
-## 5. Conventions we're establishing (Atlas-level, not in the memory store)
-_Rules that apply to this Atlas and that we've decided not (yet) to lift into the memory
-store. Keep it short; promote to the memory store only after a dedicated session, and only
-if they generalize._
+## 5. Conventions we're establishing (Atlas-level)
+_Rules that apply to this Atlas and that we've decided not (yet) to lift into the coding-rules
+source. Keep it short; promote through `CODING_RULES_CANDIDATES.md`, in a dedicated session,
+and only if they generalize._
 - _(empty — fill in as conventions get decided.)_
 ````
 
 **Applying the template:**
 
-- The **per-repo orientation block** is the heart of §1 — it's what lets any agent
-  understand each repo without re-explanation.
+- The **source orientation block** is the heart of §1 — it's what lets any agent
+  understand each source without re-explanation.
 - §2 = how you work; §3+ = domain; an optional §4 = a separable sub-domain; §5 = conventions
   you're establishing locally. **Section numbers are fixed**: if you omit §4, §5 stays §5 —
   don't renumber. The stable §1/§2/§3/§5 shape is recognizable across Atlases.
@@ -190,6 +121,7 @@ A SPEC is the *what* and its *route* (the Plan) — nothing else (see
 # SPEC_NNNN_<SLUG>
 created: <date>
 repos: <repo-a>, <repo-b>        ← the repos this SPEC may touch
+mode: <paired | delegated>       ← optional; without it the Atlas default applies
 
 ## What
 <the change, as behavior / outcome — the goal>
@@ -202,14 +134,11 @@ repos: <repo-a>, <repo-b>        ← the repos this SPEC may touch
 
 ## Plan
 <the ordered steps / milestones that deliver the What — the route, in prose.
- No technique, no code, no checkboxes: the how of each step is decided live, with the human.>
+ No technique, no code, no checkboxes: the how of each step is decided live, per the SPEC's mode.>
 ````
 
-**Never add:** a status line, progress, checkboxes, the how / technique, code (no fenced blocks
-— reference a path instead), verification results, archaeology ("previously…", "changed
-from…"), session notes. Where-we-are lives in `STATUS.md → Active`; the how is decided live and
-its record is the code (general working rules already live in the memory store); verification
-in the review's report.
+**Never add** anything on the "never in a SPEC" list in
+[04-spec-lifecycle.md](04-spec-lifecycle.md) — findings go to `SPEC_NNNN_FINDINGS.md` beside it.
 
 ## The STATUS.md template
 
@@ -234,11 +163,12 @@ _(one block per SPEC in progress / in review — rewritten to the current state,
 - **Done:** <what is already in place>
 - **Next:** <the very next step — where to resume>
 - **Blocked:** <what's in the way — omit the line if nothing>
+- **Paused:** <repos> — stash "SPEC_NNNN paused" — omit the line if not paused
 
-## Recently shipped
+## Recently closed
 _(short rolling window — last N — pointing into _archived/; the full history lives there)_
 - SPEC_NNNN_<SLUG> → _archived/ (<date>)
 ````
 
-A SPEC **leaves Active the moment it ships** and appears under Recently shipped; `BACKLOG.md`
+A SPEC **leaves Active the moment it closes** and appears under Recently closed; `BACKLOG.md`
 holds what is queued and not yet in flight.

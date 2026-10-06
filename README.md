@@ -1,15 +1,15 @@
 # Atlas
 
-**A spec-driven framework for running large, multi-repo, AI-assisted projects** — so any
-agent, in any tool, on any day, can open a project cold and have complete clarity about what
-it is, where it lives, where the work stands, and how work gets shipped.
+**A spec-driven framework for running large, multi-repo, AI-assisted projects** — so an
+agent, on any day, can open a project cold and have complete clarity about what
+it is, where it lives, where the work stands, and how work gets closed.
 
-Atlas is a small, tool-agnostic set of conventions: **where each kind of knowledge lives**,
-and **how a unit of work travels from idea to shipped**. It assumes you drive development with
-AI agents, but requires **no particular agent, IDE, editor, or memory product**. Where a
-concrete tool helps, it's named as a *reference implementation* playing a *role* you can swap.
+Atlas is a small set of conventions: **where each kind of knowledge lives**,
+and **how a unit of work travels from idea to closed**. It is anchored in **Claude**
+(Claude Code) as the primary agent, which delegates work to other agents — Cursor, Codex,
+subagents, local LLMs — as workbenches.
 
-> **About this repo.** The formal, tool-agnostic write-up of the framework, served as a small
+> **About this repo.** The formal write-up of the framework, served as a small
 > documentation site (and an `llms.txt`). Official home: **https://atlas.paranoid.software**.
 > MIT-licensed, public.
 
@@ -26,46 +26,39 @@ concrete tool helps, it's named as a *reference implementation* playing a *role*
   by copying), so a single-CWD agent sees the whole territory at once while each repo keeps
   its own git, CI, and release cadence. → [method/01-the-atlas.md](method/01-the-atlas.md)
 - **The stores model** — a fixed answer to "where does *this* knowledge go?": project
-  orientation + standing decisions in an orientation file; universal rules in a **shared
-  memory store every agent queries over MCP** (required); current state in a regenerable
+  orientation + standing decisions in an orientation file; universal rules in the
+  **coding-rules source each Atlas chooses** (a plugin: an MCP memory server or a `.md`);
+  current state in a regenerable
   status digest; each with exactly one home.
   → [method/02-stores-model.md](method/02-stores-model.md)
 - **The SPEC lifecycle** — nothing is coded without a small, deliverable spec; every spec
-  travels `READY → IN PROGRESS → IN REVIEW → SHIPPED → archived`.
+  travels `READY → IN PROGRESS → IN REVIEW → CLOSED → archived`.
   → [method/04-spec-lifecycle.md](method/04-spec-lifecycle.md)
-- **The discipline** — small deliverable specs and **independent review before "shipped"**
+- **The discipline** — small deliverable specs and **independent review before "closed"**
   (never trust an agent's self-report). → [method/05-discipline.md](method/05-discipline.md)
 
-## Roles and reference implementations
+## Claude as the anchor
 
-Atlas describes each component by the **role** it plays, then names a concrete tool that fills
-it. The tools are swappable and optional; the first two **roles are required**, the last two
-are strengtheners.
+Claude (Claude Code) is the primary agent. `CLAUDE.md`, skills, hooks and commands are
+first-class pieces of the framework. Other agents — Cursor, Codex, subagents, local LLMs —
+are workbenches Claude delegates to. The memory of rules is the **coding-rules** plugin
+each Atlas chooses.
 
-| Role | Reference implementation (optional) | Alternatives |
-|---|---|---|
-| Primary agent / tool *(required)* | Claude Code | Cursor, Codex, Cline, … |
-| Cross-tool memory store, over MCP *(required)* | coco (an MCP memory server) | mem0, any cross-tool rule store agents query over MCP |
-| Skill / cheat-sheet mechanism | Claude Code skills | any reusable-prompt affordance |
-| Forced-discipline mechanism | Claude Code hooks | any event automation |
+## Sharing an Atlas
 
-## Optional: versioning the Atlas itself
-
-An Atlas works fine unversioned — it's just a folder of symlinks plus planning files. If you
-*want* a git history of its planning artifacts, there's a clean symlink/git recipe that
-versions the artifacts without touching the member repos. It stays **optional**. →
-[method/07-optional-git-versioning.md](method/07-optional-git-versioning.md)
+Git is how an Atlas is shared: its own files go in a repo of their own, the symlinks never do,
+and each person rebuilds the sources on their machine. →
+[method/07-sharing-an-atlas.md](method/07-sharing-an-atlas.md)
 
 ## What this repo is not
 
-- **Not tied to any one agent, IDE, or memory-store product.** The framework names *roles*,
-  not products: a primary agent and a shared MCP memory store are **required**, but *which*
-  tools fill them are yours to choose (coco, mem0, … are optional examples).
+- **Not tied to a memory product.** Each Atlas chooses its coding-rules source — an MCP memory
+  server such as coco, or a `.md` in the Atlas — or none; the framework assumes none.
 - **Not a memory, and not a file-based "project memory."** Unlike spec-driven-development
   approaches that accrete project knowledge into a pile of files, Atlas keeps the durable
-  universal layer in a shared, agent-queryable memory store and keeps project-specifics lean
+  universal layer in the coding-rules source its plugin declares and keeps project-specifics lean
   (orientation + status + specs). It defines methodology and discipline — nothing more.
 - **Not a product description.** How a system *works* lives in its own code and docs; Atlas is
   about orientation, decisions, status, and the flow of work.
 - **Not firm-specific.** No firm- or product-specific programming patterns — only the
-  tool-agnostic conventions any team can adopt.
+  conventions any team can adopt.
