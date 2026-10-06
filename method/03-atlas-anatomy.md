@@ -104,8 +104,11 @@ at-a-glance view over them — plus the one thing only it holds: the **Active re
 which you keep current at every checkpoint. "Recently closed" and the one-liner are
 *derived*; the Active blocks are *maintained* (refreshed via the "sync" command when you stop
 or hand off). Ideally `STATUS.md` is injected automatically at the start of every session so
-an agent never starts cold. (In Claude Code, a session-start hook injects `STATUS.md`
-into context; a "sync" command refreshes it.)
+an agent never starts cold. Beside it, `atlas status` prints the Atlas's state as its files
+and sources show it — the Active SPECs, any SPEC out of place, each source's branch and
+uncommitted changes, the paused SPECs — so a fresh session starts from both: where the
+conversation was left and where the code is. (In Claude Code, a session-start hook injects
+`atlas status` and `STATUS.md` into context; a "sync" command refreshes `STATUS.md`.)
 
 ## The source orientation block
 
