@@ -18,7 +18,7 @@ arrives.
 | **`BACKLOG.md`** | The **queue**: one line per open workitem (`SPEC_*` / `DRAFT_*`) **not yet in flight**, index-only — no bodies, no rules, no decisions. `READY` = in the backlog and not yet in `STATUS → Active`. |
 | **`_archived/`** | Where closed SPECs go — the project's history of work. Holds **only closed SPECs** and their findings files, plus a `README.md` explaining the folder. |
 | **`_settings/`** | The Atlas's configuration, in `atlas.toml` (below). Versioned with the Atlas. |
-| **`.claude/settings.local.json`** | Claude's settings for this Atlas: the real path of each source as a readable directory. Machine-specific — rewritten by `atlas link`, never versioned. |
+| **`.claude/settings.local.json`** | Claude's settings for this Atlas: the real path of each source as a readable directory. Machine-specific — rewritten by `atlas link` and `atlas unlink`, never versioned. |
 | **`.vscode/settings.json`** | Editor git settings, so every git source shows in Source Control (below). Relative paths — the same on every machine, versioned. |
 | **`.gitignore`** | Keeps only the Atlas's own files under git, never the symlinks nor `.claude/` ([07-sharing-an-atlas.md](07-sharing-an-atlas.md)). Ready from day one, whether or not the Atlas is ever shared. |
 
@@ -134,22 +134,24 @@ The agent never invents the purpose from whatever files are already there.
 ## Sources: declared once, located per machine
 
 `_settings/atlas.toml` says which sources the Atlas has; each machine has its own symlinks.
-Two commands keep them in line:
+Three commands keep them in line:
 
 - **`atlas link <name> <path>`** — adds or rebinds a source: creates the symlink, declares the
   source (with its `remote` when it is a git repo), adds it to `.vscode/settings.json` and
   writes its real path to `.claude/settings.local.json`. The creator of an Atlas and whoever
   clones it run the same command.
+- **`atlas unlink <name>`** — drops a source: removes its symlink, its declaration, its
+  `.vscode/settings.json` entry and its path in `.claude/settings.local.json`. It works on
+  whatever is left of the source (missing, broken or undeclared) and never touches the source
+  itself.
 - **`atlas doctor`** — reports each declared source as **ok**, **missing** (with the exact
   clone and link commands to run) or **broken** (the symlink points nowhere), and flags
   symlinks that aren't declared. It writes nothing.
 
 **The CLI never clones nor runs git**, beyond reading a source's remote — it tells the person
-exactly what to run. A new source also needs its orientation block in `CLAUDE.md`, written
-with the human.
-
-To drop a source, remove its symlink, its declaration, its `.vscode/settings.json` entry and
-its orientation block — asking the human before deleting.
+exactly what to run, and never edits `CLAUDE.md`. A new source also needs its orientation
+block in `CLAUDE.md`, written with the human; a dropped source's block leaves `CLAUDE.md` the
+same way.
 
 ## Naming conventions
 
