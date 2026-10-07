@@ -44,8 +44,10 @@ If this Atlas shares coding rules with others, declare where they come from:
 ## 4. Join an existing Atlas — `atlas doctor`
 
 Clone the Atlas, run `atlas doctor`: it lists every declared source that is missing or broken
-on this machine, with the exact commands to get it and link it. Put each source wherever you
-like and `atlas link` it. Run `atlas doctor` again until everything is ok.
+on this machine (with the exact commands to get it and link it) and every orientation block
+still unwritten or with placeholders; the full list of findings is in
+[03-atlas-anatomy.md](03-atlas-anatomy.md). Put each source wherever you like and
+`atlas link` it. Run `atlas doctor` again until everything is ok.
 
 ## The orientation-file template
 
