@@ -146,7 +146,10 @@ Three commands keep them in line:
   itself.
 - **`atlas doctor`** — reports each declared source as **ok**, **missing** (with the exact
   clone and link commands to run) or **broken** (the symlink points nowhere), and flags
-  symlinks that aren't declared. It writes nothing.
+  symlinks that aren't declared. It also judges each source's orientation block in
+  `CLAUDE.md` §1: **unoriented** when the `### <name> — …` heading is not there, and
+  **placeholder** when the block still carries the template's `<...>` placeholders. It
+  writes nothing.
 
 **The CLI never clones nor runs git**, beyond reading a source's remote — it tells the person
 exactly what to run, and never edits `CLAUDE.md`. A new source also needs its orientation
