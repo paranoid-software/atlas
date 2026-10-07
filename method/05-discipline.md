@@ -48,12 +48,18 @@ A SPEC runs in one of two modes. Only the approval of the how changes; the human
 | Who approves the how | The human, step by step | The principal, reviewing the complete execution and having corrections made |
 | The SPEC | May stay open; it is settled in conversation | **Complete** — executable without questions |
 | The executing agent stops | At every step | Only on a real blocker or a decision the SPEC doesn't cover |
-| The hand-over | — | A precise, self-contained prompt: what to build, the rules, the verification, what to leave staged, when to stop, the report expected. It never sends the workbench to research what the principal already knows. It never prescribes tooling (see Environments and tooling). |
+| The hand-over | — | A precise, self-contained prompt (its contents below). It never sends the workbench to research what the principal already knows. It never prescribes tooling (see Environments and tooling). |
 
 In delegated mode the **principal** is the agent the human talks to (Claude); the
 **workbench** is whoever executes — another tool, another session, a subagent. The Atlas
 declares its default mode in its orientation file; a SPEC overrides it with a `mode:` line
 under `repos:`.
+
+**The hand-over prompt carries:** what to build; the rules; the files to imitate when the
+project has them, otherwise the patterns of the coding-rules source; the verification; what to
+leave staged; when to stop — a SPEC that conflicts with what the workbench finds is a blocker:
+report a finding, never implement around it; and the report expected — what was verified and
+with what output, what was assumed, what was not done.
 
 ## Environments and tooling
 
@@ -116,7 +122,9 @@ works when it lands, not "once the next three SPECs also land."
 
 An agent's "I'm done" is not evidence. Before a SPEC closes, the work is **verified in the
 code by a reviewer other than the implementer** — running the suites and exercising the
-change, not reading the agent's report. The review's corrections go into the code.
+change, not reading the agent's report. The reviewer reads the code against each Acceptance
+criterion and hunts for tests that only look like tests, edges left uncovered, silent
+assumptions and abstractions nobody asked for. The review's corrections go into the code.
 
 ## 5. Start each SPEC from a clean baseline
 
