@@ -30,7 +30,8 @@ existing `.gitignore` is kept, with a reminder to check it against
 For each source, `atlas link <name> <path>` creates the symlink, declares the source and wires
 it into `.vscode/settings.json` and `.claude/settings.local.json`. Then write its orientation
 block in `CLAUDE.md` §1 with the human — from the source's README; if there is none or it is
-ambiguous, ask. Sources keep being added this way for the life of the Atlas.
+ambiguous, ask. Sources keep being added this way for the life of the Atlas; one that leaves
+it is dropped with `atlas unlink <name>`, and its block leaves `CLAUDE.md` §1.
 
 ## 3. Choose the coding-rules memory — `atlas plugin add` *(optional)*
 
