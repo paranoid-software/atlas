@@ -32,5 +32,6 @@ known set of Atlas files is the form that never needs editing when a source is a
 ## Cloning a shared Atlas
 
 Clone it anywhere, then rebuild the sources on your machine: `atlas doctor` lists what is
-missing or broken, with the exact commands to get each source, and `atlas link` wires it in
-([03-atlas-anatomy.md](03-atlas-anatomy.md)).
+missing or broken, with the exact commands to get each source, and `atlas link` wires it in.
+`atlas doctor` also flags any orientation block still unwritten or with placeholders; the full
+list of its findings is in [03-atlas-anatomy.md](03-atlas-anatomy.md).
