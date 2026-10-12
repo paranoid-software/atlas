@@ -66,7 +66,7 @@ choice of shared coding-rules memory ([02-stores-model.md](02-stores-model.md)) 
 
 | File | Role |
 |---|---|
-| **`CODING_RULES_CANDIDATES.md`** | Universal rules found while working, staged for promotion to the source in a dedicated session with the human's approval — never written straight to the source. |
+| **`CODING_RULES_CANDIDATES.md`** | Universal rules found while working, in force in this Atlas from the moment they are staged, and promoted to the source in a dedicated session with the human's approval — never written straight to the source. Brought to the agent at session start. |
 | **`CODING_RULES_DEVIATIONS.md`** | Deliberate divergences, in this Atlas, from a rule of the source: "the rule says X; here we do Y because …". Brought to the agent at session start. |
 
 ## The per-workitem files (appear as work arrives)
