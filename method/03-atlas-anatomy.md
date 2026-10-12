@@ -137,9 +137,10 @@ The agent never invents the purpose from whatever files are already there.
 Three commands keep them in line:
 
 - **`atlas link <name> <path>`** — adds or rebinds a source: creates the symlink, declares the
-  source (with its `remote` when it is a git repo), adds it to `.vscode/settings.json` and
-  writes its real path to `.claude/settings.local.json`. The creator of an Atlas and whoever
-  clones it run the same command.
+  source (with its `remote` when it is a git repo, stored without credentials: an
+  `https://user:token@host/…` origin is declared as `https://host/…`), adds it to
+  `.vscode/settings.json` and writes its real path to `.claude/settings.local.json`. The
+  creator of an Atlas and whoever clones it run the same command.
 - **`atlas unlink <name>`** — drops a source: removes its symlink, its declaration, its
   `.vscode/settings.json` entry and its path in `.claude/settings.local.json`. It works on
   whatever is left of the source (missing, broken or undeclared) and never touches the source
@@ -147,7 +148,9 @@ Three commands keep them in line:
 - **`atlas doctor`** — reports each declared source as **ok**, **missing** (with the exact
   clone and link commands to run) or **broken** (the symlink points nowhere), and flags
   symlinks that aren't declared, and a present source as **rules** when it carries agent or
-  tool rule files at its top level ([01-the-atlas.md](01-the-atlas.md)). It also judges each
+  tool rule files at its top level ([01-the-atlas.md](01-the-atlas.md)), and a declared
+  remote as **credentials** when it still carries a user or token, with the `atlas link` that
+  rewrites it. It also judges each
   source's orientation block in `CLAUDE.md` §1: **unoriented** when the `### <name> — …`
   heading is not there, and **placeholder** when the block still carries the template's
   `<...>` placeholders. It writes nothing.
