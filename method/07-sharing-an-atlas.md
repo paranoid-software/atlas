@@ -12,8 +12,10 @@ their own git — the Atlas never folds them into its history.
   symlink is a dangling pointer on any other — and `.claude/settings.local.json`, which holds
   those same paths.
 
-What the Atlas *shares* about its sources is their declaration in `_settings/atlas.toml`;
-where each one lives is up to each person.
+What the Atlas *shares* about its sources is their declaration in `_settings/atlas.toml` —
+their remote without credentials, never a `user:token@` an origin may carry; where each one
+lives is up to each person. A token that reached the Atlas's history is compromised: rotate
+it, cleaning the history is not enough.
 
 ## The `.gitignore` — deny everything, allow the Atlas's files
 
