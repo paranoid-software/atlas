@@ -35,7 +35,10 @@ One is required, one is a plugin each Atlas chooses, and two are strengtheners:
 
 The plugin owns two files at the Atlas root: `CODING_RULES_CANDIDATES.md` (rules staged for
 promotion to the source) and `CODING_RULES_DEVIATIONS.md` (deliberate divergences from one of
-its rules). At session start the agent is told the source and the deviations in force.
+its rules). A candidate is **in force in the Atlas that staged it** from the moment it is
+written — the agent follows it like a rule of the source; promotion only widens it to every
+project. At session start the agent is told what each store is for, the source, the candidates
+in force and the deviations in force.
 
 > The method does **not** use per-tool config files (`.cursorrules`, `GEMINI.md`,
 > `AGENTS.md`, symlinked entrypoints, …): the coding-rules source covers the universal layer,
@@ -89,8 +92,8 @@ When something worth persisting appears, route it:
    product architecture, a footgun) → the project's **orientation file**. *Not* the
    coding-rules source.
 5. **A universal, cross-project pattern / rule / anti-pattern** → staged in
-   **`CODING_RULES_CANDIDATES.md`**, then promoted to the **coding-rules source** in a
-   dedicated curation session, with the human's approval.
+   **`CODING_RULES_CANDIDATES.md`**, in force here from then on, and promoted to the
+   **coding-rules source** in a dedicated curation session, with the human's approval.
 6. **A buildable workitem** (feature / fix / refactor / a plan handed over by another
    tool) → a **SPEC** (shape it as a DRAFT first if still undecided), indexed in the
    backlog. *No coding without a SPEC.*
