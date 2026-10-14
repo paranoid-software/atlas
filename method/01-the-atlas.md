@@ -3,14 +3,15 @@
 ## What an Atlas is
 
 An **Atlas** is the folder that keeps the context of a **real software project** — not an
-isolated repo. Its **sources** — git repos, folders that aren't in git, docs, references —
-each live **once** on the machine and enter the Atlas **by symlink**, next to the Atlas's own
-files.
+isolated repo. Its **sources** — git repos, folders of repos, folders that aren't in git,
+docs, references — each live **once** on the machine and enter the Atlas **by symlink**, next
+to the Atlas's own files.
 
 ```
 my-project/                        (the Atlas)
 ├── log-daemon/   → ~/code/log-daemon      — a git repo, also linked by other Atlases
 ├── client-api/   → ~/code/client-api      — a git repo
+├── infra/        → ~/code/acme/infra      — a folder of repos: each child is a git repo
 ├── specs/        → ~/clients/acme/specs   — a folder that isn't in git
 │
 ├── CLAUDE.md                ┐
