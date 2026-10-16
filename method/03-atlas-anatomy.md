@@ -33,6 +33,14 @@ version = 1                              # the Atlas model version this Atlas fo
 [sources.log-daemon]
 remote = "git@github.com:me/log-daemon.git"
 
+[sources.infra]                          # a folder of repos: each direct child that is a repo
+
+[sources.infra.repos.gke-logy]
+remote = "https://dev.azure.com/acme/infra/_git/gke-logy"
+
+[sources.infra.repos.gke-n8n]
+remote = "https://dev.azure.com/acme/infra/_git/gke-n8n"
+
 [sources.specs]                          # not in git: the name is all there is
 
 [plugins]                                # none by default
@@ -49,7 +57,7 @@ symlink itself, chosen by each person on their machine and never versioned.
 VS Code–family editors (VS Code, Cursor, the Claude Code desktop Code tab) don't follow
 symlinks when looking for repos, so without help no source shows in Source Control — and if
 the Atlas itself is versioned, a file opened through a symlink is attributed to the Atlas's
-repo. `.vscode/settings.json` fixes both: `git.scanRepositories` lists every source (relative
+repo. `.vscode/settings.json` fixes both: `git.scanRepositories` lists every source, or each nested repo of a folder of repos (relative
 paths, through the symlinks), and `git.autoRepositoryDetection` is set to `true` — the list is
 only read when detection scans sub-folders, and Cursor defaults to `openEditors`, which
 ignores it. Reload the window after changing it.
@@ -139,15 +147,19 @@ Three commands keep them in line:
 - **`atlas link <name> <path>`** — adds or rebinds a source: creates the symlink, declares the
   source (with its `remote` when it is a git repo, stored without credentials: an
   `https://user:token@host/…` origin is declared as `https://host/…`), adds it to
-  `.vscode/settings.json` and writes its real path to `.claude/settings.local.json`. The
-  creator of an Atlas and whoever clones it run the same command.
+  `.vscode/settings.json` and writes its real path to `.claude/settings.local.json`. A folder
+  that is not a repo but whose direct children are is a **folder of repos**: each child is
+  declared under the source with its remote, and the editor scans each one. Rebinding
+  rescans the folder. The creator of an Atlas and whoever clones it run the same command.
 - **`atlas unlink <name>`** — drops a source: removes its symlink, its declaration, its
-  `.vscode/settings.json` entry and its path in `.claude/settings.local.json`. It works on
+  `.vscode/settings.json` entries and its path in `.claude/settings.local.json`. It works on
   whatever is left of the source (missing, broken or undeclared) and never touches the source
   itself.
 - **`atlas doctor`** — reports each declared source as **ok**, **missing** (with the exact
   clone and link commands to run) or **broken** (the symlink points nowhere), and flags
-  symlinks that aren't declared, and a present source as **rules** when it carries agent or
+  symlinks that aren't declared; in a folder of repos it reports each nested repo
+  **missing** (with its clone) or **undeclared** (with the `atlas link` that rescans), and a
+  present source — or nested repo — as **rules** when it carries agent or
   tool rule files at its top level ([01-the-atlas.md](01-the-atlas.md)), and a declared
   remote as **credentials** when it still carries a user or token, with the `atlas link` that
   rewrites it. It also judges each
