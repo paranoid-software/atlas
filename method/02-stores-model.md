@@ -38,7 +38,12 @@ promotion to the source) and `CODING_RULES_DEVIATIONS.md` (deliberate divergence
 its rules). A candidate is **in force in the Atlas that staged it** from the moment it is
 written — the agent follows it like a rule of the source; promotion only widens it to every
 project. At session start the agent is told what each store is for, the source, the candidates
-in force and the deviations in force.
+in force and the deviations in force. Where the tool supports it, the rules are enforced, not
+only announced: in Claude Code a hook blocks the first code edit of a session until the source
+has been consulted (an MCP tool of the declared server, or a read of the declared file); the
+Atlas's own files are never blocked. The gate covers the editing tools, not writes through the
+shell, and the human can turn it off when the source can't be reached
+(`ATLAS_CODING_RULES_GATE=off`).
 
 > The method does **not** use per-tool config files (`.cursorrules`, `GEMINI.md`,
 > `AGENTS.md`, symlinked entrypoints, …): the coding-rules source covers the universal layer,

@@ -16,9 +16,12 @@ project — and what breaks first under pressure.
 4. **Create its branch** — the human creates `spec/NNNN-<slug>` from `develop` in each repo
    the SPEC touches. With its branch in place, the SPEC enters `STATUS → Active` and gets
    `started: <date>`.
-5. **Step by step** — for each Plan step the how is decided and executed: approved by the
-   human in **paired** mode, decided by the workbench and reviewed by the principal in
-   **delegated** mode (below). What is learned on the way goes to the findings file.
+5. **Step by step** — when the Atlas declares a coding-rules source, the first thing is to
+   recall the rules for the SPEC's area from it and say which apply (by id when the source has
+   ids), in the conversation, not in the SPEC. Then, for each Plan step, the how is decided and
+   executed: approved by the human in **paired** mode, decided by the workbench and reviewed by
+   the principal in **delegated** mode (below). What is learned on the way goes to the findings
+   file.
 6. **Independent review** in the code.
 7. **The human commits on the SPEC branch and closes the SPEC**, which gets `closed: <date>`
    when it moves to `_archived/`. After the close — done by the human, never a condition to
@@ -56,11 +59,12 @@ In delegated mode the **principal** is the agent the human talks to (Claude); th
 declares its default mode in its orientation file; a SPEC overrides it with a `mode:` line
 under `repos:`.
 
-**The hand-over prompt carries:** what to build; the rules; the files to imitate when the
-project has them, otherwise the patterns of the coding-rules source; the verification; what to
-leave staged; when to stop — a SPEC that conflicts with what the workbench finds is a blocker:
-report a finding, never implement around it; and the report expected — what was verified and
-with what output, what was assumed, what was not done.
+**The hand-over prompt carries:** what to build; the rules — the coding rules recalled for the
+area, by id and text, so a workbench without access to the source follows them; the files to
+imitate when the project has them, otherwise the patterns of the coding-rules source; the
+verification; what to leave staged; when to stop — a SPEC that conflicts with what the
+workbench finds is a blocker: report a finding, never implement around it; and the report
+expected — what was verified and with what output, what was assumed, what was not done.
 
 ## Environments and tooling
 
@@ -124,8 +128,9 @@ works when it lands, not "once the next three SPECs also land."
 An agent's "I'm done" is not evidence. Before a SPEC closes, the work is **verified in the
 code by a reviewer other than the implementer** — running the suites and exercising the
 change, not reading the agent's report. The reviewer reads the code against each Acceptance
-criterion and hunts for tests that only look like tests, edges left uncovered, silent
-assumptions and abstractions nobody asked for. The review's corrections go into the code.
+criterion and against the coding rules recalled for the SPEC, and hunts for tests that only
+look like tests, edges left uncovered, silent assumptions and abstractions nobody asked for. The
+review's corrections go into the code.
 
 ## 5. Start each SPEC from a clean baseline
 
