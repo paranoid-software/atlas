@@ -126,6 +126,8 @@ A SPEC is the *what* and its *route* (the Plan) — nothing else (see
 ````markdown
 # SPEC_NNNN_<SLUG>
 created: <date>
+started: <date>                  ← written when it enters Active
+closed: <date>                   ← written when it moves to _archived/
 repos: <repo-a>, <repo-b>        ← the repos this SPEC may touch (a nested one as <source>/<repo>)
 mode: <paired | delegated>       ← optional; without it the Atlas default applies
 
