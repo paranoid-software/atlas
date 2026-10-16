@@ -17,8 +17,12 @@ written*.
 
 A SPEC is the **what** plus its **route**: the goal, its acceptance criteria, its repos, its
 boundaries, and a **Plan** — the ordered steps that deliver it. The fixed shape (template in
-[06-bootstrap.md](06-bootstrap.md)): `created` · `repos` · optional `mode` · **What** ·
-**Acceptance** · **Out of scope** · **Plan**. Nothing else.
+[06-bootstrap.md](06-bootstrap.md)): `created` · optional `started` · optional `closed` ·
+`repos` · optional `mode` · **What** · **Acceptance** · **Out of scope** · **Plan**. Nothing else.
+
+`started:` is written the day the SPEC enters STATUS → Active (its branch created) and `closed:`
+the day it moves to `_archived/`; each is written once and never rewritten, like `created:`, so a
+stamp is not state — the living state stays in STATUS.
 
 A SPEC run in **delegated** mode ([05-discipline.md](05-discipline.md)) must be complete enough
 to execute without questions: its Acceptance covers the cases the workbench will meet,
