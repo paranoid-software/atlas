@@ -14,14 +14,15 @@ project — and what breaks first under pressure.
    whose record is the code). What is not written is lost.
 3. **Write a bounded SPEC** ([04](04-spec-lifecycle.md)).
 4. **Create its branch** — the human creates `spec/NNNN-<slug>` from `develop` in each repo
-   the SPEC touches. With its branch in place, the SPEC enters `STATUS → Active`.
+   the SPEC touches. With its branch in place, the SPEC enters `STATUS → Active` and gets
+   `started: <date>`.
 5. **Step by step** — for each Plan step the how is decided and executed: approved by the
    human in **paired** mode, decided by the workbench and reviewed by the principal in
    **delegated** mode (below). What is learned on the way goes to the findings file.
 6. **Independent review** in the code.
-7. **The human commits on the SPEC branch and closes the SPEC.** After the close — done by
-   the human, never a condition to close — the branch returns to `develop`; `main` only ever
-   receives `develop`.
+7. **The human commits on the SPEC branch and closes the SPEC**, which gets `closed: <date>`
+   when it moves to `_archived/`. After the close — done by the human, never a condition to
+   close — the branch returns to `develop`; `main` only ever receives `develop`.
 
 **Sessions are disposable.** Every agent session starts blank; what carries the work from one
 to the next is the Atlas. So a decision taken in conversation is written the moment it is
