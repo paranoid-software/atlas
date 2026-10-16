@@ -165,7 +165,8 @@ Three commands keep them in line:
   rewrites it. It also judges each
   source's orientation block in `CLAUDE.md` §1: **unoriented** when the `### <name> — …`
   heading is not there, and **placeholder** when the block still carries the template's
-  `<...>` placeholders. It writes nothing.
+  `<...>` placeholders. `atlas doctor --json` gives the same report as data, for tools.
+  It writes nothing.
 
 **The CLI never clones nor runs git**, beyond reading a source's remote — it tells the person
 exactly what to run, and never edits `CLAUDE.md`. A new source also needs its orientation
