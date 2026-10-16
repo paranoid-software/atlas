@@ -57,14 +57,10 @@ symlink itself, chosen by each person on their machine and never versioned.
 VS Code–family editors (VS Code, Cursor, the Claude Code desktop Code tab) don't follow
 symlinks when looking for repos, so without help no source shows in Source Control — and if
 the Atlas itself is versioned, a file opened through a symlink is attributed to the Atlas's
-repo. `.vscode/settings.json` fixes both: `git.scanRepositories` lists every source, or each nested repo of a folder of repos (relative
-paths, through the symlinks), and `git.autoRepositoryDetection` is set to `true` — the list is
-only read when detection scans sub-folders, and Cursor defaults to `openEditors`, which
-ignores it. Reload the window after changing it.
-
-To check what the editor actually does, raise the Git log level to Trace (`Developer: Set Log
-Level`), reload the window and read the Git output log: its `doInitialScan` line prints the
-effective `autoRepositoryDetection`.
+repo. `.vscode/settings.json` fixes both: `git.scanRepositories` lists every source, or each
+nested repo of a folder of repos (relative paths, through the symlinks), and
+`git.autoRepositoryDetection` is `true`, since the list is only read when detection scans
+sub-folders. When sources still don't show, the CLI's README says how to check it.
 
 ## Plugin files
 
@@ -167,6 +163,10 @@ Three commands keep them in line:
   heading is not there, and **placeholder** when the block still carries the template's
   `<...>` placeholders. `atlas doctor --json` gives the same report as data, for tools.
   It writes nothing.
+
+`atlas ui` shows all of this on a local, read-only page — the doctor's findings in plain words
+with their fix commands, the SPECs with search, stats from their stamps — served on
+`127.0.0.1` and reading only the Atlas's own files.
 
 **The CLI never clones nor runs git**, beyond reading a source's remote — it tells the person
 exactly what to run, and never edits `CLAUDE.md`. A new source also needs its orientation
