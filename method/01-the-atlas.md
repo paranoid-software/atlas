@@ -46,10 +46,13 @@ folder sees the whole project at once: what we are doing, and where each source 
   **orientation, status and work**.
 - **Not a place inside a source.** Planning files never live inside a source: a source shared
   by several Atlases would leak them into all of them.
-- **No agent or tool rule files in a source.** A source carries no `CLAUDE.md`, `.claude/`,
-  `AGENTS.md` or `.cursorrules`. Claude Code loads a subfolder's `CLAUDE.md` on its own, so
-  one inside a source leaks into every Atlas that links it. A source's orientation lives in
-  its block in the Atlas's `CLAUDE.md`.
+- **A source's own rule files are its context, never the Atlas's rules.** A source may carry
+  a `CLAUDE.md`, `.claude/`, `AGENTS.md` or `.cursorrules`: a repo that is not ours, or one
+  with its own conventions. Tools load them on their own when working inside the source, so
+  `atlas doctor` lists them as a notice and the agent reads them with caution, as that
+  source's context. Where they contradict the Atlas or the coding rules, the Atlas and the
+  coding rules win, and the contradiction is a decision for the human. A source's orientation
+  in this Atlas lives in its block in the Atlas's `CLAUDE.md`.
 - **Not tied to one machine.** The Atlas's own files are versioned when it is shared; each
   person rebuilds the symlinks on their machine
   ([07-sharing-an-atlas.md](07-sharing-an-atlas.md)).
