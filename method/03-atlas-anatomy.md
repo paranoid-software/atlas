@@ -119,8 +119,8 @@ conversation was left and where the code is. (In Claude Code, a session-start ho
 Inside `CLAUDE.md`, **every source gets a standard block** so any agent understands the
 territory cold. The block describes the source's role **in this Atlas** — the same source can
 be core in one project and read-only reference in another. Group sources by role when there
-are many. A source carries no `CLAUDE.md`, `.claude/`, `AGENTS.md` or `.cursorrules` — see
-[01-the-atlas.md](01-the-atlas.md). Each block is:
+are many. A source's own rule files, when it carries any, are its context and not the
+Atlas's — see [01-the-atlas.md](01-the-atlas.md). Each block is:
 
 - **Role** — core product / reference / infrastructure / tooling
 - **Contributes** — one paragraph: what this source holds and does for the project
@@ -155,14 +155,15 @@ Three commands keep them in line:
   clone and link commands to run) or **broken** (the symlink points nowhere), and flags
   symlinks that aren't declared; in a folder of repos it reports each nested repo
   **missing** (with its clone) or **undeclared** (with the `atlas link` that rescans), and a
-  present source — or nested repo — as **rules** when it carries agent or
-  tool rule files at its top level ([01-the-atlas.md](01-the-atlas.md)), and a declared
-  remote as **credentials** when it still carries a user or token, with the `atlas link` that
-  rewrites it. It also judges each
-  source's orientation block in `CLAUDE.md` §1: **unoriented** when the `### <name> — …`
-  heading is not there, and **placeholder** when the block still carries the template's
-  `<...>` placeholders. `atlas doctor --json` gives the same report as data, for tools.
-  It writes nothing.
+  declared remote as **credentials** when it still carries a user or token, with the
+  `atlas link` that rewrites it. It also judges each source's orientation block in
+  `CLAUDE.md` §1: **unoriented** when the `### <name> — …` heading is not there, and
+  **placeholder** when the block still carries the template's `<...>` placeholders. Those are
+  **problems**: the Atlas is not healthy until they are fixed. A present source — or nested
+  repo — that carries agent or tool rule files at its top level is a **notice**, **rules**,
+  naming the files ([01-the-atlas.md](01-the-atlas.md)): nothing to fix, something the agent
+  is told to read with caution. `atlas doctor --json` gives the same report as data, for
+  tools, each finding with its `level`. It writes nothing.
 
 `atlas ui` shows all of this on a local, read-only page — the doctor's findings in plain words
 with their fix commands, the SPECs with search, stats from their stamps — served on

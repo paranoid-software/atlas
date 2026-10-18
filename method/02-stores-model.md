@@ -46,8 +46,11 @@ shell, and the human can turn it off when the source can't be reached
 (`ATLAS_CODING_RULES_GATE=off`).
 
 > The method does **not** use per-tool config files (`.cursorrules`, `GEMINI.md`,
-> `AGENTS.md`, symlinked entrypoints, …): the coding-rules source covers the universal layer,
-> and project orientation reaches other agents through the primary agent's delegation prompt.
+> `AGENTS.md`, symlinked entrypoints, …) as stores: the coding-rules source covers the
+> universal layer, and project orientation reaches other agents through the primary agent's
+> delegation prompt. A source may still carry such files of its own
+> ([01-the-atlas.md](01-the-atlas.md)): they are that source's context, read with caution,
+> and never override the Atlas or the coding rules.
 
 ## What the framework is — and what it deliberately is not
 
