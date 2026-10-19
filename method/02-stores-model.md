@@ -15,7 +15,7 @@ Knowledge is sorted by **two axes**:
 
 | Store (role) | Holds | Read by | Where it lives, and where a workbench's machinery can enforce it (Claude Code today) |
 |---|---|---|---|
-| **Orientation file** | Project orientation (what the product is, each repo's purpose/stack) **+ standing project-specific decisions & conventions** (durable choices true of *this* project that don't generalize) **+ footguns** | The agent you talk to; the relevant slice reaches a workbench through `atlas handover` | `CLAUDE.md` at the Atlas root; `atlas orient` sends every session to it first |
+| **Orientation file** | Project orientation (what the product is, each repo's purpose/stack) **+ standing project-specific decisions & conventions** (durable choices true of *this* project that don't generalize) **+ footguns** | The agent you talk to; the relevant slice reaches a workbench through `atlas handover` | `AGENTS.md` at the Atlas root; `atlas orient` sends every session to it first |
 | **Coding-rules source** *(plugin)* | **Universal** rules, patterns, and anti-patterns that hold across *all* your projects | **Every** agent, querying it before writing code | Declared per Atlas by the `coding-rules` plugin: an MCP server (e.g. coco) or a `.md` file in the Atlas |
 | **Skill / cheat-sheet store** | Domain cheat-sheets that **point into** the coding-rules source — never duplicate its content | The agent you talk to | A workbench's skill files, when it has them (Claude Code skills today) |
 | **Forced-discipline store** | Behavior injected on events (e.g. "run `atlas orient` at session start") so discipline doesn't depend on an agent remembering | The agent you talk to | A workbench's event hooks, when it has them (Claude Code hooks today); without them, the agent runs the commands itself |
@@ -125,7 +125,7 @@ that, on reflection, is **not** universal is **re-routed**, not left in `CODING_
 | Just how one workitem was done, with no standing rule for the future | **leave it in its SPEC**, drop the candidate — once closed, the `_archived/` SPEC is its only record |
 
 The last row is the subtle one: an archived SPEC is the *record of the work*, not where an
-agent looks for *standing rules* — orientation comes from `CLAUDE.md` + the status digest,
+agent looks for *standing rules* — orientation comes from `AGENTS.md` + the status digest,
 never from reading archived SPECs. A durable convention buried in an archived SPEC is
 effectively lost; promote it to the orientation file. Only knowledge with **no**
 future-guiding character stays in the SPEC.
