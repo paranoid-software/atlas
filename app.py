@@ -23,9 +23,9 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 # Reading order + index metadata. Bodies live in the markdown; this is just nav + summaries.
 PAGES = [
     {"file": "README.md",                          "url": "/",                       "title": "Overview",              "group": "Start here",
-     "summary": "What Atlas is, the framework in one screen, Claude as the anchor."},
+     "summary": "What Atlas is, the framework in one screen, the CLI as the anchor and agents as workbenches."},
     {"file": "method/README.md",                   "url": "/method",                 "title": "Method overview",       "group": "The framework",
-     "summary": "Reading order, and Claude as the anchor."},
+     "summary": "Reading order, and the CLI as the anchor."},
     {"file": "method/01-the-atlas.md",             "url": "/method/01-the-atlas",     "title": "The Atlas model",       "group": "The framework",
      "summary": "An Atlas keeps the context of a real project; its sources live once and enter by symlink, reused across Atlases."},
     {"file": "method/02-stores-model.md",          "url": "/method/02-stores-model",  "title": "The stores model",      "group": "The framework",
@@ -51,11 +51,11 @@ for _p in PAGES:
     _m = re.match(r"(?:.*/)?(\d+)-", _p["file"])
     _p["num"] = _m.group(1) if _m else ""
 
-TAGLINE = "A Claude-anchored, spec-driven framework for running large, multi-repo, AI-assisted projects."
+TAGLINE = "A spec-driven framework for running large, multi-repo, AI-assisted projects, anchored in a CLI any agent can run."
 LLMS_INTRO = (
     "Atlas defines a methodology and a discipline, not a product. It is project-agnostic: it says "
     "where each kind of knowledge belongs and how a unit of work travels from idea to closed. It "
-    "requires a primary AI agent; the shared coding-rules memory is a plugin each Atlas chooses (an MCP "
+    "is anchored in the atlas CLI, which any agent or editor runs; the shared coding-rules memory is a plugin each Atlas chooses (an MCP "
     "memory server such as coco, or a .md file), or none. It does not store "
     "project knowledge in a pile of files the way other spec-driven-development approaches do.\n\n"
     "The canonical content is the markdown in this repo; the files below are the whole framework, in "

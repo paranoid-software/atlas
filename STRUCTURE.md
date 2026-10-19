@@ -12,7 +12,7 @@ atlas/
 ├── STRUCTURE.md              ← this file
 │
 ├── method/                   ← THE FRAMEWORK, split into focused, self-contained files
-│   ├── README.md             ← overview + reading order + Claude as the anchor
+│   ├── README.md             ← overview + reading order + the CLI as the anchor, agents as workbenches
 │   ├── 01-the-atlas.md       ← the Atlas model (what / why)
 │   ├── 02-stores-model.md    ← the stores model, described by role
 │   ├── 03-atlas-anatomy.md   ← the Atlas's own files, _settings/, sources, naming
