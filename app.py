@@ -37,7 +37,7 @@ PAGES = [
     {"file": "method/05-discipline.md",            "url": "/method/05-discipline",    "title": "The discipline",        "group": "The framework",
      "summary": "Human gates; branch per SPEC; independent review in the code before close."},
     {"file": "method/06-bootstrap.md",             "url": "/method/06-bootstrap",     "title": "Bootstrap recipe",      "group": "The framework",
-     "summary": "How to stand up a new Atlas, plus the orientation-file template."},
+     "summary": "How to stand up a new Atlas and work in it, plus the templates."},
     {"file": "method/07-sharing-an-atlas.md","url": "/method/07-sharing-an-atlas","title": "Sharing an Atlas","group": "The framework",
      "summary": "Git is how an Atlas is shared: its own files are versioned, never the symlinks; each person rebuilds the sources."},
     {"file": "STRUCTURE.md",                       "url": "/structure",               "title": "Repository structure",  "group": "Reference",
