@@ -3,7 +3,9 @@
 An Atlas root holds three kinds of entries: **sources**, each a symlink; the **Atlas's own
 files**; and a **declared workbench's files**. Telling them apart takes no guessing:
 **anything starting with `_`, the uppercase `.md` files, `.vscode/` and `.gitignore` belong to
-the Atlas; `.claude/` belongs to a workbench the Atlas declares; everything else is a source.** The Atlas's own files are never a tool's rule files.
+the Atlas; `.claude/` belongs to a workbench the Atlas declares; everything else is a source.**
+(`CLAUDE.md`, when the `claude` workbench is declared, is the one line `@AGENTS.md`: a
+workbench's file by role, versioned with the Atlas so a clone reads the orientation at once.) The Atlas's own files are never a tool's rule files.
 
 The **base set** is created by `atlas init`, so every Atlas has the same skeleton from day one
 and an agent always knows where each thing goes. The **per-workitem** files appear as work
@@ -13,7 +15,7 @@ arrives.
 
 | File | Role |
 |---|---|
-| **`CLAUDE.md`** *(orientation file)* | Project orientation + standing project-specific decisions & conventions + footguns. Static — changes only when an orientation fact or a standing decision changes. |
+| **`AGENTS.md`** *(orientation file)* | Project orientation + standing project-specific decisions & conventions + footguns. Static — changes only when an orientation fact or a standing decision changes. Read on their own by Codex, Cursor, OpenCode and others; the `claude` workbench adds a one-line `CLAUDE.md` that imports it (`@AGENTS.md`), so Claude Code reads the same file. |
 | **`STATUS.md`** | Where the project is *now*, in **three fixed sections that never mix**: **What it is** (one line) · **Active** (the in-flight board — one block per SPEC in progress/review with its status and a short *where-we-left-off* note: Done / Next / Blocked, and Paused when it is paused) · **Recently closed** (a short rolling window into `_archived/`). Holds no rules and no decisions. |
 | **`BACKLOG.md`** | The **queue**: one line per open workitem (`SPEC_*` / `DRAFT_*`) **not yet in flight**, index-only — no bodies, no rules, no decisions. `READY` = in the backlog and not yet in `STATUS → Active`. |
 | **`_archived/`** | Where closed SPECs go — the project's history of work. Holds **only closed SPECs** and their findings files, plus a `README.md` explaining the folder. |
@@ -34,7 +36,7 @@ exists:
 
 | Workbench | Its file | What it holds |
 |---|---|---|
-| **`claude`** | `.claude/settings.local.json` | The real path of each source as a readable directory, for Claude Code. |
+| **`claude`** | `.claude/settings.local.json`, `CLAUDE.md` | The real path of each source as a readable directory, for Claude Code (per machine, never versioned); and `CLAUDE.md` as the one line `@AGENTS.md`, so Claude Code reads the orientation file (versioned: the one workbench file that is, so a clone needs no `atlas workbench add` to be read). |
 
 An Atlas with no workbench declared is complete: the CLI, the files of record and the editor
 settings are the whole method.
@@ -98,11 +100,11 @@ choice of shared coding-rules memory ([02-stores-model.md](02-stores-model.md)) 
 | **`DRAFT_*.md`** | An item still being shaped on its way to a SPEC. Created on demand. A DRAFT either graduates to a SPEC or is discarded — it is never a destination. |
 | **`SPEC_NNNN_FINDINGS.md`** | What was found while resolving that SPEC — blockers, misconceptions that can't be resolved within it, wrongly-posed parts. A record, never a condition to close. Created on the first finding; archived with its SPEC. See lifecycle. |
 
-## The two living files: `CLAUDE.md` vs `STATUS.md`
+## The two living files: `AGENTS.md` vs `STATUS.md`
 
 These two are easy to confuse, so the split is strict:
 
-- **`CLAUDE.md` is the static "what / why."** What the product is, what each source
+- **`AGENTS.md` is the static "what / why."** What the product is, what each source
   contributes, the standing decisions. It changes only when an orientation fact or a
   standing decision changes.
 - **`STATUS.md` is the living "where are we now."** Three fixed sections that **never mix**:
@@ -137,7 +139,7 @@ blocks.)
 
 ## The source orientation block
 
-Inside `CLAUDE.md`, **every source gets a standard block** so any agent understands the
+Inside `AGENTS.md`, **every source gets a standard block** so any agent understands the
 territory cold. The block describes the source's role **in this Atlas** — the same source can
 be core in one project and read-only reference in another. Group sources by role when there
 are many. A source's own rule files, when it carries any, are its context and not the
@@ -179,7 +181,7 @@ Three commands keep them in line:
   **missing** (with its clone) or **undeclared** (with the `atlas link` that rescans), and a
   declared remote as **credentials** when it still carries a user or token, with the
   `atlas link` that rewrites it. It also judges each source's orientation block in
-  `CLAUDE.md` §1: **unoriented** when the `### <name> — …` heading is not there, and
+  `AGENTS.md` §1: **unoriented** when the `### <name> — …` heading is not there, and
   **placeholder** when the block still carries the template's `<...>` placeholders; and each
   declared workbench as **workbench** when its file is **missing** or **stale**, with the
   `atlas workbench add` that rewrites it. Those are
@@ -208,8 +210,8 @@ with their fix commands, the SPECs with search, stats from their stamps — serv
 `127.0.0.1` and reading only the Atlas's own files.
 
 **The CLI never clones nor writes to git** — it reads a source's remote, its branches and its
-working tree, tells the person exactly what to run, and never edits `CLAUDE.md`. A new source also needs its orientation
-block in `CLAUDE.md`, written with the human; a dropped source's block leaves `CLAUDE.md` the
+working tree, tells the person exactly what to run, and never edits `AGENTS.md`. A new source also needs its orientation
+block in `AGENTS.md`, written with the human; a dropped source's block leaves `AGENTS.md` the
 same way.
 
 ## Naming conventions
@@ -222,6 +224,6 @@ same way.
 - **DRAFTs: `DRAFT_<SLUG>.md`** — same spirit, for items still being shaped.
 - **Legacy files predating this naming are left as-is** — history is not renamed.
 
-Each thing has exactly one home: orientation + standing decisions in `CLAUDE.md`, universal
+Each thing has exactly one home: orientation + standing decisions in `AGENTS.md`, universal
 rules in the coding-rules source when the Atlas declares one, current state in `STATUS.md`, buildable work in a `SPEC_`, which
 sources the Atlas has in `_settings/`, closed work in `_archived/`.
