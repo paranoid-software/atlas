@@ -9,8 +9,9 @@ their own git — the Atlas never folds them into its history.
 - **Versioned:** the Atlas's own files — the `.md` files, every `_` folder
   (`_archived/`, `_settings/`, …), `.vscode/` and `.gitignore`.
 - **Never versioned:** the symlinks — their targets are paths on one machine, so a committed
-  symlink is a dangling pointer on any other — and `.claude/settings.local.json`, which holds
-  those same paths.
+  symlink is a dangling pointer on any other — and a workbench's files (`.claude/`), which
+  each person rebuilds with `atlas workbench add <name>` from the declaration the Atlas
+  carries ([03-atlas-anatomy.md](03-atlas-anatomy.md)).
 
 What the Atlas *shares* about its sources is their declaration in `_settings/atlas.toml` —
 their remote without credentials, never a `user:token@` an origin may carry; where each one

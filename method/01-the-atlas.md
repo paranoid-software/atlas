@@ -19,8 +19,8 @@ my-project/                        (the Atlas)
 ├── BACKLOG.md               │  the Atlas's own files
 ├── SPEC_* / DRAFT_*         │  (see 03-atlas-anatomy.md)
 ├── _archived/               │
-├── _settings/               │
-├── .claude/  .vscode/  .gitignore  ┘
+├── _settings/  .vscode/  .gitignore  ┘
+├── .claude/                 — a declared workbench's files, per machine (03-atlas-anatomy.md)
 ```
 
 Editing a file *through* a symlink writes to the source itself. Any agent that opens the

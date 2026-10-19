@@ -1,9 +1,9 @@
 # Atlas anatomy — the Atlas's own files
 
-An Atlas root holds two kinds of entries: **sources**, each a symlink, and the **Atlas's own
-files**. Telling them apart takes no guessing: **anything starting with `_`, the uppercase
-`.md` files, `.claude/`, `.vscode/` and `.gitignore` belong to the Atlas; everything else is a source.**
-The Atlas's own files are never a tool's rule files.
+An Atlas root holds three kinds of entries: **sources**, each a symlink; the **Atlas's own
+files**; and a **declared workbench's files**. Telling them apart takes no guessing:
+**anything starting with `_`, the uppercase `.md` files, `.vscode/` and `.gitignore` belong to
+the Atlas; `.claude/` belongs to a workbench the Atlas declares; everything else is a source.** The Atlas's own files are never a tool's rule files.
 
 The **base set** is created by `atlas init`, so every Atlas has the same skeleton from day one
 and an agent always knows where each thing goes. The **per-workitem** files appear as work
@@ -18,9 +18,26 @@ arrives.
 | **`BACKLOG.md`** | The **queue**: one line per open workitem (`SPEC_*` / `DRAFT_*`) **not yet in flight**, index-only — no bodies, no rules, no decisions. `READY` = in the backlog and not yet in `STATUS → Active`. |
 | **`_archived/`** | Where closed SPECs go — the project's history of work. Holds **only closed SPECs** and their findings files, plus a `README.md` explaining the folder. |
 | **`_settings/`** | The Atlas's configuration, in `atlas.toml` (below). Versioned with the Atlas. |
-| **`.claude/settings.local.json`** | Claude's settings for this Atlas: the real path of each source as a readable directory. Machine-specific — rewritten by `atlas link` and `atlas unlink`, never versioned. |
-| **`.vscode/settings.json`** | Editor git settings, so every git source shows in Source Control (below). Relative paths — the same on every machine, versioned. |
-| **`.gitignore`** | Keeps only the Atlas's own files under git, never the symlinks nor `.claude/` ([07-sharing-an-atlas.md](07-sharing-an-atlas.md)). Ready from day one, whether or not the Atlas is ever shared. |
+| **`.vscode/settings.json`** | Editor git settings, so every git source shows in Source Control (below). Relative paths — the same on every machine, versioned. The Atlas's own: it follows from having git sources, not from the workbench the Atlas is worked with. |
+| **`.gitignore`** | Keeps only the Atlas's own files under git, never the symlinks nor a workbench's folder ([07-sharing-an-atlas.md](07-sharing-an-atlas.md)). Ready from day one, whether or not the Atlas is ever shared. |
+
+### A workbench's files
+
+A **workbench** is an editor or agent the Atlas is worked with. The Atlas **declares** its
+workbenches in `_settings/atlas.toml` (`[workbenches.<name>]`), once, as it declares its
+sources; `atlas workbench add <name>` declares one and writes its files from the declared
+sources, `atlas workbench drop <name>` undeclares it, `atlas workbench list` shows them. A
+workbench's files are **per machine, never versioned**: `atlas link` and `atlas unlink` keep
+them current for the workbenches declared, `atlas doctor` reports one that is missing or
+stale, and on another machine the same `atlas workbench add` rebuilds them. One workbench
+exists:
+
+| Workbench | Its file | What it holds |
+|---|---|---|
+| **`claude`** | `.claude/settings.local.json` | The real path of each source as a readable directory, for Claude Code. |
+
+An Atlas with no workbench declared is complete: the CLI, the files of record and the editor
+settings are the whole method.
 
 > All the Atlas's files are **current-state snapshots, rewritten in place — never logs**.
 > History lives only in git and `_archived/` (see [05-discipline.md](05-discipline.md) §7).
@@ -147,12 +164,13 @@ Three commands keep them in line:
 - **`atlas link <name> <path>`** — adds or rebinds a source: creates the symlink, declares the
   source (with its `remote` when it is a git repo, stored without credentials: an
   `https://user:token@host/…` origin is declared as `https://host/…`), adds it to
-  `.vscode/settings.json` and writes its real path to `.claude/settings.local.json`. A folder
+  `.vscode/settings.json` and keeps the declared workbenches' files current (its real path for
+  `claude`). A folder
   that is not a repo but whose direct children are is a **folder of repos**: each child is
   declared under the source with its remote, and the editor scans each one. Rebinding
   rescans the folder. The creator of an Atlas and whoever clones it run the same command.
 - **`atlas unlink <name>`** — drops a source: removes its symlink, its declaration, its
-  `.vscode/settings.json` entries and its path in `.claude/settings.local.json`. It works on
+  `.vscode/settings.json` entries and its entries in the declared workbenches' files. It works on
   whatever is left of the source (missing, broken or undeclared) and never touches the source
   itself.
 - **`atlas doctor`** — reports each declared source as **ok**, **missing** (with the exact
@@ -162,7 +180,9 @@ Three commands keep them in line:
   declared remote as **credentials** when it still carries a user or token, with the
   `atlas link` that rewrites it. It also judges each source's orientation block in
   `CLAUDE.md` §1: **unoriented** when the `### <name> — …` heading is not there, and
-  **placeholder** when the block still carries the template's `<...>` placeholders. Those are
+  **placeholder** when the block still carries the template's `<...>` placeholders; and each
+  declared workbench as **workbench** when its file is **missing** or **stale**, with the
+  `atlas workbench add` that rewrites it. Those are
   **problems**: the Atlas is not healthy until they are fixed. A present source — or nested
   repo — that carries agent or tool rule files at its top level is a **notice**, **rules**,
   naming the files ([01-the-atlas.md](01-the-atlas.md)): nothing to fix, something the agent
@@ -171,6 +191,8 @@ Three commands keep them in line:
 
 Four more carry the work itself:
 
+- **`atlas workbench add|drop|list`** — the workbenches the Atlas declares and their files
+  (above).
 - **`atlas spec new|start|pause|resume|review|close`** — the SPEC lifecycle's transitions
   ([04-spec-lifecycle.md](04-spec-lifecycle.md)): the stamps, the backlog line, the Active
   block's shell, `_archived/`, Recently closed; never the Done / Next / Blocked judgment.
