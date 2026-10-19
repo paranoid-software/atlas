@@ -11,7 +11,7 @@ to the Atlas's own files.
 my-project/                        (the Atlas)
 ├── log-daemon/   → ~/code/log-daemon      — a git repo, also linked by other Atlases
 ├── client-api/   → ~/code/client-api      — a git repo
-├── infra/        → ~/code/acme/infra      — a folder of repos: each child is a git repo
+├── infra/        → ~/code/acme/infra      — a folder of repos: git repos inside it, at any depth
 ├── specs/        → ~/clients/acme/specs   — a folder that isn't in git
 │
 ├── AGENTS.md                ┐

@@ -52,10 +52,13 @@ version = 1                              # the Atlas model version this Atlas fo
 [sources.log-daemon]
 remote = "git@github.com:me/log-daemon.git"
 
-[sources.infra]                          # a folder of repos: each direct child that is a repo
+[sources.infra]                          # a folder of repos: each repo inside it, by its path
 
 [sources.infra.repos.gke-logy]
 remote = "https://dev.azure.com/acme/infra/_git/gke-logy"
+
+[sources.infra.repos."platform/gke-n8n"]  # a deeper one, its path quoted
+remote = "https://dev.azure.com/acme/infra/_git/gke-n8n"
 
 [sources.infra.repos.gke-n8n]
 remote = "https://dev.azure.com/acme/infra/_git/gke-n8n"
@@ -168,9 +171,11 @@ Three commands keep them in line:
   `https://user:token@host/…` origin is declared as `https://host/…`), adds it to
   `.vscode/settings.json` and keeps the declared workbenches' files current (its real path for
   `claude`). A folder
-  that is not a repo but whose direct children are is a **folder of repos**: each child is
-  declared under the source with its remote, and the editor scans each one. Rebinding
-  rescans the folder. The creator of an Atlas and whoever clones it run the same command.
+  that is not a repo but holds repos inside is a **folder of repos**: each repo, at any
+  depth, is declared under the source by its path inside the folder (`org/repo`, with `/`
+  whatever the machine) and its remote, and the editor scans each one; the scan never enters a
+  repo, a symlink, a hidden or `_`-prefixed folder, `node_modules`, `.venv`, `venv` or
+  `target`, and stops eight levels down. Rebinding rescans the folder. The creator of an Atlas and whoever clones it run the same command.
 - **`atlas unlink <name>`** — drops a source: removes its symlink, its declaration, its
   `.vscode/settings.json` entries and its entries in the declared workbenches' files. It works on
   whatever is left of the source (missing, broken or undeclared) and never touches the source
