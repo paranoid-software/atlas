@@ -10,7 +10,7 @@ project — and what breaks first under pressure.
 
 1. **Something rubs** — a bug, an idea, a friction found while working.
 2. **Decide** what to do about it, in conversation — and write the decision right away where
-   it belongs: `CLAUDE.md`, the SPEC, its findings or the backlog (except the how of a step,
+   it belongs: `AGENTS.md`, the SPEC, its findings or the backlog (except the how of a step,
    whose record is the code). What is not written is lost.
 3. **Write a bounded SPEC** ([04](04-spec-lifecycle.md)).
 4. **Create its branch** — the human creates `spec/NNNN-<slug>` from `develop` in each repo
@@ -160,5 +160,5 @@ other kind of planning file** — a north-star, a brief or a plan is either a DR
 
 Every file of record describes the **current** state or intent and is **rewritten in place —
 never appended to**. No "previously…", "changed from X to Y", "attempt 1 failed" — not in
-`CLAUDE.md`, a SPEC, `STATUS.md` or the backlog. History has two homes: **git** and
+`AGENTS.md`, a SPEC, `STATUS.md` or the backlog. History has two homes: **git** and
 **`_archived/`**.

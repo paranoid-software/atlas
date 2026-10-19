@@ -14,7 +14,7 @@ my-project/                        (the Atlas)
 ├── infra/        → ~/code/acme/infra      — a folder of repos: each child is a git repo
 ├── specs/        → ~/clients/acme/specs   — a folder that isn't in git
 │
-├── CLAUDE.md                ┐
+├── AGENTS.md                ┐
 ├── STATUS.md                │
 ├── BACKLOG.md               │  the Atlas's own files
 ├── SPEC_* / DRAFT_*         │  (see 03-atlas-anatomy.md)
@@ -52,7 +52,7 @@ folder sees the whole project at once: what we are doing, and where each source 
   `atlas doctor` lists them as a notice and the agent reads them with caution, as that
   source's context. Where they contradict the Atlas or the coding rules, the Atlas and the
   coding rules win, and the contradiction is a decision for the human. A source's orientation
-  in this Atlas lives in its block in the Atlas's `CLAUDE.md`.
+  in this Atlas lives in its block in the Atlas's `AGENTS.md`.
 - **Not tied to one machine.** The Atlas's own files are versioned when it is shared; each
   person rebuilds the symlinks on their machine
   ([07-sharing-an-atlas.md](07-sharing-an-atlas.md)).

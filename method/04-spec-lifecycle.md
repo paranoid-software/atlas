@@ -102,7 +102,7 @@ SPEC and the rules, and the principal reviews the result ([05-discipline.md](05-
 **Nothing about the how is written down.** The general way of working already lives in the
 coding-rules source, when the Atlas declares one; what remains is step-specific and its record is **the code**. No `PLAN_*.md`, no
 `TASKS_*.md`, no design notes per step. A how-decision with standing value graduates to
-`CLAUDE.md` (project-specific) or, through `CODING_RULES_CANDIDATES.md`, the coding-rules
+`AGENTS.md` (project-specific) or, through `CODING_RULES_CANDIDATES.md`, the coding-rules
 source (universal).
 
 ## The deviations registry
