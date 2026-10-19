@@ -13,27 +13,35 @@ In an empty folder, `atlas init` creates the base set of
 [03-atlas-anatomy.md](03-atlas-anatomy.md) and nothing else. Its initial contents: `CLAUDE.md`
 and `STATUS.md` from the templates below, with no sources and no SPECs; an empty backlog;
 `_archived/README.md` saying what the folder holds; `_settings/atlas.toml` with the current
-model version and no sources nor plugins; `.claude/settings.local.json` with no readable
-directories; `.vscode/settings.json` with `git.autoRepositoryDetection: true` and an empty
-`git.scanRepositories`; `.gitignore` with the whitelist of
-[07-sharing-an-atlas.md](07-sharing-an-atlas.md).
+model version and no sources, plugins nor workbenches; `.vscode/settings.json` with
+`git.autoRepositoryDetection: true` and an empty `git.scanRepositories`; `.gitignore` with the
+whitelist of [07-sharing-an-atlas.md](07-sharing-an-atlas.md). Nothing of any agent.
 
-No SPECs, DRAFTs or plugin files: those appear when there is work or a plugin is enabled.
-`atlas init` refuses a folder that is already an Atlas (it has `_settings/atlas.toml`,
-`CLAUDE.md` or `STATUS.md`). Settings found in a fresh folder are completed, never replaced —
-`.claude/settings.local.json` and `.vscode/settings.json` gain what the Atlas needs — and an
+No SPECs, DRAFTs, plugin or workbench files: those appear when there is work, a plugin is
+enabled or a workbench is declared. `atlas init` refuses a folder that is already an Atlas
+(it has `_settings/atlas.toml`, `CLAUDE.md` or `STATUS.md`). Settings found in a fresh folder
+are completed, never replaced — `.vscode/settings.json` gains what the Atlas needs — and an
 existing `.gitignore` is kept, with a reminder to check it against
 [07-sharing-an-atlas.md](07-sharing-an-atlas.md).
 
 ## 2. Add sources — `atlas link`
 
-For each source, `atlas link <name> <path>` creates the symlink, declares the source and wires
-it into `.vscode/settings.json` and `.claude/settings.local.json`. Then write its orientation
+For each source, `atlas link <name> <path>` creates the symlink, declares the source, wires it
+into `.vscode/settings.json` and keeps the declared workbenches' files current. Then write its
+orientation
 block in `CLAUDE.md` §1 with the human — from the source's README; if there is none or it is
 ambiguous, ask. Sources keep being added this way for the life of the Atlas; one that leaves
 it is dropped with `atlas unlink <name>`, and its block leaves `CLAUDE.md` §1.
 
-## 3. Choose the coding-rules memory — `atlas plugin add` *(optional)*
+## 3. Declare the workbenches — `atlas workbench add`
+
+For each agent the Atlas is worked with, `atlas workbench add <name>` declares it and writes
+its files from the declared sources: `claude` for Claude Code
+([03-atlas-anatomy.md](03-atlas-anatomy.md)). Settings a workbench already has in the folder
+are completed, never replaced. The declaration travels with the Atlas; the files do not, and
+the same command rebuilds them on another machine.
+
+## 4. Choose the coding-rules memory — `atlas plugin add` *(optional)*
 
 If this Atlas shares coding rules with others, declare where they come from:
 `atlas plugin add coding-rules mcp:<server>` (an MCP memory server, e.g. coco) or
@@ -41,15 +49,16 @@ If this Atlas shares coding rules with others, declare where they come from:
 `_settings/atlas.toml` and creates `CODING_RULES_CANDIDATES.md` and `CODING_RULES_DEVIATIONS.md`
 ([02-stores-model.md](02-stores-model.md)).
 
-## 4. Join an existing Atlas — `atlas doctor`
+## 5. Join an existing Atlas — `atlas doctor`
 
 Clone the Atlas, run `atlas doctor`: it lists every declared source that is missing or broken
-on this machine (with the exact commands to get it and link it) and every orientation block
-still unwritten or with placeholders; the full list of findings is in
+on this machine (with the exact commands to get it and link it), every declared workbench
+whose files are not there yet (with the `atlas workbench add` that writes them) and every
+orientation block still unwritten or with placeholders; the full list of findings is in
 [03-atlas-anatomy.md](03-atlas-anatomy.md). Put each source wherever you like and
 `atlas link` it. Run `atlas doctor` again until everything is ok.
 
-## 5. Work in it — `atlas orient`, `atlas spec`, `atlas sync`
+## 6. Work in it — `atlas orient`, `atlas spec`, `atlas sync`
 
 Whatever opens the Atlas — an agent in any workbench, or a person in a terminal — starts with
 `atlas orient`: it prints the method's orientation, the coding rules in force, `atlas status`
