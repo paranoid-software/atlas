@@ -5,9 +5,9 @@ agent, on any day, can open a project cold and have complete clarity about what
 it is, where it lives, where the work stands, and how work gets closed.
 
 Atlas is a small set of conventions: **where each kind of knowledge lives**,
-and **how a unit of work travels from idea to closed**. It is anchored in **Claude**
-(Claude Code) as the primary agent, which delegates work to other agents — Cursor, Codex,
-subagents, local LLMs — as workbenches.
+and **how a unit of work travels from idea to closed**. It is anchored in the **`atlas`
+CLI** and the folder's files of record; every agent — Claude Code, Cursor, Codex, subagents,
+local LLMs — is a workbench that opens the folder and runs the same commands.
 
 > **About this repo.** The formal write-up of the framework, served as a small
 > documentation site (and an `llms.txt`). Official home: **https://atlas.paranoid.software**.
@@ -37,12 +37,17 @@ subagents, local LLMs — as workbenches.
 - **The discipline** — small deliverable specs and **independent review before "closed"**
   (never trust an agent's self-report). → [method/05-discipline.md](method/05-discipline.md)
 
-## Claude as the anchor
+## The CLI as the anchor, agents as workbenches
 
-Claude (Claude Code) is the primary agent. `CLAUDE.md`, skills, hooks and commands are
-first-class pieces of the framework. Other agents — Cursor, Codex, subagents, local LLMs —
-are workbenches Claude delegates to. The memory of rules is the **coding-rules** plugin
-each Atlas chooses.
+The Atlas is the folder, and the `atlas` CLI is the method made executable: `atlas orient`
+is any session's first read, `atlas spec` moves a SPEC through its lifecycle, `atlas sync`
+does the checkpoint's mechanics, `atlas handover` builds a delegated brief. That is the whole
+framework; it works with any editor and any agent that opens the folder and has a terminal.
+An agent is a **workbench**. A workbench may have machinery — hooks, commands, skills — that
+wraps those commands so discipline doesn't depend on the agent remembering; it is optional,
+and it never does what the CLI does. Today one workbench has a setup, `atlas setup claude`
+(Claude Code); others arrive as `atlas setup <workbench>`. The memory of rules is the
+**coding-rules** plugin each Atlas chooses.
 
 ## Sharing an Atlas
 
