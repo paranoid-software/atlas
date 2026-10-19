@@ -8,17 +8,17 @@ Knowledge is sorted by **two axes**:
 
 - **Scope** — is it *universal* (true for any project), *project-specific* (true for this
   one project), or *transient* (true right now)?
-- **Audience** — does *every* tool need it, or only the primary agent you drive the
+- **Audience** — does *every* tool need it, or only the agent you drive the
   project with?
 
 ## The four stores (by role)
 
-| Store (role) | Holds | Read by | In Claude Code |
+| Store (role) | Holds | Read by | Where it lives, and where a workbench's machinery can enforce it (Claude Code today) |
 |---|---|---|---|
-| **Orientation file** | Project orientation (what the product is, each repo's purpose/stack) **+ standing project-specific decisions & conventions** (durable choices true of *this* project that don't generalize) **+ footguns** | The primary agent; the relevant slice is passed to delegated sub-agents via prompt | `CLAUDE.md` at the Atlas root (Claude Code) |
+| **Orientation file** | Project orientation (what the product is, each repo's purpose/stack) **+ standing project-specific decisions & conventions** (durable choices true of *this* project that don't generalize) **+ footguns** | The agent you talk to; the relevant slice reaches a workbench through `atlas handover` | `CLAUDE.md` at the Atlas root; `atlas orient` sends every session to it first |
 | **Coding-rules source** *(plugin)* | **Universal** rules, patterns, and anti-patterns that hold across *all* your projects | **Every** agent, querying it before writing code | Declared per Atlas by the `coding-rules` plugin: an MCP server (e.g. coco) or a `.md` file in the Atlas |
-| **Skill / cheat-sheet store** | Domain cheat-sheets that **point into** the coding-rules source — never duplicate its content | The primary agent | Per-skill files (Claude Code skills) |
-| **Forced-discipline store** | Behavior injected on events (e.g. "run `atlas orient` at session start") so discipline doesn't depend on an agent remembering | The primary agent | Event hooks (Claude Code hooks) |
+| **Skill / cheat-sheet store** | Domain cheat-sheets that **point into** the coding-rules source — never duplicate its content | The agent you talk to | A workbench's skill files, when it has them (Claude Code skills today) |
+| **Forced-discipline store** | Behavior injected on events (e.g. "run `atlas orient` at session start") so discipline doesn't depend on an agent remembering | The agent you talk to | A workbench's event hooks, when it has them (Claude Code hooks today); without them, the agent runs the commands itself |
 
 One is required, one is a plugin each Atlas chooses, and two are strengtheners:
 
@@ -29,7 +29,7 @@ One is required, one is a plugin each Atlas chooses, and two are strengtheners:
   ([03-atlas-anatomy.md](03-atlas-anatomy.md)): `source = "mcp:<server>"` for an MCP memory
   server every agent can query — coco is one — or `source = "file:<path>"` for a `.md` inside
   the Atlas. The framework assumes no particular source, and an Atlas may declare none.
-- **Strengtheners: skills + hooks.** If your primary tool supports reusable cheat-sheets
+- **Strengtheners: skills + hooks.** If your workbench supports reusable cheat-sheets
   and event automation, use them to make the discipline automatic. If it doesn't, the
   method still holds — you just apply the same discipline by hand.
 
@@ -38,17 +38,17 @@ promotion to the source) and `CODING_RULES_DEVIATIONS.md` (deliberate divergence
 its rules). A candidate is **in force in the Atlas that staged it** from the moment it is
 written — the agent follows it like a rule of the source; promotion only widens it to every
 project. At session start the agent is told what each store is for, the source, the candidates
-in force and the deviations in force. Where the tool supports it, the rules are enforced, not
-only announced: in Claude Code a hook blocks the first code edit of a session until the source
-has been consulted (an MCP tool of the declared server, or a read of the declared file); the
-Atlas's own files are never blocked. The gate covers the editing tools, not writes through the
+in force and the deviations in force. Where the workbench supports it, the rules are enforced,
+not only announced: a hook blocks the first code edit of a session until the source has been
+consulted (an MCP tool of the declared server, or a read of the declared file) — Claude Code's
+machinery does; the Atlas's own files are never blocked. The gate covers the editing tools, not writes through the
 shell, and the human can turn it off when the source can't be reached
 (`ATLAS_CODING_RULES_GATE=off`).
 
 > The method does **not** use per-tool config files (`.cursorrules`, `GEMINI.md`,
 > `AGENTS.md`, symlinked entrypoints, …) as stores: the coding-rules source covers the
-> universal layer, and project orientation reaches other agents through the primary agent's
-> delegation prompt. A source may still carry such files of its own
+> universal layer, and project orientation reaches a workbench through `atlas orient` and
+> the hand-over brief. A source may still carry such files of its own
 > ([01-the-atlas.md](01-the-atlas.md)): they are that source's context, read with caution,
 > and never override the Atlas or the coding rules.
 
