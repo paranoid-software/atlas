@@ -15,7 +15,7 @@ project — and what breaks first under pressure.
 3. **Write a bounded SPEC** ([04](04-spec-lifecycle.md)).
 4. **Create its branch** — the human creates `spec/NNNN-<slug>` from `develop` in each repo
    the SPEC touches. With its branch in place, the SPEC enters `STATUS → Active` and gets
-   `started: <date>`.
+   `started: <date>` (`atlas spec start <name>` does both and prints the branch commands).
 5. **Step by step** — when the Atlas declares a coding-rules source, the first thing is to
    recall the rules for the SPEC's area from it and say which apply (by id when the source has
    ids), in the conversation, not in the SPEC. Then, for each Plan step, the how is decided and
@@ -24,11 +24,12 @@ project — and what breaks first under pressure.
    file.
 6. **Independent review** in the code.
 7. **The human commits on the SPEC branch and closes the SPEC**, which gets `closed: <date>`
-   when it moves to `_archived/`. After the close — done by the human, never a condition to
+   when it moves to `_archived/` (`atlas spec close <name>`). After the close — done by the human, never a condition to
    close — the branch returns to `develop`; `main` only ever receives `develop`.
 
 **Sessions are disposable.** Every agent session starts blank; what carries the work from one
-to the next is the Atlas. So a decision taken in conversation is written the moment it is
+to the next is the Atlas, and `atlas orient` is how any session — an agent in any workbench, or
+a person in a terminal — reads it first. So a decision taken in conversation is written the moment it is
 taken — except the how of a step, whose record is the code ([04](04-spec-lifecycle.md)) — and
 work is cut so a fresh session picks it up from the Atlas alone: one session per SPEC, or per
 large block of it, ending with the SPEC's Active block rewritten as the handoff.
@@ -65,6 +66,10 @@ imitate when the project has them, otherwise the patterns of the coding-rules so
 verification; what to leave staged; when to stop — a SPEC that conflicts with what the
 workbench finds is a blocker: report a finding, never implement around it; and the report
 expected — what was verified and with what output, what was assumed, what was not done.
+`atlas handover <name> --step N` builds it from the Atlas — the SPEC, the step, the Active
+block, the Atlas's conventions, the rules it can read, the standing clauses — and the principal
+adds the rules recalled from a source the CLI cannot query, the files to imitate and the
+verification.
 
 ## Environments and tooling
 
@@ -91,9 +96,10 @@ before installing or changing anything — it never installs tooling to match a 
 
 **Pausing a SPEC without a commit.** In each repo with changes the human runs
 `git stash push -u -m "SPEC_NNNN paused"`, and the SPEC's Active block gains a line
-`Paused: <repos> — stash "SPEC_NNNN paused"`. **Resuming:** in each of those repos, `git switch spec/NNNN-<slug>`, then
-`git stash pop stash@{n}` — where `n` is the position of `SPEC_NNNN paused` in `git stash list`,
-so the right stash comes back even if there are several — and remove the Paused line. The agent
+`Paused: <repos> — stash "SPEC_NNNN paused"` (`atlas spec pause <name>`). **Resuming:** in each of those repos, `git switch spec/NNNN-<slug>`, then
+`git stash pop stash@{n}` — where `n` is the position of `SPEC_NNNN paused` in
+`git stash list`, so the right stash comes back even if there are several — and remove the
+Paused line (`atlas spec resume <name>`). The agent
 reads `git stash list` and gives the exact commands; the human runs them.
 
 ## 1. The human gates

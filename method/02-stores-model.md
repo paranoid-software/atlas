@@ -18,7 +18,7 @@ Knowledge is sorted by **two axes**:
 | **Orientation file** | Project orientation (what the product is, each repo's purpose/stack) **+ standing project-specific decisions & conventions** (durable choices true of *this* project that don't generalize) **+ footguns** | The primary agent; the relevant slice is passed to delegated sub-agents via prompt | `CLAUDE.md` at the Atlas root (Claude Code) |
 | **Coding-rules source** *(plugin)* | **Universal** rules, patterns, and anti-patterns that hold across *all* your projects | **Every** agent, querying it before writing code | Declared per Atlas by the `coding-rules` plugin: an MCP server (e.g. coco) or a `.md` file in the Atlas |
 | **Skill / cheat-sheet store** | Domain cheat-sheets that **point into** the coding-rules source — never duplicate its content | The primary agent | Per-skill files (Claude Code skills) |
-| **Forced-discipline store** | Behavior injected on events (e.g. "load STATUS at session start") so discipline doesn't depend on an agent remembering | The primary agent | Event hooks (Claude Code hooks) |
+| **Forced-discipline store** | Behavior injected on events (e.g. "run `atlas orient` at session start") so discipline doesn't depend on an agent remembering | The primary agent | Event hooks (Claude Code hooks) |
 
 One is required, one is a plugin each Atlas chooses, and two are strengtheners:
 
