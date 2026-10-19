@@ -49,6 +49,16 @@ still unwritten or with placeholders; the full list of findings is in
 [03-atlas-anatomy.md](03-atlas-anatomy.md). Put each source wherever you like and
 `atlas link` it. Run `atlas doctor` again until everything is ok.
 
+## 5. Work in it — `atlas orient`, `atlas spec`, `atlas sync`
+
+Whatever opens the Atlas — an agent in any workbench, or a person in a terminal — starts with
+`atlas orient`: it prints the method's orientation, the coding rules in force, `atlas status`
+and `STATUS.md`. Work enters as a SPEC with `atlas spec new <SLUG>`, moves with
+`atlas spec start|pause|resume|review|close <name>`
+([04-spec-lifecycle.md](04-spec-lifecycle.md)), and the checkpoint's mechanics are
+`atlas sync`'s ([03-atlas-anatomy.md](03-atlas-anatomy.md)); the agent's machinery, when a
+workbench has one, wraps these commands rather than redoing what they do.
+
 ## The orientation-file template
 
 Copy this skeleton, then fill the `<...>` placeholders. Universal behavior rules are **not**
@@ -157,7 +167,8 @@ SPEC — **rewritten to the current state at every checkpoint, never appended**.
 # <Topic> — STATUS (living)
 
 Where this project is now. Standing decisions + orientation live in CLAUDE.md; the
-BACKLOG / SPEC_ / _archived artifacts are the record. Refresh with `/atlas-sync`.
+BACKLOG / SPEC_ / _archived artifacts are the record. Refresh at every checkpoint: `atlas sync`,
+then rewrite the Active blocks.
 
 _Last updated: <date>_
 

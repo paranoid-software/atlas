@@ -106,13 +106,17 @@ These two are easy to confuse, so the split is strict:
 The **structured workitem artifacts are the authoritative record**; `STATUS.md` is the
 at-a-glance view over them — plus the one thing only it holds: the **Active resume notes**,
 which you keep current at every checkpoint. "Recently closed" and the one-liner are
-*derived*; the Active blocks are *maintained* (refreshed via the "sync" command when you stop
-or hand off). Ideally `STATUS.md` is injected automatically at the start of every session so
-an agent never starts cold. Beside it, `atlas status` prints the Atlas's state as its files
+*derived*; the Active blocks are *maintained* (rewritten at the checkpoint, when you stop or
+hand off). `atlas orient` prints what a session reads first — the method's orientation, the
+coding rules in force, `atlas status` and `STATUS.md` — so an agent in any workbench, or a
+human in a terminal, never starts cold. `atlas status` prints the Atlas's state as its files
 and sources show it — the Active SPECs, any SPEC out of place, each source's branch and
 uncommitted changes, the paused SPECs — so a fresh session starts from both: where the
-conversation was left and where the code is. (In Claude Code, a session-start hook injects
-`atlas status` and `STATUS.md` into context; a "sync" command refreshes `STATUS.md`.)
+conversation was left and where the code is. `atlas sync` does the checkpoint's mechanics —
+the doctor's report, the lint, a missing stamp, a closed SPEC still in Active — and leaves the
+Done / Next / Blocked lines to whoever writes them. (In Claude Code, a session-start hook
+injects `atlas orient` into context and `/atlas-sync` runs `atlas sync` and writes the
+blocks.)
 
 ## The source orientation block
 
@@ -165,12 +169,24 @@ Three commands keep them in line:
   is told to read with caution. `atlas doctor --json` gives the same report as data, for
   tools, each finding with its `level`. It writes nothing.
 
+Four more carry the work itself:
+
+- **`atlas spec new|start|pause|resume|review|close`** — the SPEC lifecycle's transitions
+  ([04-spec-lifecycle.md](04-spec-lifecycle.md)): the stamps, the backlog line, the Active
+  block's shell, `_archived/`, Recently closed; never the Done / Next / Blocked judgment.
+  `atlas spec lint` reports what a SPEC carries that it should not, and writes nothing.
+- **`atlas sync`** — the checkpoint's mechanics; `--check` writes nothing and says what it would.
+- **`atlas orient`** — the session's first read: an agent in any workbench, or a person in a
+  terminal.
+- **`atlas handover <name> --step N`** — the delegated-mode brief, from the Atlas
+  ([05-discipline.md](05-discipline.md)).
+
 `atlas ui` shows all of this on a local, read-only page — the doctor's findings in plain words
 with their fix commands, the SPECs with search, stats from their stamps — served on
 `127.0.0.1` and reading only the Atlas's own files.
 
-**The CLI never clones nor runs git**, beyond reading a source's remote — it tells the person
-exactly what to run, and never edits `CLAUDE.md`. A new source also needs its orientation
+**The CLI never clones nor writes to git** — it reads a source's remote, its branches and its
+working tree, tells the person exactly what to run, and never edits `CLAUDE.md`. A new source also needs its orientation
 block in `CLAUDE.md`, written with the human; a dropped source's block leaves `CLAUDE.md` the
 same way.
 

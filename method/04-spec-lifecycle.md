@@ -7,11 +7,12 @@ written*.
 ## The rule: no coding without a SPEC
 
 1. **Nothing gets coded without a SPEC.** A loose plan — even a good one from another agent — is
-   converted into a `SPEC_NNNN_<SLUG>.md` first.
+   converted into a `SPEC_NNNN_<SLUG>.md` first (`atlas spec new <SLUG>` creates it with the next
+   number and its backlog line).
 2. **`DRAFT_*.md` is the optional shaping stage**, for an item still being decided. A DRAFT
    either **graduates to a SPEC** or is **discarded** — it is never a destination.
 3. **The backlog indexes the open SPECs/DRAFTs** — one line each, nothing else.
-4. **A closed SPEC moves to `_archived/`**, with its findings file.
+4. **A closed SPEC moves to `_archived/`**, with its findings file (`atlas spec close <name>`).
 
 ## What a SPEC is — and is not
 
@@ -22,7 +23,13 @@ boundaries, and a **Plan** — the ordered steps that deliver it. The fixed shap
 
 `started:` is written the day the SPEC enters STATUS → Active (its branch created) and `closed:`
 the day it moves to `_archived/`; each is written once and never rewritten, like `created:`, so a
-stamp is not state — the living state stays in STATUS.
+stamp is not state — the living state stays in STATUS. The transitions are mechanical and the
+CLI performs them: `atlas spec start <name>` stamps `started:`, takes the SPEC out of the
+backlog and creates its Active block; `atlas spec close <name>` stamps `closed:`, archives the
+SPEC with its findings and lists it under Recently closed, refusing while one of its repos has
+uncommitted work on its `spec/NNNN-*` branch or commits on that branch not yet in the base
+branch. The stamps, the backlog line, the Active block and `_archived/` are what those
+commands write; they are never edited by hand.
 
 A SPEC run in **delegated** mode ([05-discipline.md](05-discipline.md)) must be complete enough
 to execute without questions: its Acceptance covers the cases the workbench will meet,
@@ -38,7 +45,9 @@ including the edge cases, so the workbench stops only on a real blocker.
   ([05-discipline.md](05-discipline.md));
 - **session notes**.
 
-A SPEC that grows any of these is **contaminated — strip it**. That is what lets any agent open a
+A SPEC that grows any of these is **contaminated — strip it** (`atlas spec lint` finds the
+fenced blocks, checkboxes, state headings and archaeology; judgment finds the rest). That is
+what lets any agent open a
 SPEC and read only *what we are doing and in what order*.
 
 ## Findings — beside the SPEC, never in it
@@ -73,10 +82,14 @@ too early goes back to the root as **IN REVIEW**.
 A fresh agent resumes in two reads: its block in **`STATUS.md → Active`** (**Done / Next /
 Blocked** — where we left off), then the **SPEC** (what we are doing). Continue from **Next** —
 and if the block has a **Paused** line, resume the stash first
-([05-discipline.md](05-discipline.md)).
+([05-discipline.md](05-discipline.md)). Whatever opens the Atlas, `atlas orient` prints that
+first read: the method's orientation, the coding rules in force, `atlas status` and STATUS.
 
 Before stopping or handing off, **rewrite that Active block** to the current state — never append
-to it. That is the checkpoint `/atlas-sync` refreshes.
+to it. That is the checkpoint: `atlas sync` does its mechanics — the sources' state, the lint,
+a missing stamp, a closed SPEC still in Active — and the Done / Next / Blocked lines are the
+agent's or the human's to write (in Claude Code, `/atlas-sync` does both).
+`atlas spec pause|resume|review <name>` keep the block through a pause and into review.
 
 ## The how is decided live
 
